@@ -4,7 +4,7 @@ class Database
     private $host = 'localhost';
     private $username = 'root';
     private $password = '';
-    private $dbname = 'hub_venue3';
+    private $dbname = 'icoco_rms';
     protected $connection = "";
 
     function connect()
