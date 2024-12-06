@@ -216,8 +216,8 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
             <!-- New second section -->
             <section class="bg-slate-50 py-16">
                 <!-- Content container with left margin for sidebar -->
-                <div class="ml-20">
-                    <div class="container mx-auto px-4 md:px-8">
+                <div>
+                    <div class=" container mx-auto px-4 md:px-8">
                         <div class="mt-16 max-w-6xl mx-auto scroll-animate">
                             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
                                 Find Your Perfect Resort
@@ -408,28 +408,6 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                             us and experience the future of resort management today.</p>
                                     </div>
 
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <!-- mission -->
-                                        <div
-                                            class="flex flex-col items-center bg-slate-50 border p-4 lg:p-4 lg:py-8 rounded-lg shadow-md gap-2 scroll-animate">
-                                            <h3 class="text-xl font-semibold  text-red-500 italic">Our Mission</h3>
-                                            <p class="text-center">
-                                                Our mission is to revolutionize resort management by providing a
-                                                user-friendly platform that connects guests with the perfect resort
-                                                experience, ensuring seamless operations from booking to checkout.
-                                            </p>
-                                        </div>
-                                        <!-- vission -->
-                                        <div
-                                            class="flex flex-col items-center bg-slate-50 border p-4 lg:p-4 lg:py-8 rounded-lg shadow-md gap-2 scroll-animate">
-                                            <h3 class="text-xl font-semibold  text-red-500 italic">Our Vision</h3>
-                                            <p class="text-center">
-                                                Our vision is to be the premier platform for resort management, helping
-                                                resorts worldwide deliver exceptional guest experiences.
-                                            </p>
-                                        </div>
-                                    </div>
-
                                     <!-- FAQ -->
                                     <div
                                         class="flex flex-col bg-slate-50 border text-neutral-700 p-4 lg:p-4 lg:py-8 rounded-lg shadow-md">
@@ -439,8 +417,8 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                                 <button class="faq-header w-full text-left">
                                                     1. How do I book a resort?
                                                 </button>
-                                                <div class="faq-content hidden">
-                                                    <p class="text-xs">To book a resort, simply search for your desired
+                                                <div class="faq-content p-4 bg-neutral-100 rounded-xl hidden">
+                                                    <p class="text-sm">To book a resort, simply search for your desired
                                                         location and dates on our platform. Browse through the available
                                                         options, select the resort that suits your needs, and follow the
                                                         booking process to confirm your reservation.</p>
@@ -450,7 +428,7 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                                 <button class="faq-header  w-full text-left">
                                                     2. Can I list my own space on Icoco?
                                                 </button>
-                                                <div class="faq-content hidden">
+                                                <div class="faq-content p-4 bg-neutral-100 rounded-xl hidden">
                                                     <p class="text-sm ">Yes, you can list your resort on iCoCo Resort
                                                         Management System. Create an account, provide details about your
                                                         resort, upload photos, and set your availability and pricing.
@@ -462,7 +440,7 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                                 <button class="faq-header  w-full text-left">
                                                     3. What types of spaces can I list?
                                                 </button>
-                                                <div class="faq-content hidden">
+                                                <div class="faq-content p-4 bg-neutral-100 rounded-xl hidden">
                                                     <p class="text-sm ">You can list a variety of resort types,
                                                         including luxury resorts, budget-friendly options, and unique
                                                         stays. Our platform accommodates all types of resorts that offer
@@ -473,7 +451,7 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                                 <button class="faq-header  w-full text-left">
                                                     4. Are there any fees associated with booking or listing a space?
                                                 </button>
-                                                <div class="faq-content hidden">
+                                                <div class="faq-content p-4 bg-neutral-100 rounded-xl hidden">
                                                     <p class="text-sm ">Yes, there may be fees associated with both
                                                         booking and listing resorts. Booking fees are typically a
                                                         percentage of the total rental cost, while listing fees may vary
@@ -486,7 +464,7 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                                 <button class="faq-header  w-full text-left">
                                                     5. How can I contact customer support?
                                                 </button>
-                                                <div class="faq-content hidden">
+                                                <div class="faq-content p-4 bg-neutral-100 rounded-xl hidden">
                                                     <p class="text-sm ">If you need assistance, you can contact our
                                                         customer support team via the contact form on our website, or by
                                                         email at support@icoco.com. Our team is available to help you

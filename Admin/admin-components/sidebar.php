@@ -1,6 +1,6 @@
 <div id="sidebar" class="w-64 bg-gray-50 transition-all duration-300 flex flex-col h-screen text-sm">
     <div class="p-4 w-full flex justify-center">
-        <img src="./../images/black_ico.png" alt="HubVenue Logo" class="transition-all duration-300">
+        <img src="./../images/icoco_black_ico.png" alt="HubVenue Logo" class="transition-all duration-300">
     </div>
     <div class="px-4 w-full mb-4 sidebar-full">
         <div class="flex">
@@ -72,7 +72,7 @@
             </svg>
             <span class="sidebar-full">Host Application</span>
         </a>
-
+        <!-- 
         <a href="financial-management" id="financial-management-link"
             class="nav-link flex items-center text-gray-800 hover:bg-red-900 hover:text-white w-full px-4 py-2">
             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -80,9 +80,9 @@
                     d="M5.5 2A1.5 1.5 0 004 3.5V4h12v-.5A1.5 1.5 0 0014.5 2h-9zM2 7.5A1.5 1.5 0 013.5 6h13A1.5 1.5 0 0118 7.5V8H2v-.5zM0 4.5A1.5 1.5 0 011.5 3h13A1.5 1.5 0 0116 4.5V5H0v-.5zM2 12.5A1.5 1.5 0 013.5 11h13A1.5 1.5 0 0118 12.5V13H2v-.5zM0 10.5A1.5 1.5 0 011.5 9h13A1.5 1.5 0 0116 10.5V11H0v-.5zM3.5 14A1.5 1.5 0 002 15.5V16h16v-.5a1.5 1.5 0 00-1.5-1.5h-13zM0 13.5A1.5 1.5 0 011.5 12h13A1.5 1.5 0 0116 13.5V14H0v-.5z" />
             </svg>
             <span class="sidebar-full">Financial Management</span>
-        </a>
+        </a> -->
 
-        <a href="reports-analytics" id="reports-analytics-link"
+        <!-- <a href="reports-analytics" id="reports-analytics-link"
             class="nav-link flex items-center text-gray-800 hover:bg-red-900 hover:text-white w-full px-4 py-2">
             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
@@ -91,17 +91,17 @@
                     clip-rule="evenodd" />
             </svg>
             <span class="sidebar-full">Reports and Analytics</span>
-        </a>
+        </a> -->
 
-        <a href="notifications-alerts" id="notifications-alerts-link"
+        <!-- <a href="notifications-alerts" id="notifications-alerts-link"
             class="nav-link flex items-center text-gray-800 hover:bg-red-900 hover:text-white w-full px-4 py-2">
             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM5 8h10v2H5V8zm0 4h10v2H5v-2z" />
             </svg>
             <span class="sidebar-full">Notifications and Alerts</span>
-        </a>
+        </a> -->
 
-        <a href="content-management" id="content-management-link"
+        <!-- <a href="content-management" id="content-management-link"
             class="nav-link flex items-center text-gray-800 hover:bg-red-900 hover:text-white w-full px-4 py-2">
             <svg class="w-5 h-5 min-w-[1.25rem] mr-3" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd"
@@ -109,9 +109,9 @@
                     clip-rule="evenodd" />
             </svg>
             <span class="sidebar-full">Content Management</span>
-        </a>
+        </a> -->
 
-        <a href="promotions-marketing" id="promotions-marketing-link"
+        <!-- <a href="promotions-marketing" id="promotions-marketing-link"
             class="nav-link flex items-center text-gray-800 hover:bg-red-900 hover:text-white w-full px-4 py-2">
             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd"
@@ -119,7 +119,7 @@
                     clip-rule="evenodd" />
             </svg>
             <span class="sidebar-full">Promotions and Marketing</span>
-        </a>
+        </a> -->
 
         <a href="discount-application" id="discount-application-link"
             class="nav-link flex items-center text-gray-800 hover:bg-red-900 hover:text-white w-full px-4 py-2">
@@ -131,16 +131,16 @@
             <span class="sidebar-full">Discount Application</span>
         </a>
 
-        <a href="support-helpdesk" id="support-helpdesk-link"
+        <!-- <a href="support-helpdesk" id="support-helpdesk-link"
             class="nav-link flex items-center text-gray-800 hover:bg-red-900 hover:text-white w-full px-4 py-2">
             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                 <path
                     d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
             </svg>
             <span class="sidebar-full">Support and Helpdesk</span>
-        </a>
+        </a> -->
 
-        <a href="settings" id="settings-link"
+        <!-- <a href="settings" id="settings-link"
             class="nav-link flex items-center text-gray-800 hover:bg-red-900 hover:text-white w-full px-4 py-2">
             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd"
@@ -148,9 +148,9 @@
                     clip-rule="evenodd" />
             </svg>
             <span class="sidebar-full">Settings</span>
-        </a>
+        </a> -->
 
-        <a href="audit-logs" id="audit-logs-link"
+        <!-- <a href="audit-logs" id="audit-logs-link"
             class="nav-link flex items-center text-gray-800 hover:bg-red-900 hover:text-white w-full px-4 py-2">
             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd"
@@ -158,7 +158,7 @@
                     clip-rule="evenodd" />
             </svg>
             <span class="sidebar-full">Audit Logs</span>
-        </a>
+        </a> -->
 
     </nav>
 

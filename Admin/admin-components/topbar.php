@@ -8,7 +8,7 @@
                 <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
             </svg>
         </button>
-        <h1 class="text-2xl font-bold ml-4" id="h1" for="darkModeToggle">HubVenue Admin</h1>
+        <h1 class="text-2xl font-bold ml-4" id="h1" for="darkModeToggle">Icoco Admin</h1>
     </div>
     <!-- Dark Mode Toggle (Centered) -->
     <div class="flex items-center">
