@@ -16,7 +16,7 @@ if (!isset($_SESSION['user'])) {
     <title>HubVenue || Profile</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link rel="icon" href="./images/black_ico.png">
+    <link rel="icon" href="./images/icoco_black_ico.png">
     <link rel="stylesheet" href="./output.css">
 
     <style>

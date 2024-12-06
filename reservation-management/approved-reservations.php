@@ -8,7 +8,7 @@ $accountObj = new Account();
 $allReservations = $venueObj->getBookings();
 
 // Filter for status_id = 2 (Confirmed)
-$Reservations = array_filter($allReservations, function($booking) {
+$Reservations = array_filter($allReservations, function ($booking) {
     return $booking['booking_status_id'] == 2;
 });
 
@@ -35,14 +35,16 @@ function formatDate($date)
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Customer</label>
-            <input type="text" id="customerFilter" class="border rounded p-2 w-full" placeholder="Filter by customer name">
+            <input type="text" id="customerFilter" class="border rounded p-2 w-full"
+                placeholder="Filter by customer name">
         </div>
     </div>
     <div class="flex items-center gap-2">
         <button id="applyFilters" class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors">
             Apply Filters
         </button>
-        <button id="clearFilters" class="border border-gray-300 bg-white text-gray-700 py-2 px-4 rounded hover:bg-gray-100 transition-colors">
+        <button id="clearFilters"
+            class="border border-gray-300 bg-white text-gray-700 py-2 px-4 rounded hover:bg-gray-100 transition-colors">
             Clear
         </button>
     </div>
@@ -105,7 +107,8 @@ function formatDate($date)
                             <td class="py-2 px-4">
                                 <form class="cancelReservationButton inline-block" method="POST">
                                     <input type="hidden" name="booking_id" value="<?php echo $reservation['booking_id']; ?>">
-                                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                                    <button type="submit"
+                                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
                                         Cancel
                                     </button>
                                 </form>
@@ -127,106 +130,106 @@ function formatDate($date)
 </section>
 
 <script>
-$(document).ready(function() {
-    // Handle filter functionality
-    $('#applyFilters').click(function() {
-        applyFilters();
-    });
-
-    // Handle clear filters
-    $('#clearFilters').click(function() {
-        // Clear all inputs
-        $('#startDate, #endDate, #venueFilter, #customerFilter').val('');
-        // Show all data rows
-        $('#reservationsTable tr').show();
-        $('#noResultsRow').remove();
-    });
-
-    function applyFilters() {
-        const startDate = $('#startDate').val();
-        const endDate = $('#endDate').val();
-        const venue = $('#venueFilter').val().toLowerCase();
-        const customer = $('#customerFilter').val().toLowerCase();
-
-        // Remove existing no results row
-        $('#noResultsRow').remove();
-
-        // Get all data rows (excluding the header)
-        const dataRows = $('#reservationsTable tr:not(thead tr)');
-        let visibleRows = 0;
-
-        dataRows.each(function() {
-            const row = $(this);
-            if (row.attr('id') === 'noResultsRow') return;
-
-            const rowStartDate = new Date(row.find('td:eq(1)').text()).getTime();
-            const rowEndDate = new Date(row.find('td:eq(2)').text()).getTime();
-            const rowVenue = row.find('td:eq(7)').text().toLowerCase();
-            const rowCustomer = row.find('td:eq(4)').text().toLowerCase();
-
-            let showRow = true;
-
-            // Date range filter
-            if (startDate && endDate) {
-                const filterStartTimestamp = new Date(startDate).getTime();
-                const filterEndTimestamp = new Date(endDate).getTime();
-
-                if (rowStartDate < filterStartTimestamp || rowEndDate > filterEndTimestamp) {
-                    showRow = false;
-                }
-            }
-
-            // Venue filter
-            if (venue && !rowVenue.includes(venue)) {
-                showRow = false;
-            }
-
-            // Customer filter
-            if (customer && !rowCustomer.includes(customer)) {
-                showRow = false;
-            }
-
-            if (showRow) {
-                visibleRows++;
-                row.show();
-            } else {
-                row.hide();
-            }
+    $(document).ready(function () {
+        // Handle filter functionality
+        $('#applyFilters').click(function () {
+            applyFilters();
         });
 
-        // Show "No results found" if no data rows are visible
-        if (visibleRows === 0) {
-            $('#reservationsTable tbody').append(
-                '<tr id="noResultsRow"><td colspan="19" class="py-4 text-center">No results found</td></tr>'
-            );
-        }
-    }
+        // Handle clear filters
+        $('#clearFilters').click(function () {
+            // Clear all inputs
+            $('#startDate, #endDate, #venueFilter, #customerFilter').val('');
+            // Show all data rows
+            $('#reservationsTable tr').show();
+            $('#noResultsRow').remove();
+        });
 
-    // Update cancel reservation handler
-    $('.cancelReservationButton').on("submit", function (e) {
-        e.preventDefault();
-        const formData = $(this).serialize();
-        
-        confirmshowModal(
-            "Are you sure you want to cancel this reservation?",
-            function() {
-                $.ajax({
-                    type: "POST",
-                    url: "../api/CancelReservation.api.php",
-                    data: formData,
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === "success") {
-                            loadReservationView('cancelled-reservations'); // Change to load cancelled reservations
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error:", error);
+        function applyFilters() {
+            const startDate = $('#startDate').val();
+            const endDate = $('#endDate').val();
+            const venue = $('#venueFilter').val().toLowerCase();
+            const customer = $('#customerFilter').val().toLowerCase();
+
+            // Remove existing no results row
+            $('#noResultsRow').remove();
+
+            // Get all data rows (excluding the header)
+            const dataRows = $('#reservationsTable tr:not(thead tr)');
+            let visibleRows = 0;
+
+            dataRows.each(function () {
+                const row = $(this);
+                if (row.attr('id') === 'noResultsRow') return;
+
+                const rowStartDate = new Date(row.find('td:eq(1)').text()).getTime();
+                const rowEndDate = new Date(row.find('td:eq(2)').text()).getTime();
+                const rowVenue = row.find('td:eq(7)').text().toLowerCase();
+                const rowCustomer = row.find('td:eq(4)').text().toLowerCase();
+
+                let showRow = true;
+
+                // Date range filter
+                if (startDate && endDate) {
+                    const filterStartTimestamp = new Date(startDate).getTime();
+                    const filterEndTimestamp = new Date(endDate).getTime();
+
+                    if (rowStartDate < filterStartTimestamp || rowEndDate > filterEndTimestamp) {
+                        showRow = false;
                     }
-                });
-            },
-            "black_ico.png"
-        );
+                }
+
+                // Venue filter
+                if (venue && !rowVenue.includes(venue)) {
+                    showRow = false;
+                }
+
+                // Customer filter
+                if (customer && !rowCustomer.includes(customer)) {
+                    showRow = false;
+                }
+
+                if (showRow) {
+                    visibleRows++;
+                    row.show();
+                } else {
+                    row.hide();
+                }
+            });
+
+            // Show "No results found" if no data rows are visible
+            if (visibleRows === 0) {
+                $('#reservationsTable tbody').append(
+                    '<tr id="noResultsRow"><td colspan="19" class="py-4 text-center">No results found</td></tr>'
+                );
+            }
+        }
+
+        // Update cancel reservation handler
+        $('.cancelReservationButton').on("submit", function (e) {
+            e.preventDefault();
+            const formData = $(this).serialize();
+
+            confirmshowModal(
+                "Are you sure you want to cancel this reservation?",
+                function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "../api/CancelReservation.api.php",
+                        data: formData,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.status === "success") {
+                                loadReservationView('cancelled-reservations'); // Change to load cancelled reservations
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error:", error);
+                        }
+                    });
+                },
+                "icoco_black_ico.png"
+            );
+        });
     });
-});
-</script> 
+</script>

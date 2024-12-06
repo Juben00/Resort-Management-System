@@ -24,7 +24,7 @@ $isHost = $accountObj->HostApplicationStats($_SESSION['user']['id'], 2);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Host Account Application</title>
-    <link rel="icon" href="./images/black_ico.png">
+    <link rel="icon" href="./images/icoco_black_ico.png">
     <link rel="stylesheet" href="./output.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -403,7 +403,7 @@ $isHost = $accountObj->HostApplicationStats($_SESSION['user']['id'], 2);
                         document.getElementById('sform').click();
                     }
                 } else {
-                    showModal('Please fill in all required fields before proceeding.', undefined, "black_ico.png");
+                    showModal('Please fill in all required fields before proceeding.', undefined, "icoco_black_ico.png");
                 }
             });
 

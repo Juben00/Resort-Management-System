@@ -92,7 +92,7 @@ $(document).ready(function () {
 
   $("#admin-logout").on("click", function (e) {
   e.preventDefault();
-  confirmshowModal("Are you sure you want to logout?", adminLogout, "black_ico.png");
+  confirmshowModal("Are you sure you want to logout?", adminLogout, "icoco_black_ico.png");
   });
 
   //main views
@@ -241,7 +241,7 @@ $(document).ready(function () {
                 function() {
                     approveDiscount(formElement);
                 },
-                "black_ico.png"
+                "icoco_black_ico.png"
             );
         });
 
@@ -254,7 +254,7 @@ $(document).ready(function () {
                 function() {
                     rejectDiscount(formElement);  
                 },
-                "black_ico.png"
+                "icoco_black_ico.png"
             );
         });
       },
@@ -354,7 +354,7 @@ $(document).ready(function () {
                 function() {
                     approveHost(formElement); // Call approveVenue only after confirmation
                 },
-                "black_ico.png"
+                "icoco_black_ico.png"
             );
         });
 
@@ -368,7 +368,7 @@ $(document).ready(function () {
                 function() {
                     rejectHost(formElement); // Call approveVenue only after confirmation
                 },
-                "black_ico.png"
+                "icoco_black_ico.png"
             );
         });
         },
@@ -422,7 +422,7 @@ $(document).ready(function () {
                     function() {
                         approveVenue(formElement); // Call approveVenue only after confirmation
                     },
-                    "black_ico.png"
+                    "icoco_black_ico.png"
                 );
             });
 
@@ -437,7 +437,7 @@ $(document).ready(function () {
                     function() {
                         rejectVenue(formElement); // Call rejectVenue only after confirmation
                     },
-                    "black_ico.png"
+                    "icoco_black_ico.png"
                 );
             });
         },
@@ -509,12 +509,12 @@ $(document).ready(function () {
                     "Venue added successfully", function () {
                       $("#add-venue-form")[0].reset();
                     },
-                    "black_ico.png"
+                    "icoco_black_ico.png"
                 );
             } else {
                 showModal(
                     "Venue not added", undefined,
-                    "black_ico.png"
+                    "icoco_black_ico.png"
                 );
             }
         },
@@ -582,12 +582,12 @@ $(document).ready(function () {
                       formElement[0].reset();
                       viewHostApplication();
                     },
-                    "black_ico.png"
+                    "icoco_black_ico.png"
                 );
             } else {
                 showModal(
                     response.message, undefined,
-                    "black_ico.png"
+                    "icoco_black_ico.png"
                 );
             }
         },
@@ -610,12 +610,12 @@ $(document).ready(function () {
                       formElement[0].reset();
                       viewHostApplication();
                     },
-                    "black_ico.png"
+                    "icoco_black_ico.png"
                 );
             } else {
                 showModal(
                     response.message, undefined,
-                    "black_ico.png"
+                    "icoco_black_ico.png"
                 );
             }
         },
@@ -637,10 +637,10 @@ $(document).ready(function () {
                       function () {
                         $('#createUserModal').addClass("hidden");
                         $('#createUserModal').removeClass("flex");
-                      },"black_ico.png");
+                      },"icoco_black_ico.png");
                     formElement[0].reset();
                 } else {
-                    showModal(response.message, undefined, "black_ico.png");
+                    showModal(response.message, undefined, "icoco_black_ico.png");
                 }
             },
             });
@@ -658,9 +658,9 @@ $(document).ready(function () {
             if (response.success) {
                 showModal(response.message, function(){
                 viewDiscountApplication();
-                }, "black_ico.png");
+                }, "icoco_black_ico.png");
             } else {
-                showModal(response.message, undefined, "black_ico.png");
+                showModal(response.message, undefined, "icoco_black_ico.png");
             }
         },
         });
@@ -678,9 +678,9 @@ $(document).ready(function () {
           if (response.success) {
             showModal(response.message, function(){
             viewDiscountApplication();
-            }, "black_ico.png");
+            }, "icoco_black_ico.png");
             } else { 
-              showModal(response.message, undefined, "black_ico.png");
+              showModal(response.message, undefined, "icoco_black_ico.png");
               }
         },
         });

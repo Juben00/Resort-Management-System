@@ -675,7 +675,7 @@ $venueView = $venueObj->getSingleVenue($getParams);
         const mainImage = document.getElementById('mainImage');
         mainImage.src = venue.image_urls && venue.image_urls.length > 0
             ? venue.image_urls[0]
-            : '../images/black_ico.png';
+            : '../images/icoco_black_ico.png';
         mainImage.alt = venue.name || 'Venue image';
     }
 

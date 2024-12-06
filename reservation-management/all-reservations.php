@@ -258,7 +258,7 @@ function formatDate($date)
                         }
                     });
                 },
-                "black_ico.png"
+                "icoco_black_ico.png"
             );
         });
 
@@ -285,7 +285,7 @@ function formatDate($date)
                         }
                     });
                 },
-                "black_ico.png"
+                "icoco_black_ico.png"
             );
         });
     });

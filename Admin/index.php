@@ -26,7 +26,7 @@ $venueObj = new Venue();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HubVenue Dashboard</title>
-    <link rel="icon" href="../images/black_ico.png">
+    <link rel="icon" href="../images/icoco_black_ico.png">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="../output.css">

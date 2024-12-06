@@ -54,7 +54,7 @@ $reviews = $venueObj->getReview($_GET['id']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Venue Details - HubVenue</title>
-    <link rel="icon" href="./images/black_ico.png">
+    <link rel="icon" href="./images/icoco_black_ico.png">
     <link rel="stylesheet" href="./output.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
@@ -914,7 +914,7 @@ $reviews = $venueObj->getReview($_GET['id']);
 
                 while (dateRange <= checkoutDate) {
                     if (disableBookedDates(dateRange)) {
-                        showModal('Selected date range includes unavailable dates.', undefined, 'black_ico.png');
+                        showModal('Selected date range includes unavailable dates.', undefined, 'icoco_black_ico.png');
                         checkinInput.value = '';
                         checkoutInput.value = '';
                         break;

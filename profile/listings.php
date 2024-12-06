@@ -61,7 +61,7 @@ $venuePost = $venueObj->getAllVenues('', $_SESSION['user']['id']);
                                         break;
                                 }
                                 ?>
-                                <img src="./<?php echo !empty($venue['image_urls'][0]) ? $venue['image_urls'][0] : '../images/black_ico.png'; ?>"
+                                <img src="./<?php echo !empty($venue['image_urls'][0]) ? $venue['image_urls'][0] : '../images/icoco_black_ico.png'; ?>"
                                     alt="<?php echo htmlspecialchars($venue['name'] ?? 'Venue'); ?>"
                                     class="w-full h-48 object-cover">
                             </div>
@@ -214,7 +214,7 @@ $venuePost = $venueObj->getAllVenues('', $_SESSION['user']['id']);
         const mainImage = document.getElementById('mainImage');
         mainImage.src = venue.image_urls && venue.image_urls.length > 0
             ? venue.image_urls[0]
-            : '../images/black_ico.png';
+            : '../images/icoco_black_ico.png';
         mainImage.alt = venue.name || 'Venue image';
     }
 

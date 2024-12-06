@@ -383,7 +383,7 @@ $ratings = array(
                     } else {
                         showModal("Invalid Coupon Code", function () {
                             document.getElementById('couponCode').value = 'none';
-                        }, "black_ico.png");
+                        }, "icoco_black_ico.png");
                     }
                 });
         }
@@ -420,7 +420,7 @@ $ratings = array(
                     modal.classList.remove('flex');
                 }, 300);
             } else {
-                showModal('Please complete the payment and enter the reference number before closing.', undefined, "black_ico.png");
+                showModal('Please complete the payment and enter the reference number before closing.', undefined, "icoco_black_ico.png");
             }
         }
 
@@ -431,7 +431,7 @@ $ratings = array(
             if (!modalContent.contains(event.target) && referenceNumber) {
                 closeQrModal();
             } else if (!modalContent.contains(event.target)) {
-                showModal('Please complete the payment and enter the reference number before closing.', undefined, "black_ico.png");
+                showModal('Please complete the payment and enter the reference number before closing.', undefined, "icoco_black_ico.png");
             }
         }
 
