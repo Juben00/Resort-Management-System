@@ -3,6 +3,8 @@
 require_once '../classes/venue.class.php';
 require_once '../sanitize.php';
 
+session_start();
+
 $venueObj = new Venue();
 
 $name = $description = $location = $price = $capacity = $amenities = $tag = $entrance = $cleaning = $rules = $addRules = $checkIn = $checkOut = $check_inout = "";
@@ -117,6 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $venueObj->amenities = $amenitiesJson;
         $venueObj->rules = $mergedRulesJson;
         $venueObj->tag = $tag;
+        $venueObj->host_id = $_SESSION['user']['id'];
         $venueObj->entrance = $entrance;
         $venueObj->cleaning = $cleaning;
         $venueObj->check_inout = $check_inout;

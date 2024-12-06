@@ -322,29 +322,28 @@ $reviews = $venueObj->getReview($_GET['id']);
 
     ?>
 
-    <main class="max-w-7xl pt-32 mx-auto px-4 py-6 sm:px-6 lg:px-8 main-container">
-        <div class="main-content">
-            <div id="venueDetails">
-                <div class="mb-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h1 class="text-3xl font-semibold"><?php echo htmlspecialchars($venue['name']) ?></h1>
-                        <button id="compareButton"
-                            class="flex items-center gap-2 px-4 py-2 bg-slate-50 border-2 border-gray-500 rounded-lg hover:bg-gray-50 transition duration-300">
-                            <i class="fas fa-exchange-alt"></i>
-                            <span>Compare</span>
-                        </button>
+    <main class="max-w-7xl pt-32 mx-auto px-4 py-6 sm:px-6 lg:px-8 main-container bg-gray-50">
+        <div class="main-content rounded-lg overflow-hidden">
+            <div id="venueDetails" class="p-6 md:p-10">
+                <div class="mb-8">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                        <h1 class="text-4xl font-bold text-gray-800 mb-2 md:mb-0">
+                            <?php echo htmlspecialchars($venue['name']) ?>
+                        </h1>
+                        <div class="flex items-center bg-gray-100 rounded-full px-4 py-2">
+                            <span class="text-lg font-semibold text-gray-800">
+                                <i
+                                    class="fas fa-star text-yellow-400 mr-1"></i><?php echo number_format($venue['rating'], 1) ?>
+                            </span>
+                            <span class="mx-2 text-gray-400">·</span>
+                            <span
+                                class="text-sm font-medium text-gray-600"><?php echo htmlspecialchars($venue['total_reviews']) ?>
+                                reviews</span>
+                        </div>
                     </div>
-                    <div class="flex items-center">
-                        <span class="text-sm font-semibold">
-                            <i
-                                class="fas fa-star text-yellow-400 mr-1"></i><?php echo number_format($venue['rating'], 1) ?></span>
-                        <span class="mx-2">·</span>
-                        <span class="text-sm font-semibold"><?php echo htmlspecialchars($venue['total_reviews']) ?>
-                            review/s</span>
-                        <span class="mx-2">·</span>
-                        <span class="text-sm font-semibold"><?php echo htmlspecialchars($venue['tag']) ?></span>
-                        <span class="mx-2">·</span>
-                        <span class="text-sm font-semibold"><?php echo htmlspecialchars($venue['location']) ?></span>
+                    <div class="flex flex-wrap items-center text-sm text-gray-600">
+                        <span><i
+                                class="fas fa-map-marker-alt mr-1"></i><?php echo htmlspecialchars($venue['location']) ?></span>
                     </div>
                 </div>
 
@@ -359,7 +358,6 @@ $reviews = $venueObj->getReview($_GET['id']);
                                 class="venue-image w-full h-full object-cover rounded-lg">
                         <?php endif; ?>
                     </div>
-
                     <!-- Small Images on the Right -->
                     <div class="space-y-2">
                         <?php if (!empty($venue['image_urls']) && count($venue['image_urls']) > 1): ?>
@@ -371,7 +369,6 @@ $reviews = $venueObj->getReview($_GET['id']);
                                 <p>No more image to show</p>
                             </div>
                         <?php endif; ?>
-
                         <?php if (!empty($venue['image_urls']) && count($venue['image_urls']) > 2): ?>
                             <img src="./<?= htmlspecialchars($venue['image_urls'][2]) ?>" alt="Venue Image"
                                 class="venue-image w-full h-60 object-cover rounded-lg" data-image-index="2">
@@ -382,7 +379,6 @@ $reviews = $venueObj->getReview($_GET['id']);
                             </div>
                         <?php endif; ?>
                     </div>
-
                     <!-- Show All Photos Button -->
                     <button id="showAllPhotosBtn" onclick="openGallery(0)"
                         class="absolute border-2 border-gray-500 bottom-4 right-4 bg-slate-50 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100">
@@ -390,317 +386,276 @@ $reviews = $venueObj->getReview($_GET['id']);
                     </button>
                 </div>
 
-                <div class="flex gap-12 flex-col md:flex-row">
-                    <div class="md:w-2/3">
-                        <div class="flex justify-between items-center mb-6 gap-4">
-                            <div>
-                                <h2 class="text-xl font-semibold"><?php echo htmlspecialchars($venue['tag']) ?> at
-                                    <?php echo htmlspecialchars($venue['location']) ?>
-                                </h2>
-                            </div>
-                        </div>
+                <div class="flex flex-col lg:flex-row gap-12">
+                    <div class="lg:w-2/3">
+                        <section class="mb-10">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">About this place</h2>
+                            <p class="text-gray-600 leading-relaxed">
+                                <?php echo htmlspecialchars($venue['description']) ?>
+                            </p>
+                        </section>
 
+                        <section class="mb-10">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Venue Capacity</h2>
+                            <p class="text-gray-600 text-lg">
+                                <i
+                                    class="fas fa-users mr-2 text-blue-500"></i><?php echo htmlspecialchars($venue['capacity']) ?>
+                                guests
+                            </p>
+                        </section>
 
-                        <hr class="my-6">
-
-                        <h3 class="text-xl font-semibold mb-4">Place Description</h3>
-                        <p class="mb-4"><?php echo htmlspecialchars($venue['description']) ?></p>
-
-                        <hr class="my-6">
-
-                        <h3 class="text-xl font-semibold mb-4">Venue Capacity</h3>
-                        <p class="">
-                            <?php echo htmlspecialchars($venue['capacity']) ?>
-                            guests
-                        </p>
-
-                        <hr class="my-6">
-
-                        <h3 class="text-xl font-semibold mb-4">What this place offers</h3>
-                        <div class="grid grid-cols-2 gap-4 mb-6">
-                            <?php if (!empty($venue['amenities'])): ?>
-                                <?php
-                                $amenities = json_decode($venue['amenities'], true);
-                                if ($amenities):
-                                    ?>
-                                    <ul class="list-disc pl-5 space-y-1">
-                                        <?php foreach ($amenities as $amenity): ?>
-                                            <li class="text-sm text-gray-800 leading-tight">
-                                                <?= htmlspecialchars($amenity) ?>
-                                            </li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                <?php else: ?>
-                                    <p class="text-sm text-gray-500">No amenities available</p>
-                                <?php endif; ?>
-                            <?php else: ?>
-                                <p class="text-sm text-gray-500">No amenities available</p>
-                            <?php endif; ?>
-                        </div>
-
-                        <hr class="my-6">
-
-                        <h3 class="text-xl font-semibold mb-4">Location</h3>
-                        <div class="bg-gray-100 rounded-lg h-96 w-full mb-4" id="map">
-                            <?php include_once './openStreetMap/autoMapping.osm.php' ?>
-                        </div>
-
-                        <hr class="my-6">
-
-                        <h3 class="text-xl font-semibold mb-4">Ratings & Reviews</h3>
-                        <div class="mb-8">
-                            <div class="flex items-start gap-8">
-                                <!-- Overall Rating -->
-                                <div class="text-center">
-                                    <div class="text-5xl font-bold mb-1">
-                                        <?php echo number_format($venue['rating'], 1) ?>
-                                    </div>
-                                    <div class="flex items-center justify-center text-yellow-400 mb-1">
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <div class="text-sm text-gray-600">
-                                        <?php echo htmlspecialchars($venue['total_reviews']) ?> reviews
-                                    </div>
-                                </div>
-
-                                <!-- Rating Bars -->
-                                <div class="flex-grow">
-                                    <div class="space-y-2">
-                                        <?php
-                                        $totalReviews = isset($ratings['total']) ? (int) $ratings['total'] : 0;
-                                        $rate = [
-                                            5 => isset($ratings['rating_5']) ? (int) $ratings['rating_5'] : 0,
-                                            4 => isset($ratings['rating_4']) ? (int) $ratings['rating_4'] : 0,
-                                            3 => isset($ratings['rating_3']) ? (int) $ratings['rating_3'] : 0,
-                                            2 => isset($ratings['rating_2']) ? (int) $ratings['rating_2'] : 0,
-                                            1 => isset($ratings['rating_1']) ? (int) $ratings['rating_1'] : 0,
-                                        ];
-
-                                        // Find the maximum review count to normalize widths
-                                        $maxReviewCount = max($rate);
-
-                                        for ($i = 5; $i >= 1; $i--):
-                                            $count = isset($rate[$i]) ? $rate[$i] : 0; // Count of reviews for the current star rating
-                                            // Normalize percentage based on $maxReviewCount
-                                            $normalizedPercentage = $maxReviewCount > 0 ? (($count) / $ratings['total']) * 100 : 0;
-                                            ?>
-                                            <div class="flex items-center gap-2">
-                                                <span class="text-sm w-16"><?php echo $i; ?> stars</span>
-                                                <!-- Set explicit max width -->
-                                                <div class="flex-grow h-2 bg-gray-200 rounded max-w-[500px]">
-                                                    <!-- Dynamically set the width based on normalized percentage -->
-                                                    <div class="h-full bg-yellow-400 rounded"
-                                                        style="width: <?php echo $normalizedPercentage; ?>%;"></div>
-                                                </div>
-                                                <span class="text-sm w-8"><?php echo $count; ?></span>
-                                            </div>
-                                        <?php endfor; ?>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Individual Reviews -->
-                            <div class="mt-8 space-y-6" id="reviewContainer">
-                                <?php foreach ($reviews as $index => $review): ?>
-                                    <div class="border-b pb-6 review" data-index="<?php echo $index; ?>"
-                                        style="<?php echo $index === 0 ? '' : 'display: none;'; ?>">
-                                        <div class="flex items-center gap-4 mb-4">
-                                            <?php
-                                            if ($review['profile_pic'] == null) {
-                                                echo '<div class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-bold">';
-                                                echo htmlspecialchars($review['user_name'][0]); // Display the first letter of the user's first name
-                                                echo '</div>';
-                                            } else {
-                                                echo '<img class="w-12 h-12 bg-gray-200 rounded-full" src="./' . htmlspecialchars($review['profile_pic']) . '" alt="Profile Picture">';
-                                            }
-                                            ?>
-
-                                            <div>
-                                                <a href="user-page.php"
-                                                    class="font-semibold hover:underline"><?php echo htmlspecialchars($review['user_name']); ?></a>
-                                                <p class="text-sm text-gray-500">
-                                                    <?php
-                                                    $originalDate = $review['date'];
-                                                    $formattedDate = date('F j, Y \a\t g:i A', strtotime($originalDate)); // Format the date
-                                                    echo htmlspecialchars($formattedDate);
-                                                    ?>
-                                                </p>
-
-                                            </div>
-                                        </div>
-                                        <div class="flex text-yellow-400 mb-2">
-                                            <?php for ($i = 0; $i < $review['rating']; $i++): ?>
-                                                <i class="fas fa-star"></i>
-                                            <?php endfor; ?>
-                                        </div>
-                                        <p class="text-gray-700"><?php echo htmlspecialchars($review['review']); ?></p>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-
-                            <!-- Pagination -->
-                            <div class="flex items-center justify-center gap-2 mt-6">
-                                <button id="prevReview"
-                                    class="px-4 py-2 text-sm border w-24 bg-neutral-200 transition-all duration-150 text-gray-600 hover:bg-gray-100 rounded">Previous</button>
-                                <button id="nextReview"
-                                    class="px-4 py-2 text-sm border w-24 bg-neutral-200 transition-all duration-150 text-gray-600 hover:bg-gray-100 rounded">Next</button>
-                            </div>
-
-
-
-                        </div>
-
-                        <hr class="my-6">
-
-                        <!-- New Section: Things You Should Know -->
-                        <h3 class="text-xl font-semibold mb-4">Things You Should Know</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <!-- House Rules -->
-                            <div>
-                                <h4 class="font-semibold text-lg mb-3">House Rules</h4>
-                                <ul class="space-y-2">
+                        <section class="mb-10">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">What this place offers</h2>
+                            <div class="grid grid-cols-2 gap-4">
+                                <?php if (!empty($venue['amenities'])): ?>
                                     <?php
-                                    if (isset($venue['time_inout'])) {
-                                        $timeInOut = json_decode($venue['time_inout'], true); // Decode into array
-                                    
-                                        // Convert to 12-hour format with AM/PM
-                                        $checkIn = DateTime::createFromFormat('H:i', $timeInOut['check_in'])->format('h:i A');
-                                        $checkOut = DateTime::createFromFormat('H:i', $timeInOut['check_out'])->format('h:i A');
+                                    $amenities = json_decode($venue['amenities'], true);
+                                    if ($amenities):
                                         ?>
-                                        <li class="flex items-center gap-2">
-                                            <i class="fas fa-clock text-gray-600"></i>
-                                            <span>Check-in: After <?php echo htmlspecialchars($checkIn); ?></span>
-                                        </li>
-                                        <li class="flex items-center gap-2">
-                                            <i class="fas fa-clock text-gray-600"></i>
-                                            <span>Checkout: Before <?php echo htmlspecialchars($checkOut); ?></span>
-                                        </li>
-                                        <?php
-                                    }
-                                    ?>
-                                    <li class="flex items-center gap-2">
-                                        <i class="fas fa-users text-gray-600"></i>
-                                        <span>Maximum <?php echo htmlspecialchars($venue['capacity']) ?> guests</span>
-                                    </li>
-                                    <?php
-                                    if (!empty($venue['rules'])) {
-                                        $rules = json_decode($venue['rules'], true); // Decode the JSON string into an array
-                                        if ($rules):
-                                            ?>
-                                            <?php foreach ($rules as $rule): ?>
-                                                <li class="list-disc list-inside flex items-center gap-2">
-                                                    <?= htmlspecialchars($rule) ?>
+                                        <ul class="space-y-2">
+                                            <?php foreach ($amenities as $amenity): ?>
+                                                <li class="flex items-center text-gray-600">
+                                                    <i class="fas fa-check-circle mr-2 text-green-500"></i>
+                                                    <?= htmlspecialchars($amenity) ?>
                                                 </li>
                                             <?php endforeach; ?>
-                                            <?php
-                                        endif;
-                                    }
-                                    ?>
-                                </ul>
-                            </div>
-
-                            <!-- Cancellation Policy -->
-                            <div>
-                                <h4 class="font-semibold text-lg mb-3">Cancellation Policy</h4>
-                                <div class="space-y-3">
-                                    <p class="text-gray-700">Free cancellation for 48 hours after booking.</p>
-                                    <p class="text-gray-700">Cancel before check-in and get a full refund, minus the
-                                        service
-                                        fee.</p>
-                                    <div class="mt-4">
-                                        <h5 class="font-medium mb-2">Refund Policy:</h5>
-                                        <ul class="space-y-2 text-gray-700">
-                                            <li class="flex items-center gap-2">
-                                                <i class="fas fa-check text-green-600"></i>
-                                                <span>100% refund: Cancel 7 days before check-in</span>
-                                            </li>
-                                            <li class="flex items-center gap-2">
-                                                <i class="fas fa-check text-green-600"></i>
-                                                <span>50% refund: Cancel 3-7 days before check-in</span>
-                                            </li>
-                                            <li class="flex items-center gap-2">
-                                                <i class="fas fa-times text-red-600"></i>
-                                                <span>No refund: Cancel less than 3 days before check-in</span>
-                                            </li>
                                         </ul>
+                                    <?php else: ?>
+                                        <p class="text-gray-500">No amenities available</p>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <p class="text-gray-500">No amenities available</p>
+                                <?php endif; ?>
+                            </div>
+                        </section>
+
+                        <section class="mb-10">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Location</h2>
+                            <div class="bg-gray-100 rounded-lg h-96 w-full mb-4 shadow-inner" id="map">
+                                <?php include_once './openStreetMap/autoMapping.osm.php' ?>
+                            </div>
+                        </section>
+
+                        <section class="mb-10">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Ratings & Reviews</h2>
+                            <div class="bg-gray-50 rounded-lg p-6 shadow-inner">
+                                <div class="flex flex-col md:flex-row items-start md:items-center gap-8 mb-8">
+                                    <div class="text-center">
+                                        <div class="text-5xl font-bold text-gray-800 mb-1">
+                                            <?php echo number_format($venue['rating'], 1) ?>
+                                        </div>
+                                        <div class="flex items-center justify-center text-yellow-400 mb-1">
+                                            <?php for ($i = 0; $i < 5; $i++): ?>
+                                                <i
+                                                    class="fas fa-star<?php echo $i < floor($venue['rating']) ? '' : ($i < $venue['rating'] ? '-half-alt' : '-o') ?>"></i>
+                                            <?php endfor; ?>
+                                        </div>
+                                        <div class="text-sm text-gray-600">
+                                            <?php echo htmlspecialchars($venue['total_reviews']) ?> reviews
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow w-full md:w-auto">
+                                        <div class="space-y-2">
+                                            <?php
+                                            $totalReviews = isset($ratings['total']) ? (int) $ratings['total'] : 0;
+                                            $rate = [
+                                                5 => isset($ratings['rating_5']) ? (int) $ratings['rating_5'] : 0,
+                                                4 => isset($ratings['rating_4']) ? (int) $ratings['rating_4'] : 0,
+                                                3 => isset($ratings['rating_3']) ? (int) $ratings['rating_3'] : 0,
+                                                2 => isset($ratings['rating_2']) ? (int) $ratings['rating_2'] : 0,
+                                                1 => isset($ratings['rating_1']) ? (int) $ratings['rating_1'] : 0,
+                                            ];
+                                            $maxReviewCount = max($rate);
+                                            for ($i = 5; $i >= 1; $i--):
+                                                $count = isset($rate[$i]) ? $rate[$i] : 0;
+                                                $normalizedPercentage = $maxReviewCount > 0 ? (($count) / $ratings['total']) * 100 : 0;
+                                                ?>
+                                                <div class="flex items-center gap-2">
+                                                    <span class="text-sm w-16 text-right"><?php echo $i; ?> stars</span>
+                                                    <div class="flex-grow h-2 bg-gray-200 rounded max-w-[500px]">
+                                                        <div class="h-full bg-yellow-400 rounded"
+                                                            style="width: <?php echo $normalizedPercentage; ?>%;"></div>
+                                                    </div>
+                                                    <span class="text-sm w-8"><?php echo $count; ?></span>
+                                                </div>
+                                            <?php endfor; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-6" id="reviewContainer">
+                                    <?php foreach ($reviews as $index => $review): ?>
+                                        <div class="review bg-white p-4 rounded-lg shadow"
+                                            data-index="<?php echo $index; ?>"
+                                            style="<?php echo $index === 0 ? '' : 'display: none;'; ?>">
+                                            <div class="flex items-center gap-4 mb-4">
+                                                <?php if ($review['profile_pic'] == null): ?>
+                                                    <div
+                                                        class="w-12 h-12 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-bold">
+                                                        <?php echo htmlspecialchars($review['user_name'][0]); ?>
+                                                    </div>
+                                                <?php else: ?>
+                                                    <img class="w-12 h-12 rounded-full object-cover"
+                                                        src="./<?php echo htmlspecialchars($review['profile_pic']); ?>"
+                                                        alt="Profile Picture">
+                                                <?php endif; ?>
+                                                <div>
+                                                    <a href="user-page.php"
+                                                        class="font-semibold text-blue-600 hover:underline"><?php echo htmlspecialchars($review['user_name']); ?></a>
+                                                    <p class="text-sm text-gray-500">
+                                                        <?php echo date('F j, Y \a\t g:i A', strtotime($review['date'])); ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="flex text-yellow-400 mb-2">
+                                                <?php for ($i = 0; $i < $review['rating']; $i++): ?>
+                                                    <i class="fas fa-star"></i>
+                                                <?php endfor; ?>
+                                            </div>
+                                            <p class="text-gray-700"><?php echo htmlspecialchars($review['review']); ?></p>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="flex items-center justify-center gap-4 mt-6">
+                                    <button id="prevReview"
+                                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300">
+                                        <i class="fas fa-chevron-left mr-2"></i>Previous
+                                    </button>
+                                    <button id="nextReview"
+                                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300">
+                                        Next<i class="fas fa-chevron-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="mb-10">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Things You Should Know</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                                    <h3 class="font-semibold text-xl mb-4 text-gray-800">House Rules</h3>
+                                    <ul class="space-y-3">
+                                        <?php
+                                        if (isset($venue['time_inout'])) {
+                                            $timeInOut = json_decode($venue['time_inout'], true);
+                                            $checkIn = DateTime::createFromFormat('H:i', $timeInOut['check_in'])->format('h:i A');
+                                            $checkOut = DateTime::createFromFormat('H:i', $timeInOut['check_out'])->format('h:i A');
+                                            ?>
+                                            <li class="flex items-center gap-2 text-gray-700">
+                                                <i class="fas fa-clock text-blue-500"></i>
+                                                <span>Check-in: After <?php echo htmlspecialchars($checkIn); ?></span>
+                                            </li>
+                                            <li class="flex items-center gap-2 text-gray-700">
+                                                <i class="fas fa-clock text-blue-500"></i>
+                                                <span>Checkout: Before <?php echo htmlspecialchars($checkOut); ?></span>
+                                            </li>
+                                        <?php } ?>
+                                        <li class="flex items-center gap-2 text-gray-700">
+                                            <i class="fas fa-users text-blue-500"></i>
+                                            <span>Maximum <?php echo htmlspecialchars($venue['capacity']) ?>
+                                                guests</span>
+                                        </li>
+                                        <?php
+                                        if (!empty($venue['rules'])) {
+                                            $rules = json_decode($venue['rules'], true);
+                                            if ($rules):
+                                                foreach ($rules as $rule): ?>
+                                                    <li class="flex items-center gap-2 text-gray-700">
+                                                        <i class="fas fa-check text-green-500"></i>
+                                                        <?= htmlspecialchars($rule) ?>
+                                                    </li>
+                                                <?php endforeach;
+                                            endif;
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
+                                <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                                    <h3 class="font-semibold text-xl mb-4 text-gray-800">Cancellation Policy</h3>
+                                    <div class="space-y-3 text-gray-700">
+                                        <p>Free cancellation for 48 hours after booking.</p>
+                                        <p>Cancel before check-in and get a full refund, minus the service fee.</p>
+                                        <div class="mt-4">
+                                            <h4 class="font-medium mb-2">Refund Policy:</h4>
+                                            <ul class="space-y-2">
+                                                <li class="flex items-center gap-2">
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                    <span>100% refund: Cancel 7 days before check-in</span>
+                                                </li>
+                                                <li class="flex items-center gap-2">
+                                                    <i class="fas fa-check text-green-500"></i>
+                                                    <span>50% refund: Cancel 3-7 days before check-in</span>
+                                                </li>
+                                                <li class="flex items-center gap-2">
+                                                    <i class="fas fa-times text-red-500"></i>
+                                                    <span>No refund: Cancel less than 3 days before check-in</span>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <hr class="my-6">
-
-
+                        </section>
                     </div>
 
-                    <div class="md:w-1/3">
-                        <div class="border rounded-xl p-6 shadow-lg mb-6">
-                            <h3 class="text-xl font-semibold mb-4">The Owner</h3>
-                            <div class="flex gap-4">
+                    <div class="lg:w-1/3">
+                        <div class="sticky top-32 space-y-6">
+                            <div class="bg-white border rounded-xl p-6 shadow-lg">
+                                <h3 class="text-xl font-semibold mb-4 text-gray-800">The Owner</h3>
                                 <a href="owner-page.php"
-                                    class="bg-slate-50 p-6 w-full hover:bg-slate-100 transition duration-300 cursor-pointer">
-                                    <!-- Card Header -->
-                                    <div class="text-center mb-4">
+                                    class="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition duration-300">
+                                    <div class="flex items-center gap-4">
                                         <div
-                                            class="size-24 text-2xl rounded-full bg-black text-white flex items-center justify-center mx-auto mb-4">
+                                            class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                                             <?php
-
                                             $profilePic = $account->getProfilePic($owner[0]['id']);
                                             if (isset($owner) && empty($profilePic)) {
-                                                echo $owner[0]['firstname'][0];
+                                                echo '<span class="text-3xl font-bold text-gray-600">' . $owner[0]['firstname'][0] . '</span>';
                                             } else {
-                                                echo '<img id="profileImage" name="profile_image" src="./' . htmlspecialchars($profilePic) . '" alt="Profile Picture" class="w-full h-full rounded-full object-cover">';
+                                                echo '<img src="./' . htmlspecialchars($profilePic) . '" alt="Profile Picture" class="w-full h-full object-cover">';
                                             }
                                             ?>
                                         </div>
-                                        <h2 class="text-xl font-semibold text-gray-800">
-                                            <?php echo htmlspecialchars($owner[0]['firstname'] . " " . $owner[0]['lastname']); ?>
-                                        </h2>
-                                        <p class="text-xs text-gray-500">Owner</p>
-
+                                        <div>
+                                            <h2 class="text-lg font-semibold text-gray-800">
+                                                <?php echo htmlspecialchars($owner[0]['firstname'] . " " . $owner[0]['lastname']); ?>
+                                            </h2>
+                                            <p class="text-sm text-gray-600">Owner</p>
+                                        </div>
                                     </div>
                                 </a>
                             </div>
-                        </div>
 
-
-
-
-                        <div class="sticky top-32">
-                            <form id="reservationForm" class="border rounded-xl p-6 shadow-lg bg-slate-50" method="GET"
+                            <form id="reservationForm" class="bg-white border rounded-xl p-6 shadow-lg" method="GET"
                                 action="payment.php">
-                                <!-- Price Header -->
-                                <div class="flex flex-col lg:flex-row justify-between items-center mb-6">
-                                    <div class="flex items-baseline">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div>
                                         <span
-                                            class="text-3xl font-bold">₱<?php echo htmlspecialchars($venue['price']); ?></span>
-                                        <span class="text-gray-600 ml-2">/ night</span>
+                                            class="text-3xl font-bold text-gray-800">₱<?php echo htmlspecialchars($venue['price']); ?></span>
+                                        <span class="text-gray-600">/ night</span>
                                     </div>
-                                    <div class="flex items-center gap-2 text-sm">
+                                    <div class="flex items-center">
                                         <i class="fas fa-star text-yellow-400 mr-1"></i>
                                         <span
                                             class="font-semibold"><?php echo number_format($venue['rating'], 1) ?></span>
-                                        <span class="text-gray-500 text-xs"> <?php echo $venue['total_reviews'] ?>
-                                            review/s</span>
+                                        <span class="text-gray-500 text-xs ml-1">(<?php echo $venue['total_reviews'] ?>
+                                            reviews)</span>
                                     </div>
                                 </div>
 
-                                <!-- Date and Guest Selection -->
-                                <div class="border rounded-xl mb-6 shadow-sm bg-gray-50 relative">
+                                <div class="border rounded-lg mb-4">
+                                    <input type="hidden" name="venueId"
+                                        value="<?php echo htmlspecialchars($venue['id']); ?>">
                                     <div class="flex border-b">
-                                        <input type="hidden" name="venueId"
-                                            value="<?php echo htmlspecialchars($venue['id']); ?>">
                                         <div class="w-1/2 p-3 border-r">
                                             <label
                                                 class="block text-xs font-semibold text-gray-700 mb-1">CHECK-IN</label>
-                                            <input type="date" name="checkin" placeholder="Set Date"
+                                            <input type="date" name="checkin"
                                                 class="w-full bg-transparent focus:outline-none text-gray-800">
                                         </div>
                                         <div class="w-1/2 p-3">
                                             <label
                                                 class="block text-xs font-semibold text-gray-700 mb-1">CHECKOUT</label>
-                                            <input type="date" name="checkout" placeholder="Set Date"
+                                            <input type="date" name="checkout"
                                                 class="w-full bg-transparent focus:outline-none text-gray-800">
                                         </div>
                                     </div>
@@ -715,118 +670,76 @@ $reviews = $venueObj->getReview($_GET['id']);
                                     </div>
                                 </div>
 
-                                <!-- Price Breakdown -->
-                                <div class="space-y-4 mb-6">
+                                <div class="space-y-3 mb-4">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-gray-600 hover:text-gray-900 cursor-help">
-                                            ₱<?php echo htmlspecialchars($venue['price']); ?> × <span
-                                                total-nights>0</span>
-                                            nights
-                                        </span>
+                                        <span class="text-gray-600">₱<?php echo htmlspecialchars($venue['price']); ?> ×
+                                            <span total-nights>0</span> nights</span>
                                         <span class="font-medium">₱ <input type="number"
                                                 class="text-right bg-transparent w-24" name="totalPriceForNights"
                                                 value="0" readonly></span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-gray-600 hover:text-gray-900 cursor-help">
-                                            Entrance fee × <span total-entrance-guests>0</span> guest
-                                        </span>
+                                        <span class="text-gray-600">Entrance fee × <span total-entrance-guests>0</span>
+                                            guest</span>
                                         <span class="font-medium">₱ <input type="number"
                                                 class="text-right bg-transparent w-24" name="totalEntranceFee"
                                                 value="<?php echo htmlspecialchars($venue['entrance']); ?>"
                                                 readonly></span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-gray-600 hover:text-gray-900 cursor-help">Cleaning fee</span>
+                                        <span class="text-gray-600">Cleaning fee</span>
                                         <span class="font-medium">₱ <input type="number"
                                                 class="text-right bg-transparent w-24" name="cleaningFee"
                                                 value="<?php echo htmlspecialchars($venue['cleaning']); ?>"
                                                 readonly></span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-gray-600 hover:text-gray-900 cursor-help">HubVenue service
-                                            fee</span>
+                                        <span class="text-gray-600">HubVenue service fee</span>
                                         <span class="font-medium">₱ <input type="number"
                                                 class="text-right bg-transparent w-24" name="serviceFee" value="0"
                                                 readonly></span>
                                     </div>
-
                                     <div class="flex justify-between items-center">
-                                        <span
-                                            class="text-gray-600 hover:text-gray-900 cursor-help text-xs">Discounts(PWD/Senior
-                                            Citizen)
-                                        </span>
+                                        <span class="text-gray-600 text-xs">Discounts (PWD/Senior Citizen)</span>
                                         <span class="font-medium text-right bg-transparent w-24" readonly>
                                             <?php
-                                            if ($discountStatus['status'] == 'Active') {
-                                                echo htmlspecialchars(number_format($discountStatus['discount_value'], 0)) . "%";
+                                            if ($discountStatus) {
+                                                if ($discountStatus['status'] == 'Active') {
+                                                    echo htmlspecialchars(number_format($discountStatus['discount_value'], 0)) . "%";
+                                                } else {
+                                                    echo "0%";
+                                                }
                                             } else {
-                                                echo "0%";
+                                                echo "0%"; // No discount found
                                             }
                                             ?>
                                         </span>
                                     </div>
                                 </div>
 
-                                <!-- Total -->
-                                <div class="border-t pt-4 mb-6">
+                                <div class="border-t pt-4 mb-4">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-lg font-bold">Total</span>
-                                        <span class="font-bold text-lg">₱ <input type="number"
+                                        <span class="text-lg font-bold text-gray-800">Total</span>
+                                        <span class="font-bold text-lg text-gray-800">₱ <input type="number"
                                                 class="text-right bg-transparent w-24 font-bold" name="totalPrice"
                                                 value="0" readonly></span>
                                     </div>
                                 </div>
 
-                                <p class="text-center text-gray-600 my-4">You won't be charged yet</p>
+                                <p class="text-center text-gray-600 mb-4">You won't be charged yet</p>
                                 <button type="submit"
-                                    class="w-full bg-red-500 text-white rounded-lg py-3 font-semibold mb-4">Reserve</button>
+                                    class="w-full bg-red-500 text-white rounded-lg py-3 font-semibold hover:bg-red-600 transition duration-300">Reserve</button>
                             </form>
                         </div>
-
-
-
-
-
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <div class="venue-comparison hidden" id="comparisonPanel">
-        <button class="comparison-close hidden" id="closeCompareBtn" type="button" onclick="window.closeComparison()">
-            <i class="fas fa-times text-xl"></i>
-        </button>
-        <div class="comparison-content">
-            <h2 class="text-2xl font-semibold">Compare With</h2>
-            <div id="comparisonVenues" class="space-y-4">
-                <!-- Venues will be loaded here -->
-            </div>
-        </div>
-    </div>
 
     <script src="./vendor/jQuery-3.7.1/jquery-3.7.1.min.js"></script>
     <script src="./js/user.jquery.js"></script>
-    <script>
-        // Define closeComparison in the global scope
-        window.closeComparison = function () {
-            const mainContent = document.querySelector('.main-content');
-            const mainContainer = document.querySelector('.main-container');
-            const comparisonPanel = document.getElementById('comparisonPanel');
-            const closeCompareBtn = document.getElementById('closeCompareBtn');
-
-            document.body.style.overflow = '';
-            mainContent.classList.remove('shifted');
-            mainContainer.classList.remove('shifted');
-            comparisonPanel.classList.remove('active');
-
-            setTimeout(() => {
-                comparisonPanel.classList.add('hidden');
-                closeCompareBtn.classList.add('hidden');
-            }, 300);
-        }
-    </script>
 
     <!-- pagination -->
     <script>
@@ -962,7 +875,17 @@ $reviews = $venueObj->getReview($_GET['id']);
                     guestsInput.value = maxGuests;
                 }
 
-                const discountRate = <?php echo $discountStatus['status'] == 'Active' ? $discountStatus['discount_value'] / 100 : 0; ?>;
+                const discountRate = <?php
+                if ($discountStatus) {
+                    if ($discountStatus['status'] == 'Active') {
+                        echo $discountStatus['discount_value'] / 100; // Convert percentage to decimal
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 0;
+                }
+                ?>;
 
                 if (days > 0) {
                     const totalPriceForNights = pricePerNight * days;
@@ -1238,163 +1161,6 @@ $reviews = $venueObj->getReview($_GET['id']);
                     if (e.key === 'ArrowRight') nextButton.click();
                 }
             });
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Comparison Panel Functionality
-            const compareButton = document.getElementById('compareButton');
-            const mainContent = document.querySelector('.main-content');
-            const comparisonPanel = document.getElementById('comparisonPanel');
-            const comparisonVenues = document.getElementById('comparisonVenues');
-            const closeCompareBtn = document.getElementById('closeCompareBtn');
-
-            // Completely separate compare button handler
-            if (compareButton) {
-                compareButton.onclick = function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    e.stopImmediatePropagation(); // Stop other events from firing
-
-                    // Remove any photo gallery related classes/states
-                    const photoGalleryModal = document.getElementById('photoGalleryModal');
-                    if (photoGalleryModal) {
-                        photoGalleryModal.classList.add('hidden');
-                    }
-
-                    openComparisonPanel();
-                    return false;
-                };
-            }
-
-            function openComparisonPanel() {
-                document.body.style.overflow = 'hidden';
-                mainContent.classList.add('shifted');
-                document.querySelector('.main-container').classList.add('shifted');
-                comparisonPanel.classList.remove('hidden');
-                comparisonPanel.classList.add('active');
-                closeCompareBtn.classList.remove('hidden');
-                loadComparisonVenues();
-            }
-
-            function closeComparison() {
-                document.body.style.overflow = '';
-                mainContent.classList.remove('shifted');
-                document.querySelector('.main-container').classList.remove('shifted');
-                comparisonPanel.classList.remove('active');
-                setTimeout(() => {
-                    comparisonPanel.classList.add('hidden');
-                    closeCompareBtn.classList.add('hidden');
-                }, 300);
-            }
-
-            async function loadComparisonVenues() {
-                try {
-                    comparisonVenues.innerHTML = '<div class="text-center py-4">Loading venues...</div>';
-                    const response = await fetch('get_comparison_venues.php?current_venue_id=<?php echo $venue['id']; ?>');
-                    const venues = await response.json();
-
-                    if (venues.length === 0) {
-                        comparisonVenues.innerHTML = '<div class="text-center py-4">No venues available for comparison</div>';
-                        return;
-                    }
-
-                    comparisonVenues.innerHTML = venues.map(venue => `
-    <div class="bg-slate-50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 mb-6">
-        <div class="relative">
-            <div class="relative w-full h-48 overflow-hidden">
-                <img src="./${venue.image_urls[0]}" alt="${venue.name}" class="w-full h-full object-cover">
-            </div>
-            <div class="p-4">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-lg font-semibold text-gray-900">${venue.name}</h3>
-                    <div class="flex items-center">
-                        <p class="font-bold text-sm">${parseFloat(venue.rating).toFixed(1)}</p>
-                        <i class="fas fa-star text-yellow-500 ml-1"></i>
-                    </div>
-                </div>
-                <p class="text-sm text-gray-500 line-clamp-2 mb-3">${venue.description}</p>
-                <div class="flex justify-between items-center">
-                    <p class="text-gray-900">
-                        <span class="font-semibold">₱${parseFloat(venue.price).toLocaleString()}</span>
-                        <span class="text-sm"> / night</span>
-                    </p>
-                    <div class="flex gap-2">
-                        <button onclick="toggleVenueDetails(${venue.id}, this)"
-                            class="inline-flex items-center justify-center px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors">
-                            View Details
-                        </button>
-                        <a href="venues.php?id=${venue.id}"
-                            class="inline-flex items-center justify-center px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-lg hover:bg-gray-900 transition-colors">
-                            View Venue
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="venue-details-${venue.id}" class="hidden p-4 border-t">
-            <div class="space-y-4">
-                <div>
-                    <h4 class="font-semibold mb-2">Place Description</h4>
-                    <p class="text-sm text-gray-600">${venue.description}</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-2">Venue Capacity</h4>
-                    <p class="text-sm text-gray-600">${venue.capacity} guests</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-2">Location</h4>
-                    <p class="text-sm text-gray-600">${venue.location}</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-2">Amenities</h4>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        ${JSON.parse(venue.amenities).map(amenity => `
-                        <li>• ${amenity}</li>
-                        `).join('')}
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-2">House Rules</h4>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        ${venue.rules ? JSON.parse(venue.rules).map(rule => `
-                        <li>• ${rule}</li>
-                        `).join('') : '<li>No specific rules listed</li>'}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    `).join('');
-                } catch (error) {
-                    console.error('Error loading comparison venues:', error);
-                    comparisonVenues.innerHTML = '<div class="text-center py-4 text-red-500">Error loading venues</div>';
-                }
-            }
-
-            // Function to toggle venue details
-            window.toggleVenueDetails = function (venueId, button) {
-                const detailsSection = document.getElementById(`venue-details-${venueId}`);
-                if (detailsSection.classList.contains('hidden')) {
-                    detailsSection.classList.remove('hidden');
-                    button.textContent = 'Hide Details';
-                    // Allow time for the hidden class to be removed before setting max-height
-                    requestAnimationFrame(() => {
-                        detailsSection.style.maxHeight = detailsSection.scrollHeight + 'px';
-                    });
-                } else {
-                    detailsSection.style.maxHeight = '0';
-                    button.textContent = 'View Details';
-                    // Wait for transition to complete before hiding
-                    setTimeout(() => {
-                        detailsSection.classList.add('hidden');
-                    }, 300);
-                }
-            }
-
-            // Make loadComparisonVenues available globally
-            window.loadComparisonVenues = loadComparisonVenues;
         });
     </script>
 

@@ -57,15 +57,6 @@ $profilePic = $account->getProfilePic($_SESSION['user']['id']);
           button.style.color = "white";
         });
       }
-
-      // Show/hide the search bar based on scroll position
-      if (scrollPosition >= firstSectionBottom - mainNav.offsetHeight / 2) {
-        bottomSearch.classList.add("flex");
-        bottomSearch.classList.remove("hidden");
-      } else {
-        bottomSearch.classList.add("hidden");
-        bottomSearch.classList.remove("flex");
-      }
     }
   }
 
@@ -74,48 +65,4 @@ $profilePic = $account->getProfilePic($_SESSION['user']['id']);
   // Initial call to set correct color on page load
   updateNavColor();
 
-  document.getElementById('guestsButton').addEventListener('click', function () {
-    const dropdown = document.getElementById('guestDropdown');
-    dropdown.classList.toggle('hidden');
-  });
-
-  // Update guest count when + or - buttons are clicked
-  document.querySelectorAll('.guest-plus, .guest-minus').forEach(button => {
-    button.addEventListener('click', function () {
-      const countElement = this.parentElement.querySelector('.guest-count');
-      let count = parseInt(countElement.textContent);
-
-      if (this.classList.contains('guest-plus')) {
-        count++;
-      } else if (count > 0) {
-        count--;
-      }
-
-      countElement.textContent = count;
-      updateTotalGuestCount();
-    });
-  });
-
-  function updateTotalGuestCount() {
-    const counts = Array.from(document.querySelectorAll('.guest-count'))
-      .map(el => parseInt(el.textContent));
-    const total = counts.reduce((sum, current) => sum + current, 0);
-
-    const guestCountElement = document.getElementById('guestCount');
-    if (total === 0) {
-      guestCountElement.textContent = 'Add guests';
-    } else {
-      guestCountElement.textContent = `${total} guest${total !== 1 ? 's' : ''}`;
-    }
-  }
-
-  // Close dropdown when clicking outside
-  document.addEventListener('click', function (event) {
-    const dropdown = document.getElementById('guestDropdown');
-    const guestsButton = document.getElementById('guestsButton');
-
-    if (!dropdown.contains(event.target) && !guestsButton.contains(event.target)) {
-      dropdown.classList.add('hidden');
-    }
-  });
 </script>

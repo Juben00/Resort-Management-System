@@ -88,21 +88,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $accountObj->usertype = $user_type;
 
         $result = $accountObj->signup();
-
-        header('Content-Type: application/json');
-
-        try {
+        if ($result['status'] == 'success') {
             echo json_encode([
                 'status' => 'success',
-                'message' => 'Signup successful! Please login to continue.'
+                'message' => $result['message']
             ]);
-        } catch (Exception $e) {
+        } else {
             echo json_encode([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => $result['message']
             ]);
         }
-        exit();
 
     } else {
         echo json_encode([
