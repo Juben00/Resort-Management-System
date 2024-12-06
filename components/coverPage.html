@@ -1,110 +1,19 @@
-<section class="first-section relative" style="background-color: blue-500/20">
-  <div class="ml-20 p-4 md:p-8">
-    <!-- Added ml-20 to account for sidebar width -->
+<section
+  class="first-section flex items-center relative "
+  style="background: url('./images/beach-cover.jpg') no-repeat center/cover; opacity: 0.9;"
+>
+  <div class="p-4 md:p-8 w-full">
 
-    <!-- search -->
-    <div class="bg-slate-50 border mt-16 border-gray-300 rounded-full shadow-lg p-2 mb-8 flex items-center max-w-5xl mx-auto scroll-animate">
-      
-      <div class="flex-1 min-w-0 px-4">
-          <label for="location" class="block text-sm font-medium text-gray-700">Where</label>
-          <input type="text" id="location" placeholder="Search for a venue" class="w-full border-0 focus:ring-0 focus:outline-none text-lg bg-transparent">
-      </div>
-      <div class="w-px h-10 bg-gray-300 mx-2"></div>
-      <div class="flex-1 min-w-0 px-4">
-          <label for="minPrice" class="block text-sm font-medium text-gray-700">Price Range</label>
-          <input type="number" id="minPrice" placeholder="Minimum" class="w-full border-0 focus:ring-0 focus:outline-none text-lg bg-transparent">
-      </div>
-      <div class="w-px h-10 bg-gray-300 mx-2"></div>
-      <div class="flex-1 min-w-0 px-4">
-          <label for="maxPrice" class="block text-sm font-medium text-gray-700"></label>
-          <input type="number" id="maxPrice" placeholder="Maximum" class="w-full border-0 focus:ring-0 focus:outline-none text-lg bg-transparent">
-      </div>
-      <div class="w-px h-10 bg-gray-300 mx-2"></div>
-      <div class="flex-1 min-w-0 px-4 relative">
-          <label for="guests" class="block text-sm font-medium text-gray-700">Who</label>
-          <input type="text" id="guests" readonly placeholder="Add guests" class="w-full border-0 focus:ring-0 focus:outline-none text-lg bg-transparent cursor-pointer">
-          
-          <!-- Guest counter dropdown -->
-          <div id="guestDropdown" class="hidden absolute top-full left-0 mt-2 w-72 bg-slate-50 rounded-2xl shadow-lg border border-gray-200 p-4 z-50">
-              <!-- Adults -->
-              <div class="flex items-center justify-between py-3 border-b">
-                  <div>
-                      <h3 class="font-medium">Adults</h3>
-                      <p class="text-gray-500 text-sm">Ages 13 or above</p>
-                  </div>
-                  <div class="flex items-center gap-3">
-                      <button class="guest-minus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">-</button>
-                      <span class="guest-count w-4 text-center">0</span>
-                      <button class="guest-plus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">+</button>
-                  </div>
-              </div>
-              
-              <!-- Children -->
-              <div class="flex items-center justify-between py-3 border-b">
-                  <div>
-                      <h3 class="font-medium">Children</h3>
-                      <p class="text-gray-500 text-sm">Ages 2-12</p>
-                  </div>
-                  <div class="flex items-center gap-3">
-                      <button class="guest-minus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">-</button>
-                      <span class="guest-count w-4 text-center">0</span>
-                      <button class="guest-plus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">+</button>
-                  </div>
-              </div>
-              
-              <!-- Infants -->
-              <div class="flex items-center justify-between py-3 border-b">
-                  <div>
-                      <h3 class="font-medium">Infants</h3>
-                      <p class="text-gray-500 text-sm">Under 2</p>
-                  </div>
-                  <div class="flex items-center gap-3">
-                      <button class="guest-minus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">-</button>
-                      <span class="guest-count w-4 text-center">0</span>
-                      <button class="guest-plus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">+</button>
-                  </div>
-              </div>
-              
-              <!-- Pets -->
-              <div class="flex items-center justify-between py-3">
-                  <div>
-                      <h3 class="font-medium">Pets</h3>
-                      <p class="text-gray-500 text-sm hover:underline cursor-pointer">Bringing a service animal?</p>
-                  </div>
-                  <div class="flex items-center gap-3">
-                      <button class="guest-minus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">-</button>
-                      <span class="guest-count w-4 text-center">0</span>
-                      <button class="guest-plus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">+</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-    </div>
-
-    <!-- Welcome section -->
-    <div
-      class="text-white rounded-3xl lg:p-8 lg:pt-0 mb-8 max-w-6xl mx-auto relative"
-    >
-      <div class="flex items-center lg:justify-around w-full relative z-10">
-        <div class="lg:w-2/3 scroll-animate" style="transition-delay: 0.3s;">
-          <h2 class="text-3xl mt-10 md:text-5xl font-bold mb-2">
-            Welcome to HubVenue
-          </h2>
-          <p class="text-xl mb-4">Plan your next event with us!</p>
-          <button
-            class="bg-slate-50 mt-4 hover:font-semibold text-blue-500 font-semibold py-3 px-8 rounded-full hover:bg-blue-100 transition duration-300 text-lg"
-          >
-            Check venues
-          </button>
-        </div>
-        <div class="hidden lg:block scroll-animate" style="transition-delay: 0.6s;">
-          <img
-            src="./images/R.png"
-            alt="VenueSpot Mascot"
-            class="w-80 h-80 object-cover"
-          />
-        </div>
-      </div>
+    <div class=" rounded-s-xl rounded-e-full lg:w-1/2 shadow-lg scroll-animate border-l-8 border border-white/30 backdrop-blur-md p-8" style="transition-delay: 0.3s;">
+      <h2 class="text-3xl mt-10 md:text-5xl font-bold mb-2">
+        Welcome to  <br> Icoco Resort Management System
+      </h2>
+      <p class="text-xl mb-4">Make your vacation memorable!</p>
+      <button
+        class="bg-slate-50 mt-4 hover:font-semibold font-semibold py-3 px-8 rounded-full hover:bg-blue-100 transition duration-300 text-lg"
+      > 
+        Check Resorts
+      </button>
     </div>
   </div>
   <div class="cloud-bottom absolute left-0 w-full overflow-hidden">
@@ -160,7 +69,6 @@
   }
 </style>
 
-<script src="assets/js/guestCounter.js"></script>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -174,8 +82,6 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('show');
-          // Optionally, stop observing the element after it's animated
-          // observer.unobserve(entry.target);
         }
       });
     }, observerOptions);

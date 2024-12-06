@@ -10,110 +10,11 @@ $profilePic = $account->getProfilePic($_SESSION['user']['id']);
   <!-- logged in -->
   <div class="flex items-center justify-between md:px-4">
     <!-- Left Section -->
-    <a href="./" class="flex items-center space-x-2 hover:cursor-pointer" id="HubvenueLogo">
-      <img src="./images/black_ico.png" alt="HubVenue_Logo" class="h-[80px]" />
+    <a href="./" class="flex items-center">
+      <img src="./images/icoco_black_ico.png" alt="Icoco_Logo" class="h-[80px]" />
+      <span class="text-4xl font-semibold">Icoco <span class="text-sm text-neutral-800">Resort Management
+          System</span></span>
     </a>
-    <!-- Center Section -->
-    <div id="bottom-search"
-      class="bg-slate-50 text-xs hidden border border-gray-300 p-1 rounded-full shadow-lg items-center max-w-2xl md:max-w-5xl mx-auto">
-      <div class="flex-1 min-w-0 px-4">
-        <label for="location" class="block text-sm font-medium text-gray-700">Where</label>
-        <input type="text" id="location" placeholder="Search location"
-          class="w-full border-0 focus:ring-0 focus:outline-none text-lg bg-transparent">
-      </div>
-
-      <div class="w-px h-10 bg-gray-300 mx-2"></div>
-      <div class="flex-1 min-w-0 px-4">
-        <label for="minPrice" class="block text-sm font-medium text-gray-700">Price Range</label>
-        <div class="flex items-center gap-2">
-          <input type="number" id="minPrice" placeholder="Min"
-            class="w-20 border-0 focus:ring-0 focus:outline-none text-lg bg-transparent">
-          <span class="text-gray-500">-</span>
-          <input type="number" id="maxPrice" placeholder="Max"
-            class="w-20 border-0 focus:ring-0 focus:outline-none text-lg bg-transparent">
-        </div>
-      </div>
-
-      <div class="w-px h-10 bg-gray-300 mx-2"></div>
-      <div class="flex-1 min-w-0 px-4 relative">
-        <label for="guests" class="block text-sm font-medium text-gray-700">Who</label>
-        <button id="guestsButton"
-          class="w-full text-left border-0 focus:ring-0 focus:outline-none text-lg bg-transparent">
-          <span id="guestCount">Add guests</span>
-        </button>
-      </div>
-
-      <button class="rounded-full bg-gray-500 hover:bg-gray-600 text-black p-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      </button>
-
-      <!-- Guest Dropdown (moved outside the button for better positioning) -->
-      <div id="guestDropdown"
-        class="hidden absolute top-full left-0 mt-2 w-72 bg-slate-50 rounded-2xl shadow-lg border border-gray-200 p-4 z-50">
-        <!-- Adults -->
-        <div class="flex items-center justify-between py-3 border-b">
-          <div>
-            <h3 class="font-medium">Adults</h3>
-            <p class="text-gray-500 text-sm">Ages 13 or above</p>
-          </div>
-          <div class="flex items-center gap-3">
-            <button
-              class="guest-minus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">-</button>
-            <span class="guest-count w-4 text-center">0</span>
-            <button
-              class="guest-plus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">+</button>
-          </div>
-        </div>
-
-        <!-- Children -->
-        <div class="flex items-center justify-between py-3 border-b">
-          <div>
-            <h3 class="font-medium">Children</h3>
-            <p class="text-gray-500 text-sm">Ages 2-12</p>
-          </div>
-          <div class="flex items-center gap-3">
-            <button
-              class="guest-minus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">-</button>
-            <span class="guest-count w-4 text-center">0</span>
-            <button
-              class="guest-plus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">+</button>
-          </div>
-        </div>
-
-        <!-- Infants -->
-        <div class="flex items-center justify-between py-3 border-b">
-          <div>
-            <h3 class="font-medium">Infants</h3>
-            <p class="text-gray-500 text-sm">Under 2</p>
-          </div>
-          <div class="flex items-center gap-3">
-            <button
-              class="guest-minus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">-</button>
-            <span class="guest-count w-4 text-center">0</span>
-            <button
-              class="guest-plus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">+</button>
-          </div>
-        </div>
-
-        <!-- Pets -->
-        <div class="flex items-center justify-between py-3">
-          <div>
-            <h3 class="font-medium">Pets</h3>
-            <p class="text-gray-500 text-sm hover:underline cursor-pointer">Bringing a service animal?</p>
-          </div>
-          <div class="flex items-center gap-3">
-            <button
-              class="guest-minus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">-</button>
-            <span class="guest-count w-4 text-center">0</span>
-            <button
-              class="guest-plus rounded-full w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-400">+</button>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- Right Section -->
     <button class="flex items-center space-x-4" id="menutabtrigger">
       <div class="relative flex items-center space-x-2 bg-slate-50 shadow-md rounded-full ps-4 p-1">

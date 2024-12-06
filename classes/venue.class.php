@@ -165,67 +165,6 @@ class Venue
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
-    //     function getSingleVenue($venue_id = '')
-//     {
-//         try {
-//             // Establish database connection
-//             $conn = $this->db->connect();
-
-    //             // Start building the SQL query
-//             $sql = "SELECT 
-//     v.id AS venue_id, 
-//     v.name AS venue_name, 
-//     v.description AS venue_description, 
-//     v.location AS venue_location, 
-//     v.*, 
-//     vt.tag_name AS tag, 
-//     vss.name AS status, 
-//     vas.name AS availability, 
-//     AVG(r.rating) AS rating, 
-//     COUNT(DISTINCT r.id) AS total_reviews,
-//     SUM(CASE WHEN r.rating = 5 THEN 1 ELSE 0 END) AS rating_5,
-//     SUM(CASE WHEN r.rating = 4 THEN 1 ELSE 0 END) AS rating_4,
-//     SUM(CASE WHEN r.rating = 3 THEN 1 ELSE 0 END) AS rating_3,
-//     SUM(CASE WHEN r.rating = 2 THEN 1 ELSE 0 END) AS rating_2,
-//     SUM(CASE WHEN r.rating = 1 THEN 1 ELSE 0 END) AS rating_1,
-
-    //     GROUP_CONCAT(vi.image_url) AS image_urls
-// FROM 
-//     venues v
-// JOIN 
-//     venue_tag_sub vt ON v.venue_tag = vt.id
-// JOIN 
-//     venue_status_sub vss ON v.status_id = vss.id
-// JOIN 
-//     venue_availability_sub vas ON v.availability_id = vas.id
-// JOIN 
-//     venue_images vi ON v.id = vi.venue_id
-// LEFT JOIN 
-//     reviews r ON v.id = r.venue_id
-// WHERE 
-//     v.id = :venue_id
-// GROUP BY 
-//     v.id, vt.tag_name, vss.name, vas.name;
-
-    //             ";
-//             $stmt = $conn->prepare($sql);
-//             $stmt->bindParam(':venue_id', $venue_id);
-//             $stmt->execute();
-//             $venues = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    //             // Process the images (split the comma-separated string into an array)
-//             if (!empty($venues['image_urls'])) {
-//                 $venues['image_urls'] = explode(',', $venues['image_urls']); // Convert image URLs to an array
-//             }
-
-    //             return $venues;
-
-    //         } catch (PDOException $e) {
-//             // Log error and return failure message
-//             error_log("Database error: " . $e->getMessage());
-//             return ['status' => 'error', 'message' => $e->getMessage()];
-//         }
-//     }
 
     function getSingleVenue($venue_id = '')
     {
@@ -288,6 +227,7 @@ class Venue
         try {
             $conn = $this->db->connect();
             $sql = "SELECT 
+                AVG(rating) AS average,
                 COUNT(rating) AS total,
                 SUM(CASE WHEN rating = 5 THEN 1 ELSE 0 END) AS rating_5,
                 SUM(CASE WHEN rating = 4 THEN 1 ELSE 0 END) AS rating_4,
@@ -580,9 +520,13 @@ class Venue
     {
         try {
             $conn = $this->db->connect();
-            $sql = "SELECT booking_start_date AS startdate, booking_end_date AS enddate FROM bookings WHERE booking_venue_id = :venue_id";
+            $STATUS_1 = 1;
+            $STATUS_2 = 2;
+            $sql = "SELECT booking_start_date AS startdate, booking_end_date AS enddate FROM bookings WHERE booking_venue_id = :venue_id AND booking_status_id IN (:status1, :status2)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':venue_id', $venue_id);
+            $stmt->bindParam(':status1', $STATUS_1);
+            $stmt->bindParam(':status2', $STATUS_2);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
@@ -701,6 +645,83 @@ LEFT JOIN
             return false;
         }
     }
+
+    function getBookingsByHost($host_id, $booking_status)
+    {
+        try {
+            $conn = $this->db->connect();
+            $sql = "SELECT v.*, b.*, b.id AS booking_id, 
+                GROUP_CONCAT(vi.image_url) AS image_urls
+                FROM venues AS v
+                JOIN bookings AS b 
+                ON v.id = b.booking_venue_id 
+                LEFT JOIN venue_images AS vi
+                ON v.id = vi.venue_id
+                WHERE v.host_id = :host_id AND b.booking_status_id = :booking_status
+                GROUP BY b.id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':host_id', $host_id, PDO::PARAM_INT);
+            $stmt->bindParam(':booking_status', $booking_status, PDO::PARAM_INT);
+            $stmt->execute();
+            $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $bookings;
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    function getBookingByVenue($venue_id, $booking_status)
+    {
+        try {
+            $conn = $this->db->connect();
+            $sql = "SELECT 
+                COUNT(b.id) OVER() AS booking_count, 
+                b.*, 
+                u.*, 
+                v.* 
+            FROM bookings b
+            JOIN users u ON b.booking_guest_id = u.id
+            JOIN venues v ON b.booking_venue_id = v.id
+            WHERE b.booking_venue_id = :venue_id AND b.booking_status_id = :status;
+        ";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':venue_id', $venue_id);
+            $stmt->bindParam(':status', $booking_status);
+            $stmt->execute();
+            $booking = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all rows since multiple bookings may exist
+            return $booking;
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+
+
+    // function getBookingsByVenue($venue_id)
+    // {
+    //     try {
+    //         $conn = $this->db->connect();
+    //         $sql = "SELECT v.*, b.*, b.id AS booking_id, 
+    //             GROUP_CONCAT(vi.image_url) AS image_urls
+    //             FROM venues AS v
+    //             JOIN bookings AS b 
+    //             ON v.id = b.booking_venue_id 
+    //             LEFT JOIN venue_images AS vi
+    //             ON v.id = vi.venue_id
+    //             WHERE v.id = :venue_id
+    //             GROUP BY b.id";
+    //         $stmt = $conn->prepare($sql);
+    //         $stmt->bindParam(':venue_id', $venue_id, PDO::PARAM_INT);
+    //         $stmt->execute();
+    //         $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //         return $bookings;
+    //     } catch (PDOException $e) {
+    //         error_log("Database error: " . $e->getMessage());
+    //         return ['status' => 'error', 'message' => $e->getMessage()];
+    //     }
+    // }
 
     // public function getComparisonVenues($currentVenueId)
     // {

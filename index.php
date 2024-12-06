@@ -28,8 +28,8 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HubVenue || Home</title>
-    <link rel="icon" href="./images/black_ico.png">
+    <title>iCoCo Resort Management System || Home</title>
+    <link rel="icon" href="./images/icoco_black_ico.png">
     <link rel="stylesheet" href="./output.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"></script>
@@ -53,10 +53,6 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
             z-index: 1;
         }
 
-
-        body {
-            background: #3490dc;
-        }
 
         .cloud-bottom {
             position: absolute;
@@ -210,11 +206,8 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
 
 
     <div class="flex flex-1 ">
-        <!-- Sidebar -->
-        <?php include_once './components/sidebar.html' ?>
-
         <!-- Main content -->
-        <main class="flex-1 mt-28">
+        <main class="flex-1">
             <!-- First section with blue background -->
             <div class="bg-blue-500/20 relative">
                 <?php require_once './components/coverPage.html' ?>
@@ -227,12 +220,12 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                     <div class="container mx-auto px-4 md:px-8">
                         <div class="mt-16 max-w-6xl mx-auto scroll-animate">
                             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-                                Find Your Perfect Venue
+                                Find Your Perfect Resort
                             </h2>
                             <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-                                From intimate gatherings to grand celebrations, discover spaces that match your vision.
-                                Browse through our carefully curated selection of venues to find the one that speaks to
-                                you.
+                                Welcome to iCoCo Resort Management System, your ultimate solution for managing resort
+                                operations efficiently. Our platform is designed to enhance guest experiences and
+                                streamline resort management processes.
                             </p>
                         </div>
                     </div>
@@ -240,13 +233,12 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                     <!-- Second section with white background -->
                     <div class="bg-slate-50 p-50 pt-10 relative z-10">
                         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 scroll-animate">
-                            <h2 class="text-3xl font-bold mb-4">Featured Venues</h2>
+                            <h2 class="text-3xl font-bold mb-4">Featured Resorts</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full h-full"
                                 id="venueList">
-                                <!-- Venue cards will be dynamically inserted here -->
                                 <?php
                                 if (empty($venues)) {
-                                    echo '<p class="text-left text-gray-500">No venues available</p>';
+                                    echo '<p class="text-left text-gray-500">No resorts available</p>';
                                 }
                                 foreach ($venues as $venue) {
                                     ?>
@@ -336,9 +328,10 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                             <div class="flex flex-col">
                                 <div class="text-center mb-8 scroll-animate">
                                     <h2 class="text-3xl font-bold mb-2">Our Services</h2>
-                                    <p class="text-gray-600 max-w-2xl mx-auto text-sm">Discover how HubVenue can help
-                                        you find the perfect space or monetize your venue with our comprehensive
-                                        services.</p>
+                                    <p class="text-gray-600 max-w-2xl mx-auto text-sm">iCoCo Resort Management System
+                                        offers innovative tools to simplify booking, facility management, and customer
+                                        service, ensuring a seamless experience for both guests and resort managers.
+                                    </p>
                                 </div>
 
                                 <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
@@ -350,9 +343,10 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                                 class="w-full h-52 object-cover transform group-hover:scale-105 transition-transform duration-300">
                                         </div>
                                         <div class="space-y-2">
-                                            <h3 class="text-xl font-semibold text-gray-800">Space Rentals</h3>
-                                            <p class="text-sm text-gray-600">Discover unique spaces for any event, from
-                                                intimate gatherings to large-scale functions.</p>
+                                            <h3 class="text-xl font-semibold text-gray-800">Resort Rentals</h3>
+                                            <p class="text-sm text-gray-600">Ensure a memorable stay for guests by
+                                                enabling personalized services and streamlined interactions from booking
+                                                to checkout.</p>
                                         </div>
                                     </div>
 
@@ -365,9 +359,12 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                                 class="w-full h-52 object-cover transform group-hover:scale-105 transition-transform duration-300">
                                         </div>
                                         <div class="space-y-2">
-                                            <h3 class="text-xl font-semibold text-gray-800">Post Your Space</h3>
-                                            <p class="text-sm text-gray-600">Earn money by listing your home or
-                                                commercial space for event rentals.</p>
+                                            <h3 class="text-xl font-semibold text-gray-800">Resort Owners</h3>
+                                            <p class="text-sm text-gray-600">
+                                                Efficiently manage bookings, availability, and reservations with
+                                                real-time updates to ensure a seamless guest experience.
+
+                                            </p>
                                         </div>
                                     </div>
 
@@ -399,45 +396,16 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                         class="flex flex-col items-center bg-slate-50 border p-4 lg:p-4 lg:py-8 rounded-lg shadow-md gap-2 scroll-animate">
                                         <h3 class="text-xl font-semibold  text-red-500 italic">Our Story</h3>
                                         <p>
-                                            Hubvenue was born out of the need to streamline the often complex and
-                                            time-consuming
-                                            process of
-                                            event
-                                            planning. The journey began when our founders, faced with the daunting task
-                                            of
-                                            organizing
-                                            multiple
-                                            events, realized how fragmented the venue and catering service industry was.
-                                            From
-                                            endless phone
-                                            calls to
-                                            lengthy negotiations, the process was anything but easy. Inspired by the
-                                            vision
-                                            of a
-                                            one-stop
-                                            platform,
-                                            Hubvenue was developed to centralize and simplify these interactions,
-                                            allowing
-                                            users
-                                            to focus on
-                                            creating memorable experiences instead of logistics.
+                                            iCoCo Resort Management System was created to address the challenges faced
+                                            by resort managers and guests. Our founders recognized the need for a
+                                            comprehensive platform that integrates all aspects of resort management,
+                                            from booking to customer service. With iCoCo, you can manage your resort
+                                            effortlessly and provide an exceptional experience for your guests.
                                         </p>
-                                        <p>Throughout our journey, we faced challenges, such as integrating diverse
-                                            services
-                                            and
-                                            building
-                                            trust
-                                            within the community. However, these obstacles only strengthened our
-                                            commitment
-                                            to
-                                            innovation.
-                                            Hubvenue
-                                            continues to grow, expanding our network of partners and refining our
-                                            platform
-                                            based
-                                            on user
-                                            feedback,
-                                            making it the ultimate event planning tool for everyone.</p>
+                                        <p>Our journey has been driven by a commitment to innovation and customer
+                                            satisfaction. We continuously improve our platform based on user feedback,
+                                            ensuring that iCoCo remains the leading solution for resort management. Join
+                                            us and experience the future of resort management today.</p>
                                     </div>
 
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -446,12 +414,9 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                             class="flex flex-col items-center bg-slate-50 border p-4 lg:p-4 lg:py-8 rounded-lg shadow-md gap-2 scroll-animate">
                                             <h3 class="text-xl font-semibold  text-red-500 italic">Our Mission</h3>
                                             <p class="text-center">
-                                                To simplify finding and booking available venues, offering users an easy
-                                                and
-                                                efficient platform
-                                                that connects them with ideal spaces for their events, ensuring seamless
-                                                experience from
-                                                discovery ro registration.
+                                                Our mission is to revolutionize resort management by providing a
+                                                user-friendly platform that connects guests with the perfect resort
+                                                experience, ensuring seamless operations from booking to checkout.
                                             </p>
                                         </div>
                                         <!-- vission -->
@@ -459,11 +424,8 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                             class="flex flex-col items-center bg-slate-50 border p-4 lg:p-4 lg:py-8 rounded-lg shadow-md gap-2 scroll-animate">
                                             <h3 class="text-xl font-semibold  text-red-500 italic">Our Vision</h3>
                                             <p class="text-center">
-                                                To be the go to platform for venue reservations, helping people connect
-                                                with
-                                                the
-                                                perfect spaces
-                                                for any event.
+                                                Our vision is to be the premier platform for resort management, helping
+                                                resorts worldwide deliver exceptional guest experiences.
                                             </p>
                                         </div>
                                     </div>
@@ -475,34 +437,25 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                         <div class="w-full ">
                                             <div class="faq-item mb-4">
                                                 <button class="faq-header w-full text-left">
-                                                    1. How do I book a space?
+                                                    1. How do I book a resort?
                                                 </button>
                                                 <div class="faq-content hidden">
-                                                    <p class="text-xs">To book a space, simply look for your desired
-                                                        location
-                                                        and
-                                                        date on our platform. Browse
-                                                        through the available options, select the space that suits your
-                                                        needs,
-                                                        and follow
-                                                        the
+                                                    <p class="text-xs">To book a resort, simply search for your desired
+                                                        location and dates on our platform. Browse through the available
+                                                        options, select the resort that suits your needs, and follow the
                                                         booking process to confirm your reservation.</p>
                                                 </div>
                                             </div>
                                             <div class="faq-item mb-4">
                                                 <button class="faq-header  w-full text-left">
-                                                    2. Can I list my own space on HubVenue?
+                                                    2. Can I list my own space on Icoco?
                                                 </button>
                                                 <div class="faq-content hidden">
-                                                    <p class="text-sm ">Yes, you can list your space on HubVenue. Create
-                                                        an
-                                                        account,
-                                                        provide details about your
-                                                        space, upload photos, and set your availability and pricing.
-                                                        Once
-                                                        your
-                                                        listing is
-                                                        approved, it will be visible to potential renters.</p>
+                                                    <p class="text-sm ">Yes, you can list your resort on iCoCo Resort
+                                                        Management System. Create an account, provide details about your
+                                                        resort, upload photos, and set your availability and pricing.
+                                                        Once your listing is approved, it will be visible to potential
+                                                        guests.</p>
                                                 </div>
                                             </div>
                                             <div class="faq-item mb-4">
@@ -510,16 +463,10 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                                     3. What types of spaces can I list?
                                                 </button>
                                                 <div class="faq-content hidden">
-                                                    <p class="text-sm ">You can list a variety of spaces including
-                                                        residential
-                                                        homes,
-                                                        commercial venues, event
-                                                        halls, and more. The platform is designed to accommodate all
-                                                        types
-                                                        of
-                                                        spaces that
-                                                        can be
-                                                        used for events and gatherings.</p>
+                                                    <p class="text-sm ">You can list a variety of resort types,
+                                                        including luxury resorts, budget-friendly options, and unique
+                                                        stays. Our platform accommodates all types of resorts that offer
+                                                        exceptional guest experiences.</p>
                                                 </div>
                                             </div>
                                             <div class="faq-item mb-4">
@@ -528,20 +475,11 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                                 </button>
                                                 <div class="faq-content hidden">
                                                     <p class="text-sm ">Yes, there may be fees associated with both
-                                                        booking
-                                                        and
-                                                        listing
-                                                        spaces. Booking fees are
-                                                        typically a percentage of the total rental cost, while listing
-                                                        fees
-                                                        may
-                                                        vary based
-                                                        on
-                                                        the type of space and duration of the listing. Detailed
-                                                        information
-                                                        about fees will
-                                                        be
-                                                        provided during the booking or listing process.</p>
+                                                        booking and listing resorts. Booking fees are typically a
+                                                        percentage of the total rental cost, while listing fees may vary
+                                                        based on the type of resort and duration of the listing.
+                                                        Detailed information about fees will be provided during the
+                                                        booking or listing process.</p>
                                                 </div>
                                             </div>
                                             <div class="faq-item mb-4">
@@ -550,15 +488,9 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                                 </button>
                                                 <div class="faq-content hidden">
                                                     <p class="text-sm ">If you need assistance, you can contact our
-                                                        customer
-                                                        support
-                                                        team via the contact form on
-                                                        our website, or by email at info@hubvenue.com. Our team is
-                                                        available
-                                                        to
-                                                        help you
-                                                        with
-                                                        any questions or issues you may have.</p>
+                                                        customer support team via the contact form on our website, or by
+                                                        email at support@icoco.com. Our team is available to help you
+                                                        with any questions or issues you may have.</p>
                                                 </div>
                                             </div>
                                         </div>
