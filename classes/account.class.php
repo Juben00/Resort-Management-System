@@ -447,13 +447,15 @@ class Account
             v.*, 
             vss.name AS status, 
             vas.name AS availability, 
-            GROUP_CONCAT(vi.image_url) AS image_urls
+            GROUP_CONCAT(vi.image_url) AS image_urls,
+            AVG(r.rating) AS rating
             FROM venues v 
             JOIN venue_tag_sub vtg ON v.venue_tag = vtg.id
             JOIN venue_status_sub vss ON v.status_id = vss.id 
             JOIN venue_availability_sub vas ON v.availability_id = vas.id 
             JOIN venue_images vi ON v.id = vi.venue_id
             JOIN bookmarks b ON b.venueId = v.id
+            LEFT JOIN reviews r ON v.id = r.venue_id
             WHERE b.userId = :userId
             GROUP BY v.id";
 
