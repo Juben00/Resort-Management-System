@@ -53,7 +53,7 @@ $reviews = $venueObj->getReview($_GET['id']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venue Details - HubVenue</title>
+    <title>Venue Details - Icoco</title>
     <link rel="icon" href="./images/icoco_black_ico.png">
     <link rel="stylesheet" href="./output.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -694,7 +694,7 @@ $reviews = $venueObj->getReview($_GET['id']);
                                                 readonly></span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-gray-600">HubVenue service fee</span>
+                                        <span class="text-gray-600">Icoco service fee</span>
                                         <span class="font-medium">₱ <input type="number"
                                                 class="text-right bg-transparent w-24" name="serviceFee" value="0"
                                                 readonly></span>

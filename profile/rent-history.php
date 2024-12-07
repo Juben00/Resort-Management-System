@@ -18,7 +18,7 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
         <!-- Tabs -->
         <div class="mb-8">
             <nav class="flex space-x-4 bg-white p-2 rounded-lg shadow-sm" aria-label="Tabs">
-                <button onclick="showTab('pending')"
+                <button onclick="showTab('pending')"5
                     class="tab-btn text-gray-600 hover:text-gray-800 px-3 py-2 font-medium text-sm rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Pending Rentals
                 </button>
@@ -719,10 +719,10 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
             </head>
             <body>
                 <div class="header">
-                    <img src="./images/white_ico.png" alt="HubVenue Logo" class="logo" 
+                    <img src="./images/white_ico.png" alt="Icoco Logo" class="logo" 
                          onerror="this.style.display='none'">
                     <h1>Booking Receipt</h1>
-                    <p>Thank you for choosing HubVenue!</p>
+                    <p>Thank you for choosing Icoco!</p>
                 </div>
                 
                 <div class="receipt-details">
@@ -766,7 +766,7 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
 
                 <div class="footer">
                     <p>This is an electronically generated receipt. For questions or concerns, please contact our support team.</p>
-                    <p>© ${new Date().getFullYear()} HubVenue. All rights reserved.</p>
+                    <p>© ${new Date().getFullYear()} Icoco. All rights reserved.</p>
                 </div>
             </body>
             </html>
@@ -901,10 +901,10 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
             </head>
             <body>
                 <div class="header">
-                    <img src="./images/white_ico.png" alt="HubVenue Logo" class="logo" 
+                    <img src="./images/white_ico.png" alt="Icoco Logo" class="logo" 
                          onerror="this.style.display='none'">
                     <h1>Booking Receipt</h1>
-                    <p>Thank you for choosing HubVenue!</p>
+                    <p>Thank you for choosing Icoco!</p>
                 </div>
                 
                 <div class="receipt-details">
@@ -948,7 +948,7 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
 
                 <div class="footer">
                     <p>This is an electronically generated receipt. For questions or concerns, please contact our support team.</p>
-                    <p>© ${new Date().getFullYear()} HubVenue. All rights reserved.</p>
+                    <p>© ${new Date().getFullYear()} Icoco. All rights reserved.</p>
                 </div>
             </body>
             </html>

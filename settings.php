@@ -24,7 +24,7 @@ $discountStatus = $accountObj->getDiscountApplication($_SESSION['user']['id']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HubVenue || Settings</title>
+    <title>Icoco || Settings</title>
     <link rel="icon" href="./images/icoco_black_ico.png">
     <link rel="stylesheet" href="./output.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />

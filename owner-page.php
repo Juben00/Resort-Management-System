@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venue Owner Profile - HubVenue</title>
+    <title>Venue Owner Profile - Icoco</title>
     <link rel="stylesheet" href="./output.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="icon" href="./images/icoco_black_ico.png">
@@ -196,7 +196,7 @@
 
         function shareOnTwitter() {
             const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent("Check out this venue owner's profile on HubVenue!");
+            const text = encodeURIComponent("Check out this venue owner's profile on Icoco!");
             window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
         }
 
@@ -207,7 +207,7 @@
 
         function shareOnWhatsApp() {
             const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent("Check out this venue owner's profile on HubVenue!");
+            const text = encodeURIComponent("Check out this venue owner's profile on Icoco!");
             window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
         }
 

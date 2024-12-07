@@ -96,7 +96,7 @@ $ratings = array(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HubVenue - Venue Reservation</title>
+    <title>Icoco - Venue Reservation</title>
     <link rel="stylesheet" href="./output.css">
     <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
