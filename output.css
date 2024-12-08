@@ -1191,6 +1191,10 @@ video {
   max-width: 28rem;
 }
 
+.max-w-\[200px\] {
+  max-width: 200px;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -3139,6 +3143,10 @@ video {
     margin-top: 0px;
   }
 
+  .md\:ml-8 {
+    margin-left: 2rem;
+  }
+
   .md\:block {
     display: block;
   }
@@ -3234,6 +3242,10 @@ video {
 
   .lg\:w-2\/3 {
     width: 66.666667%;
+  }
+
+  .lg\:w-96 {
+    width: 24rem;
   }
 
   .lg\:grid-cols-2 {

@@ -22,30 +22,29 @@ $bookingThisMonth = 0;
     <link rel="stylesheet" href="./output.css">
 </head>
 <!-- Venue Details View (Initially Hidden) -->
-<div id="venueDetailsView" class="container mx-auto pt-20">
+<div id="venueDetailsView" class="container mx-auto pt-20 px-4 sm:px-6 lg:px-8">
     <div class="mb-4">
-        <a id="backToListing" class="flex items-center text-xs cursor-pointer text-gray-600 hover:text-gray-900">
+        <a id="backToListing" class="flex items-center text-sm cursor-pointer text-gray-600 hover:text-gray-900">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
             Back to Listings
-
         </a>
     </div>
 
-    <div class="flex gap-6">
+    <div class="flex flex-col w-full lg:flex-row gap-8">
         <!-- Main Content -->
-        <div class="flex-grow">
-            <div class="bg-white text-neutral-900 rounded-lg shadow-sm">
+        <div class="w-full">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div class="p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h1 id="detailVenueName" class="text-gray-600 text-2xl view-mode">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 id="detailVenueName" class="text-3xl font-bold text-gray-900 view-mode">
                             <?php echo htmlspecialchars($venueView['venue_name']); ?>
                         </h1>
-                        <input id="editVenueName" class="text-2xl font-bold w-full edit-mode hidden"
+                        <input id="editVenueName" class="text-3xl font-bold w-full edit-mode hidden"
                             value="<?php echo htmlspecialchars(trim($venueView['venue_name'])); ?>">
                         <button onclick="toggleEditMode()"
-                            class="text-xs px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg flex items-center gap-2">
+                            class="text-sm px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg flex items-center gap-2 transition duration-300">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -55,167 +54,160 @@ $bookingThisMonth = 0;
                     </div>
 
                     <!-- Image Gallery -->
-                    <div class="mb-6 grid grid-cols-2 gap-4 relative">
-                        <div class="col-span-2">
+                    <div class="mb-8">
+                        <div class="relative">
                             <?php if (!empty($venueView['image_urls'])): ?>
                                 <img src="./<?= htmlspecialchars($venueView['image_urls'][0]) ?>" alt="Venue Image"
-                                    class="w-full h-96 object-cover rounded-lg">
+                                    class="w-full h-[500px] object-cover rounded-xl">
                             <?php else: ?>
-                                <img src="default-image.jpg" alt="Default Venue Image"
-                                    class="bg-slate-50 w-full h-96 object-cover rounded-lg">
+                                <div class="w-full h-[500px] bg-gray-200 rounded-xl flex items-center justify-center">
+                                    <p class="text-gray-500">No image available</p>
+                                </div>
                             <?php endif; ?>
+                            <button
+                                class="absolute bottom-4 right-4 bg-white text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 shadow-md">
+                                Show all photos
+                            </button>
                         </div>
-                        <div class="grid grid-cols-3 col-span-2 gap-2">
-                            <?php if (!empty($venueView['image_urls']) && count($venueView['image_urls']) > 1): ?>
-                                <img src="./<?= htmlspecialchars($venueView['image_urls'][1]) ?>" alt="Venue Image"
-                                    class="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-75">
-                            <?php else: ?>
-                                <div
-                                    class="bg-slate-50 w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-75 border flex items-center justify-center">
-                                    <p class="text-center">No more image to show</p>
+                        <div class="grid grid-cols-4 gap-4 mt-4">
+                            <?php
+                            $imageUrls = !empty($venueView['image_urls']) ? array_slice($venueView['image_urls'], 1, 4) : [];
+                            foreach ($imageUrls as $image):
+                                ?>
+                                <img src="./<?= htmlspecialchars($image) ?>" alt="Venue Image"
+                                    class="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-75 transition duration-300">
+                            <?php endforeach; ?>
+                            <?php for ($i = count($imageUrls); $i < 4; $i++): ?>
+                                <div class="w-full h-32 bg-gray-200 rounded-lg flex items-center justify-center">
+                                    <p class="text-gray-500 text-sm">No image</p>
                                 </div>
-                            <?php endif; ?>
-
-                            <?php if (!empty($venueView['image_urls']) && count($venueView['image_urls']) > 2): ?>
-                                <img src="./<?= htmlspecialchars($venueView['image_urls'][2]) ?>" alt="Venue Image"
-                                    class="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-75">
-                            <?php else: ?>
-                                <div
-                                    class="bg-slate-50 w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-75 border flex items-center justify-center">
-                                    <p class="text-center">No more image to show</p>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if (!empty($venueView['image_urls']) && count($venueView['image_urls']) > 3): ?>
-                                <img src="./<?= htmlspecialchars($venueView['image_urls'][3]) ?>" alt="Venue Image"
-                                    class="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-75">
-                            <?php else: ?>
-                                <div
-                                    class="bg-slate-50 w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-75 border flex items-center justify-center">
-                                    <p class="text-center">No more image to show</p>
-                                </div>
-                            <?php endif; ?>
+                            <?php endfor; ?>
                         </div>
-                        <button
-                            class="absolute text-xs border-2 border-gray-500 bottom-4 right-4 bg-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-100">
-                            Show all photos
-                        </button>
                     </div>
 
-                    <div class="flex gap-6 w-full ">
-                        <div class=" w-full">
-                            <!-- Location -->
-                            <div class="mb-6  w-full">
-                                <h3 class="text-lg font-semibold mb-2">Location</h3>
-                                <p id="detailVenueLocation" class="text-gray-600 view-mode">
-                                    <?php echo htmlspecialchars(trim($venueView['venue_location'])); ?>
-                                </p>
-                                <input type="text" id="editVenueLocation"
-                                    class="form-input w-full rounded-md edit-mode hidden"
-                                    value="<?php echo htmlspecialchars(trim($venueView['venue_location'])); ?>">
-                            </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Location -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Location</h3>
+                            <p id="detailVenueLocation" class="text-gray-600 view-mode">
+                                <?php echo htmlspecialchars(trim($venueView['venue_location'])); ?>
+                            </p>
+                            <input type="text" id="editVenueLocation"
+                                class="form-input w-full rounded-md edit-mode hidden"
+                                value="<?php echo htmlspecialchars(trim($venueView['venue_location'])); ?>">
+                        </div>
 
-                            <!-- Description -->
-                            <div class="mb-6">
-                                <h3 class="text-lg font-semibold mb-2">Description</h3>
-                                <p id="detailVenueDescription" class="text-gray-600 view-mode">
-                                    <?php echo trim(htmlspecialchars($venueView['venue_description'])); ?>
-                                </p>
-                                <textarea id="editVenueDescription"
-                                    class="form-textarea w-full rounded-md edit-mode hidden"
-                                    rows="4"><?php echo trim(htmlspecialchars($venueView['venue_description'])); ?></textarea>
-                            </div>
+                        <!-- Capacity -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Capacity</h3>
+                            <p id="detailVenueCapacity" class="text-gray-600 view-mode">
+                                <?php echo trim(htmlspecialchars($venueView['capacity'])); ?> guests
+                            </p>
+                            <input type="number" id="editVenueCapacity"
+                                class="form-input w-full rounded-md edit-mode hidden"
+                                value="<?php echo htmlspecialchars($venueView['capacity']); ?>">
+                        </div>
+                    </div>
 
-                            <!-- Capacity -->
-                            <div class="mb-6">
-                                <h3 class="text-lg font-semibold mb-2">Capacity</h3>
-                                <p id="detailVenueCapacity" class="text-gray-600 view-mode">
-                                    <?php echo trim(htmlspecialchars($venueView['capacity'])); ?>
-                                </p>
-                                <input type="number" id="editVenueCapacity"
-                                    class="form-input w-full rounded-md edit-mode hidden"
-                                    value="<?php echo htmlspecialchars($venueView['capacity']); ?>">
-                            </div>
+                    <!-- Description -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold mb-3">Description</h3>
+                        <p id="detailVenueDescription" class="text-gray-600 view-mode">
+                            <?php echo nl2br(htmlspecialchars(trim($venueView['venue_description']))); ?>
+                        </p>
+                        <textarea id="editVenueDescription" class="form-textarea w-full rounded-md edit-mode hidden"
+                            rows="4"><?php echo trim(htmlspecialchars($venueView['venue_description'])); ?></textarea>
+                    </div>
 
-                            <!-- Amenities -->
-                            <div class="mb-6">
-                                <h3 class="text-lg font-semibold mb-2">What this place offers</h3>
-                                <?php if (!empty($venueView['amenities'])): ?>
-                                    <?php
-                                    $amenities = json_decode($venueView['amenities'], true);
-                                    if ($amenities):
-                                        ?>
-                                        <ul class="list-disc pl-5 space-y-1">
-                                            <?php foreach ($amenities as $amenity): ?>
-                                                <li class="text-sm text-gray-800 leading-tight">
-                                                    <?= htmlspecialchars($amenity) ?>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    <?php else: ?>
-                                        <p class="text-sm text-gray-500">No amenities available</p>
-                                    <?php endif; ?>
-                                <?php else: ?>
-                                    <p class="text-sm text-gray-500">No amenities available</p>
-                                <?php endif; ?>
-                                <div id="editVenueAmenities" class="edit-mode hidden space-y-2">
-                                    <div id="amenitiesList"></div>
-                                    <button onclick="addAmenityField()"
-                                        class="text-blue-600 hover:text-blue-800 text-sm">+ Add amenity</button>
-                                </div>
-                            </div>
+                    <!-- Amenities -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold mb-3">What this place offers</h3>
+                        <?php if (!empty($venueView['amenities'])): ?>
+                            <?php
+                            $amenities = json_decode($venueView['amenities'], true);
+                            if ($amenities):
+                                ?>
+                                <ul class="grid grid-cols-2 gap-4">
+                                    <?php foreach ($amenities as $amenity): ?>
+                                        <li class="flex items-center text-gray-600">
+                                            <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <?= htmlspecialchars($amenity) ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php else: ?>
+                                <p class="text-gray-500">No amenities available</p>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <p class="text-gray-500">No amenities available</p>
+                        <?php endif; ?>
+                        <div id="editVenueAmenities" class="edit-mode hidden space-y-2 mt-4">
+                            <div id="amenitiesList"></div>
+                            <button onclick="addAmenityField()" class="text-blue-600 hover:text-blue-800 text-sm">+ Add
+                                amenity</button>
+                        </div>
+                    </div>
 
-                            <!-- Venue Rules -->
-                            <div class="mb-6">
-                                <h3 class="text-lg font-semibold mb-2">Venue Rules</h3>
-                                <?php if (!empty($venueView['rules'])): ?>
-                                    <?php
-                                    $rules = json_decode($venueView['rules'], true);
-                                    if ($rules):
-                                        ?>
-                                        <ul class="list-disc pl-5 space-y-1">
-                                            <?php foreach ($rules as $rule): ?>
-                                                <li class="text-sm text-gray-800 leading-tight">
-                                                    <?= htmlspecialchars($rule) ?>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    <?php else: ?>
-                                        <p class="text-sm text-gray-500">No Rules Stated</p>
-                                    <?php endif; ?>
-                                <?php else: ?>
-                                    <p class="text-sm text-gray-500">No Rules Stated</p>
-                                <?php endif; ?>
-                                <div id="editVenueRules" class="edit-mode hidden space-y-2">
-                                    <div id="rulesList"></div>
-                                    <button onclick="addRuleField()" class="text-blue-600 hover:text-blue-800 text-sm">+
-                                        Add rule</button>
-                                </div>
-                            </div>
-
+                    <!-- Venue Rules -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold mb-3">Venue Rules</h3>
+                        <?php if (!empty($venueView['rules'])): ?>
+                            <?php
+                            $rules = json_decode($venueView['rules'], true);
+                            if ($rules):
+                                ?>
+                                <ul class="space-y-2">
+                                    <?php foreach ($rules as $rule): ?>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 mr-2 text-red-500 mt-1 flex-shrink-0" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                                </path>
+                                            </svg>
+                                            <span class="text-gray-600"><?= htmlspecialchars($rule) ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php else: ?>
+                                <p class="text-gray-500">No rules stated</p>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <p class="text-gray-500">No rules stated</p>
+                        <?php endif; ?>
+                        <div id="editVenueRules" class="edit-mode hidden space-y-2 mt-4">
+                            <div id="rulesList"></div>
+                            <button onclick="addRuleField()" class="text-blue-600 hover:text-blue-800 text-sm">+ Add
+                                rule</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- New Ratings & Reviews Section - Moved to bottom -->
-            <div class="bg-white rounded-lg shadow-sm mt-6 p-6">
+            <!-- Ratings & Reviews Section -->
+            <div class="bg-white rounded-xl shadow-sm mt-8 p-6">
                 <h3 class="text-2xl font-bold mb-6">Ratings & Reviews</h3>
 
                 <!-- Rating Summary -->
                 <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                    <div class="flex items-center gap-8">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                         <!-- Overall Rating -->
-                        <div class="text-center">
+                        <div class="text-center mb-4 md:mb-0">
                             <div class="text-5xl font-bold mb-1">
                                 <?php echo number_format($ratings['average'], 1) ?>
                             </div>
                             <div class="flex items-center justify-center text-yellow-400 mb-1">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <!-- Repeat stars for 5 total -->
+                                <?php for ($i = 1; $i <= 5; $i++): ?>
+                                    <svg class="w-6 h-6 <?php echo $i <= $ratings['average'] ? 'text-yellow-400' : 'text-gray-300'; ?>"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                <?php endfor; ?>
                             </div>
                             <div class="text-sm text-gray-600">
                                 <?php echo htmlspecialchars($ratings['total']) ?? 0 ?> reviews
@@ -223,7 +215,7 @@ $bookingThisMonth = 0;
                         </div>
 
                         <!-- Rating Breakdown -->
-                        <div class="flex-grow">
+                        <div class="flex-grow md:ml-8">
                             <div class="space-y-2">
                                 <?php
                                 $totalReviews = isset($ratings['total']) ? (int) $ratings['total'] : 0;
@@ -235,26 +227,21 @@ $bookingThisMonth = 0;
                                     1 => isset($ratings['rating_1']) ? (int) $ratings['rating_1'] : 0,
                                 ];
 
-                                // Find the maximum review count to normalize widths
                                 $maxReviewCount = max($rate);
 
                                 for ($i = 5; $i >= 1; $i--):
-                                    $count = isset($rate[$i]) ? $rate[$i] : 0; // Count of reviews for the current star rating
-                                    // Normalize percentage based on $maxReviewCount
+                                    $count = isset($rate[$i]) ? $rate[$i] : 0;
                                     $normalizedPercentage = $maxReviewCount > 0 ? (($count) / $ratings['total']) * 100 : 0;
                                     ?>
                                     <div class="flex items-center gap-2">
                                         <span class="text-sm w-16"><?php echo $i; ?> stars</span>
-                                        <!-- Set explicit max width -->
-                                        <div class="flex-grow h-2 bg-gray-200 rounded max-w-[500px]">
-                                            <!-- Dynamically set the width based on normalized percentage -->
+                                        <div class="flex-grow h-2 bg-gray-200 rounded max-w-[200px]">
                                             <div class="h-full bg-yellow-400 rounded"
                                                 style="width: <?php echo $normalizedPercentage; ?>%;"></div>
                                         </div>
                                         <span class="text-sm w-8"><?php echo $count; ?></span>
                                     </div>
                                 <?php endfor; ?>
-
                             </div>
                         </div>
                     </div>
@@ -268,16 +255,17 @@ $bookingThisMonth = 0;
                             <div class="flex items-center gap-4 mb-4">
                                 <?php if ($review['profile_pic'] == null): ?>
                                     <div
-                                        class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-bold">
-                                        <?php echo htmlspecialchars($review['user_name'][0]); ?>
+                                        class="w-12 h-12 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-bold">
+                                        <?php echo htmlspecialchars(substr($review['user_name'], 0, 1)); ?>
                                     </div>
                                 <?php else: ?>
-                                    <img class="w-12 h-12 bg-gray-200 rounded-full"
+                                    <img class="w-12 h-12 rounded-full object-cover"
                                         src="./<?php echo htmlspecialchars($review['profile_pic']); ?>" alt="Profile Picture">
                                 <?php endif; ?>
                                 <div>
-                                    <a href="user-page.php"
-                                        class="font-semibold hover:underline"><?php echo htmlspecialchars($review['user_name']); ?></a>
+                                    <a href="user-page.php" class="font-semibold hover:underline">
+                                        <?php echo htmlspecialchars($review['user_name']); ?>
+                                    </a>
                                     <p class="text-sm text-gray-500">
                                         <?php
                                         $originalDate = $review['date'];
@@ -303,40 +291,39 @@ $bookingThisMonth = 0;
                 <!-- Pagination -->
                 <div class="flex items-center justify-center gap-2 mt-6">
                     <button id="prevReview"
-                        class="px-4 py-2 text-sm border w-24 bg-neutral-200 transition-all duration-150 text-gray-600 hover:bg-gray-100 rounded">Previous</button>
+                        class="px-4 py-2 text-sm border bg-white text-gray-700 hover:bg-gray-50 rounded-lg transition duration-300">Previous</button>
                     <button id="nextReview"
-                        class="px-4 py-2 text-sm border w-24 bg-neutral-200 transition-all duration-150 text-gray-600 hover:bg-gray-100 rounded">Next</button>
+                        class="px-4 py-2 text-sm border bg-white text-gray-700 hover:bg-gray-50 rounded-lg transition duration-300">Next</button>
                 </div>
             </div>
 
-            <!-- After the Ratings & Reviews section, add this new Calendar Pricing section -->
-            <div class="bg-white rounded-lg shadow-sm mt-6 p-6">
+            <!-- Calendar & Pricing Section -->
+            <div class="bg-white rounded-xl shadow-sm mt-8 p-6">
                 <h3 class="text-2xl font-bold mb-6">Calendar & Pricing</h3>
 
                 <!-- Calendar Header -->
                 <div class="flex justify-between items-center mb-4 calendar-header">
                     <div class="flex items-center space-x-4">
-                        <button class="p-2 hover:bg-gray-100 rounded-lg calendar-prev">
+                        <button class="p-2 hover:bg-gray-100 rounded-lg calendar-prev transition duration-300">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 19l-7-7 7-7" />
                             </svg>
                         </button>
                         <h4 class="text-lg font-semibold">October 2024</h4>
-                        <button class="p-2 hover:bg-gray-100 rounded-lg calendar-next">
+                        <button class="p-2 hover:bg-gray-100 rounded-lg calendar-next transition duration-300">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
                             </svg>
                         </button>
                     </div>
-
                 </div>
 
                 <!-- Calendar Grid -->
-                <div class="border rounded-lg">
+                <div class="border rounded-lg overflow-hidden">
                     <!-- Calendar Header -->
-                    <div class="grid grid-cols-7 text-sm font-medium text-gray-500 border-b">
+                    <div class="grid grid-cols-7 text-sm font-medium text-gray-500 bg-gray-50">
                         <div class="p-2 text-center">Su</div>
                         <div class="p-2 text-center">Mo</div>
                         <div class="p-2 text-center">Tu</div>
@@ -359,10 +346,10 @@ $bookingThisMonth = 0;
                             $isToday = $day === 5; // Example: 5th is today
                             $hasPrice = true; // Example: All days have prices
                         
-                            echo '<div class="relative p-2 border-b border-r hover:bg-gray-50 cursor-pointer">';
-                            echo '<div class="text-sm ' . ($isToday ? 'font-bold' : '') . '">' . $day . '</div>';
+                            echo '<div class="relative p-2 border-b border-r hover:bg-gray-50 transition duration-300 cursor-pointer">';
+                            echo '<div class="text-sm ' . ($isToday ? 'font-bold text-blue-600' : '') . '">' . $day . '</div>';
                             if ($hasPrice) {
-                                echo '<div class="text-xs text-gray-600"> ₱' . $venueView['price'] . '</div>';
+                                echo '<div class="text-xs text-gray-600"> ₱' . number_format($venueView['price']) . '</div>';
                             }
                             echo '</div>';
                         }
@@ -373,10 +360,10 @@ $bookingThisMonth = 0;
         </div>
 
         <!-- Right Sidebar -->
-        <div class="w-96">
-            <div class="bg-white rounded-lg shadow-sm p-6 sticky top-24">
+        <div class="w-1/3">
+            <div class="bg-white rounded-xl shadow-sm p-6 sticky top-24">
                 <div class="mb-6">
-                    <h3 class="text-lg font-semibold mb-4">Venue Settings</h3>
+                    <h3 class="text-xl font-semibold mb-4">Venue Settings</h3>
 
                     <!-- Price Setting -->
                     <div class="mb-4">
@@ -388,139 +375,80 @@ $bookingThisMonth = 0;
                         </div>
                     </div>
 
-
-
                     <!-- Save Changes Button -->
                     <button onclick="saveChanges()"
-                        class="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 mt-4">
+                        class="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition duration-300 mt-4">
                         Save Changes
                     </button>
                 </div>
 
-                <?php
-                $currentMonth = new DateTime(); // Defaults to the current date and time
-                foreach ($bookings as $booking) {
-                    $bookingCount += $booking['booking_count']; // Aggregate booking count
-                    $bookingRevenue += $booking['booking_grand_total']; // Aggregate revenue
-                
-                    $bookingEndDate = new DateTime($booking['booking_end_date']);
-
-                    if (
-                        $bookingEndDate->format('Y') === $currentMonth->format('Y') &&
-                        $bookingEndDate->format('m') === $currentMonth->format('m')
-                    ) {
-                        $bookingThisMonth += 1; // Increment count for bookings this month
-                    }
-                }
-                ?>
-
-                <?php
-                // var_dump($bookings);
-                ?>
-
                 <!-- Quick Stats -->
                 <div class="border-t pt-6">
-                    <h4 class="text-sm font-medium text-gray-700 mb-3">Booking Statistics</h4>
+                    <h4 class="text-lg font-semibold mb-4">Booking Statistics</h4>
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-gray-50 p-3 rounded-lg">
-                            <p class="text-sm text-gray-600">Total Bookings</p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-600 mb-1">Total Bookings</p>
                             <p class="text-xl font-semibold"><?php echo htmlspecialchars($bookingCount) ?></p>
                         </div>
-                        <div class="bg-gray-50 p-3 rounded-lg">
-                            <p class="text-sm text-gray-600">This Month</p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-600 mb-1">This Month</p>
                             <p class="text-xl font-semibold"><?php echo htmlspecialchars($bookingThisMonth) ?></p>
                         </div>
-                        <div class="bg-gray-50 p-3 rounded-lg">
-                            <p class="text-sm text-gray-600">Revenue</p>
-                            <p class="text-xl font-semibold">₱<?php echo htmlspecialchars($bookingRevenue) ?></p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-600 mb-1">Revenue</p>
+                            <p class="text-xl font-semibold">₱<?php echo number_format($bookingRevenue) ?></p>
                         </div>
-                        <div class="bg-gray-50 p-3 rounded-lg">
-                            <p class="text-sm text-gray-600">Rating</p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-600 mb-1">Rating</p>
                             <p class="text-xl font-semibold"><?php echo number_format($ratings['average'], 1) ?>/5</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- New Reservation History Section -->
+                <!-- Recent Reservations Section -->
                 <div class="border-t pt-6 mt-6">
                     <h4 class="text-lg font-semibold mb-4">Recent Reservations</h4>
                     <div class="space-y-4">
-
                         <?php
                         if (empty($bookings)) {
-                            echo '<p class="text-gray-600 text-xs text-center">No bookings found.</p>';
-                        }
-                        foreach ($bookings as $booking):
-                            ?>
-                            <!-- Sample Reservation Items -->
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div>
-                                        <p class="font-medium">Wedding Reception</p>
-                                        <p class="text-sm text-gray-600">
-                                            <?php echo htmlspecialchars($booking['firstname'] . " " . $booking['middlename'] . "." . " " . $booking['lastname']); ?>
-                                        </p>
+                            echo '<p class="text-gray-600 text-sm text-center">No bookings found.</p>';
+                        } else {
+                            foreach ($bookings as $booking):
+                                ?>
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <p class="font-medium">
+                                                <?php echo htmlspecialchars($booking['event_type'] ?? 'Event'); ?>
+                                            </p>
+                                            <p class="text-sm text-gray-600">
+                                                <?php echo htmlspecialchars($booking['firstname'] . " " . $booking['middlename'] . "." . " " . $booking['lastname']); ?>
+                                            </p>
+                                        </div>
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <?php echo htmlspecialchars($booking['booking_status'] ?? 'Confirmed'); ?>
+                                        </span>
                                     </div>
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        Confirmed
-                                    </span>
-                                </div>
-                                <div class="flex justify-between text-sm text-gray-600 mb-2">
-                                    <p class="text-gray-600 mt-1">
+                                    <div class="text-sm text-gray-600 mb-2">
                                         <?php
                                         $startDate = new DateTime($booking['booking_start_date']);
                                         $endDate = new DateTime($booking['booking_end_date']);
                                         echo $startDate->format('F j, Y') . ' to ' . $endDate->format('F j, Y');
                                         ?>
-                                    </p>
+                                    </div>
+                                    <p class="font-semibold">₱<?php echo number_format($booking['booking_grand_total']) ?></p>
                                 </div>
-                                <p>₱<?php echo htmlspecialchars($booking['booking_grand_total']) ?></p>
-                            </div>
-                            <?php
-                        endforeach;
+                                <?php
+                            endforeach;
+                        }
                         ?>
                     </div>
 
-
-
-                    <!-- <div class="bg-gray-50 p-4 rounded-lg">
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <p class="font-medium">Birthday Party</p>
-                                    <p class="text-sm text-gray-600">John Cruz</p>
-                                </div>
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    Pending
-                                </span>
-                            </div>
-                            <div class="flex justify-between text-sm text-gray-600">
-                                <p>Dec 20, 2024</p>
-                                <p>₱12,000</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <p class="font-medium">Corporate Event</p>
-                                    <p class="text-sm text-gray-600">Tech Corp.</p>
-                                </div>
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    Completed
-                                </span>
-                            </div>
-                            <div class="flex justify-between text-sm text-gray-600">
-                                <p>Nov 30, 2024</p>
-                                <p>₱20,000</p>
-                            </div>
-                        </div> -->
-
                     <!-- View All Reservations Link -->
                     <div class="mt-4 text-center">
-                        <a href="calendar.php" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        <a href="calendar.php"
+                            class="text-blue-600 hover:text-blue-800 text-sm font-medium transition duration-300">
                             View All Reservations →
                         </a>
                     </div>
