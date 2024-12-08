@@ -106,7 +106,7 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
                                                     View Details
                                                 </button>
                                                 <?php if ($booking['booking_status_id'] == '2' || $booking['booking_status_id'] == '4'): ?>
-                                                        <button onclick="printReceipt(<?php echo htmlspecialchars(json_encode([
+                                                        <!-- <button onclick="printReceipt(<?php echo htmlspecialchars(json_encode([
                                                             'booking_id' => $booking['booking_id'],
                                                             'venue_name' => $booking['venue_name'],
                                                             'booking_start_date' => $booking['booking_start_date'],
@@ -137,7 +137,7 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
                                                         type="button" 
                                                         class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                                                             <i class="fas fa-download mr-2"></i>Download Receipt
-                                                        </button>
+                                                        </button> -->
                                                 <?php endif; ?>
                                                 <?php if ($bookingStartDate > $currentDateTime): ?>
                                                         <button onclick="cancelBooking(<?php echo htmlspecialchars($booking['booking_id']); ?>)"
@@ -218,40 +218,6 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
                                                     class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
                                                     View Details
                                                 </button>
-                                                <?php if ($booking['booking_status_id'] == '2' || $booking['booking_status_id'] == '4'): ?>
-                                                        <button onclick="printReceipt(<?php echo htmlspecialchars(json_encode([
-                                                            'booking_id' => $booking['booking_id'],
-                                                            'venue_name' => $booking['venue_name'],
-                                                            'booking_start_date' => $booking['booking_start_date'],
-                                                            'booking_end_date' => $booking['booking_end_date'],
-                                                            'booking_duration' => $booking['booking_duration'],
-                                                            'booking_grand_total' => $booking['booking_grand_total'],
-                                                            'booking_payment_method' => $booking['booking_payment_method'],
-                                                            'booking_payment_reference' => $booking['booking_payment_reference'],
-                                                            'booking_service_fee' => $booking['booking_service_fee'],
-                                                            'venue_location' => $booking['venue_location']
-                                                        ])); ?>" 
-                                                        type="button" 
-                                                        class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-                                                            <i class="fas fa-print mr-2"></i>Print Receipt
-                                                        </button>
-                                                        <button onclick="downloadReceipt(<?php echo htmlspecialchars(json_encode([
-                                                            'booking_id' => $booking['booking_id'],
-                                                            'venue_name' => $booking['venue_name'],
-                                                            'booking_start_date' => $booking['booking_start_date'],
-                                                            'booking_end_date' => $booking['booking_end_date'],
-                                                            'booking_duration' => $booking['booking_duration'],
-                                                            'booking_grand_total' => $booking['booking_grand_total'],
-                                                            'booking_payment_method' => $booking['booking_payment_method'],
-                                                            'booking_payment_reference' => $booking['booking_payment_reference'],
-                                                            'booking_service_fee' => $booking['booking_service_fee'],
-                                                            'venue_location' => $booking['venue_location']
-                                                        ])); ?>" 
-                                                        type="button" 
-                                                        class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-                                                            <i class="fas fa-download mr-2"></i>Download Receipt
-                                                        </button>
-                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -312,7 +278,7 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
                                                         <button onclick="showDetails(<?php echo htmlspecialchars(json_encode($booking)); ?>)" type="button" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                                                             View Details
                                                         </button>
-                                                        <button id="bookAgainBtn" data-bvid="<?php echo htmlspecialchars($booking['venue_id']); ?>" type="button" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                                                        <button id="bookAgainBtn" data-id="<?php echo htmlspecialchars($booking['venue_id']); ?>" type="button" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
                                                             Book Again
                                                         </button>
                                                     </div>
@@ -362,7 +328,7 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
                                                 <span class="font-medium">Reason:</span> <?php echo htmlspecialchars($booking['booking_cancellation_reason']) ?>
                                             </p>
                                             <div class="mt-4">
-                                                <button id="bookAgainBtn" data-bvid="<?php echo htmlspecialchars($booking['venue_id']); ?>" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                                                <button id="bookAgainBtn" data-id="<?php echo htmlspecialchars($booking['venue_id']); ?>" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
                                                     Book Again
                                                 </button>
                                             </div>
@@ -378,13 +344,68 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
     <!-- Details Modal -->
     <div id="details-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
-            <div class="mt-3 text-center">
-                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title"></h3>
-                <div class="mt-2 px-7 py-3" id="modal-content">
-                    <!-- Content will be dynamically populated here -->
+            <div class="mt-3">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 text-center" id="modal-title"></h3>
+                <div class="mt-4 px-7 py-3">
+                    <!-- Main Image -->
+                    <div class="mb-4">
+                        <img id="modal-main-image" class="w-full h-64 object-cover rounded-lg" src="" alt="Venue Image">
+                    </div>
+
+                    <!-- Image Gallery -->
+                    <div id="image-gallery" class="flex gap-2 overflow-x-auto pb-2 mb-4"></div>
+
+                    <!-- Status Badge -->
+                    <div class="flex items-center gap-2 mb-4">
+                        <span id="booking-status" class="px-3 py-1 rounded-full text-sm font-medium"></span>
+                    </div>
+
+                    <!-- Booking Details -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Price Details -->
+                        <div class="space-y-2">
+                            <h4 class="font-semibold text-gray-900">Price Details</h4>
+                            <p id="price-per-night" class="text-gray-700"></p>
+                            <p id="booking-duration" class="text-gray-600"></p>
+                            <p id="cleaning-fee" class="text-gray-600"></p>
+                        </div>
+
+                        <!-- Location Details -->
+                        <div class="space-y-2">
+                            <h4 class="font-semibold text-gray-900">Location</h4>
+                            <div id="location-details" class="text-gray-600"></div>
+                        </div>
+
+                        <!-- Venue Details -->
+                        <div class="space-y-2">
+                            <h4 class="font-semibold text-gray-900">Venue Details</h4>
+                            <p id="venue-capacity" class="text-gray-600"></p>
+                            <div class="space-y-1">
+                                <p class="font-medium text-gray-700">Amenities:</p>
+                                <ul id="amenities-list" class="text-gray-600"></ul>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="space-y-2">
+                            <h4 class="font-semibold text-gray-900">Contact Information</h4>
+                            <div id="contact-details" class="text-gray-600"></div>
+                        </div>
+                    </div>
+
+                    <!-- Book Again Container -->
+                    <div id="book-again-container" class="mt-6">
+                        <button onclick="window.location.href='./venue.php?id=' + currentVenueId" 
+                                class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                            Book Again
+                        </button>
+                    </div>
                 </div>
-                <div class="items-center px-4 py-3">
-                    <button id="closeModalBtn" class="px-4 py-2 bg-gray-800 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300">
+
+                <!-- Close Button -->
+                <div class="mt-6">
+                    <button onclick="closeModal()" 
+                            class="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-200">
                         Close
                     </button>
                 </div>
@@ -441,49 +462,57 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
     });
 
     function showDetails(booking) {
+        // Store venue ID for book again functionality
+        window.currentVenueId = booking.venue_id;
+        
         const modal = document.getElementById('details-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const mainImage = document.getElementById('modal-main-image');
+        const imageGallery = document.getElementById('image-gallery');
+        const bookingStatus = document.getElementById('booking-status');
+        const pricePerNight = document.getElementById('price-per-night');
+        const bookingDuration = document.getElementById('booking-duration');
+        const cleaningFee = document.getElementById('cleaning-fee');
+        const locationDetails = document.getElementById('location-details');
+        const venueCapacity = document.getElementById('venue-capacity');
+        const amenitiesList = document.getElementById('amenities-list');
+        const contactDetails = document.getElementById('contact-details');
         const bookAgainContainer = document.getElementById('book-again-container');
 
-        // Show modal with fade-in effect
+        // Show modal
         modal.classList.remove('hidden');
-        requestAnimationFrame(() => {
-            modal.classList.add('opacity-100');
-            modal.querySelector('.relative').classList.add('scale-100');
-            modal.querySelector('.relative').classList.remove('scale-95');
-        });
 
-        // Set main title
-        document.getElementById('modal-title').textContent = booking.venue_name;
+        // Set content
+        modalTitle.textContent = booking.venue_name;
 
-        // Setup main image and gallery
-        const mainImage = document.getElementById('modal-main-image');
-        mainImage.src = './' + booking.image_urls.split(',')[0];
+        // Handle images
+        const imageUrls = booking.image_urls ? booking.image_urls.split(',') : [];
+        if (imageUrls.length > 0) {
+            mainImage.src = './' + imageUrls[0];
+            mainImage.alt = booking.venue_name;
+            
+            // Setup image gallery
+            imageGallery.innerHTML = imageUrls.map(url => `
+                <div class="flex-shrink-0 h-16 w-16 rounded-lg overflow-hidden">
+                    <img src="./${url}" 
+                        alt="Venue Image" 
+                        class="w-full h-full object-cover cursor-pointer hover:opacity-75 transition-opacity duration-200" 
+                        onclick="changeMainImage('./${url}')">
+                </div>
+            `).join('');
+        }
 
-        // Setup image gallery with horizontal thumbnails
-        const imageGallery = document.getElementById('image-gallery');
-        const imageUrls = booking.image_urls.split(',');
-        imageGallery.innerHTML = imageUrls.map(url => `
-            <div class="flex-shrink-0 h-16 w-16 rounded-lg overflow-hidden">
-                <img src="./${url}" 
-                    alt="Venue Image" 
-                    class="w-full h-full object-cover cursor-pointer hover:opacity-75 transition-opacity duration-200" 
-                    onclick="changeMainImage(this.src)">
-            </div>
-        `).join('');
-
-        // Set booking status and type
-        const bookingStatus = document.getElementById('booking-status');
+        // Set booking status
         const statusText = getBookingStatusText(booking.booking_status_id);
         bookingStatus.textContent = statusText;
         bookingStatus.className = `px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(booking.booking_status_id)}`;
 
         // Set price details
-        document.getElementById('price-per-night').textContent = `₱${numberWithCommas(booking.booking_grand_total)}`;
-        document.getElementById('booking-duration').textContent = `${booking.booking_duration} days`;
-        document.getElementById('cleaning-fee').textContent = `Cleaning fee: ₱500`;
+        pricePerNight.textContent = `₱${numberWithCommas(booking.booking_grand_total)}`;
+        bookingDuration.textContent = `${booking.booking_duration} days`;
+        cleaningFee.textContent = 'Cleaning fee: ₱500';
 
         // Set location details
-        const locationDetails = document.getElementById('location-details');
         locationDetails.innerHTML = `
             <p>${booking.venue_location}</p>
             <p>Governor Camins Avenue, Zone II</p>
@@ -491,9 +520,8 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
             <p>Zamboanga Peninsula, 7000</p>
         `;
 
-        // Set capacity and amenities (using the original amenities)
-        document.getElementById('venue-capacity').textContent = `${booking.venue_capacity || 3} guests`;
-        const amenitiesList = document.getElementById('amenities-list');
+        // Set venue details
+        venueCapacity.textContent = `${booking.venue_capacity || 3} guests`;
         amenitiesList.innerHTML = `
             <li>• Pool</li>
             <li>• WiFi</li>
@@ -501,14 +529,13 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
             <li>• Smart TV</li>
         `;
 
-        // Set contact details (using the original contact info)
-        const contactDetails = document.getElementById('contact-details');
+        // Set contact details
         contactDetails.innerHTML = `
             <p>Email: joevinansoc870@gmail.com</p>
             <p>Phone: 09053258512</p>
         `;
 
-        // Toggle book again button
+        // Toggle book again button visibility
         bookAgainContainer.classList.toggle('hidden', booking.booking_status_id === '2');
     }
 

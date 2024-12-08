@@ -442,16 +442,6 @@ class Venue
         return $result->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // public function getIdDiscount($name = "")
-    // {
-    //     $conn = $->db->connect();
-    //     $sql = "SELECT id FROM discounts WHERE discount_code = :discount_code;";
-    //     $stmt = $conn->prepare($sql);
-    //     $stmt->bindParam(':discount_code', $name);
-    //     $stmt->execute();
-    //     return $stmt->fetch(PDO::FETCH_ASSOC);
-    // }
-
     public function approveReservation($booking_id)
     {
         try {
@@ -686,65 +676,65 @@ LEFT JOIN
         }
     }
 
+    public function getDashboardStats($userId) {
+        try {
+            $conn = $this->db->connect();
+            
+            // Get total reservations and their status counts
+            $sql = "SELECT 
+                COUNT(*) as total_reservations,
+                SUM(CASE WHEN booking_status_id = 4 THEN 1 ELSE 0 END) as completed_reservations,
+                SUM(CASE WHEN booking_status_id = 1 OR booking_status_id = 2 THEN 1 ELSE 0 END) as upcoming_reservations,
+                SUM(CASE WHEN booking_status_id = 3 THEN 1 ELSE 0 END) as canceled_reservations,
+                SUM(booking_grand_total) as total_earnings,
+                SUM(CASE WHEN MONTH(booking_created_at) = MONTH(CURRENT_DATE) THEN booking_grand_total ELSE 0 END) as monthly_earnings
+            FROM bookings 
+            WHERE booking_guest_id = :userId";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':userId', $userId);
+            $stmt->execute();
+            $stats = $stmt->fetch(PDO::FETCH_ASSOC);
 
+            // Get new bookings in last 24 hours
+            $sql = "SELECT COUNT(*) as new_bookings 
+                    FROM bookings 
+                    WHERE booking_guest_id = :userId 
+                    AND booking_created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':userId', $userId);
+            $stmt->execute();
+            $newBookings = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Get upcoming reservations
+            $sql = "SELECT b.*, v.name as venue_name, v.location as venue_location,
+                        u.firstname, u.lastname, u.contact_number
+                    FROM bookings b
+                    JOIN venues v ON b.booking_venue_id = v.id
+                    JOIN users u ON b.booking_guest_id = u.id
+                    WHERE b.booking_guest_id = :userId 
+                    AND (b.booking_status_id = 1 OR b.booking_status_id = 2)
+                    AND b.booking_start_date >= CURRENT_DATE
+                    ORDER BY b.booking_start_date ASC
+                    LIMIT 5";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':userId', $userId);
+            $stmt->execute();
+            $upcomingReservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // function getBookingsByVenue($venue_id)
-    // {
-    //     try {
-    //         $conn = $this->db->connect();
-    //         $sql = "SELECT v.*, b.*, b.id AS booking_id, 
-    //             GROUP_CONCAT(vi.image_url) AS image_urls
-    //             FROM venues AS v
-    //             JOIN bookings AS b 
-    //             ON v.id = b.booking_venue_id 
-    //             LEFT JOIN venue_images AS vi
-    //             ON v.id = vi.venue_id
-    //             WHERE v.id = :venue_id
-    //             GROUP BY b.id";
-    //         $stmt = $conn->prepare($sql);
-    //         $stmt->bindParam(':venue_id', $venue_id, PDO::PARAM_INT);
-    //         $stmt->execute();
-    //         $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //         return $bookings;
-    //     } catch (PDOException $e) {
-    //         error_log("Database error: " . $e->getMessage());
-    //         return ['status' => 'error', 'message' => $e->getMessage()];
-    //     }
-    // }
-
-    // public function getComparisonVenues($currentVenueId)
-    // {
-    //     try {
-    //         $sql = "SELECT 
-    //                 v.*, 
-    //                 vt.name as venue_tag_name,
-    //                 COALESCE(AVG(r.rating), 0) as rating,
-    //                 COUNT(r.id) as total_reviews
-    //             FROM venues v
-    //             LEFT JOIN venue_tags vt ON v.tag_id = vt.id
-    //             LEFT JOIN reviews r ON v.id = r.venue_id
-    //             WHERE v.id != ? AND v.status = '2'
-    //             GROUP BY v.id
-    //             LIMIT 10";
-
-    //         $stmt = $this->conn->prepare($sql);
-    //         $stmt->bind_param("i", $currentVenueId);
-    //         $stmt->execute();
-    //         $result = $stmt->get_result();
-
-    //         $venues = [];
-    //         while ($row = $result->fetch_assoc()) {
-    //             // Get image URLs for the venue
-    //             $row['image_urls'] = $this->getVenueImages($row['id']);
-    //             $venues[] = $row;
-    //         }
-
-    //         return $venues;
-    //     } catch (PDOException $e) {
-    //         error_log("Database error: " . $e->getMessage());
-    //         return ['status' => 'error', 'message' => $e->getMessage()];
-    //     }
-    // }
+            return [
+                'reservations' => $stats,
+                'new_bookings' => $newBookings['new_bookings'],
+                'upcoming_reservations' => $upcomingReservations
+            ];
+            
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            throw new Exception("Error fetching dashboard statistics");
+        }
+    }
 
 }
 
