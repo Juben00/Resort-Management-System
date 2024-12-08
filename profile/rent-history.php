@@ -50,7 +50,6 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
                             ?>
                                 <div class="p-6 border-b border-gray-200 last:border-b-0">
                                     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                                        <h2 class="text-xl font-semibold text-gray-800"><?php echo htmlspecialchars($booking['venue_tag_name']) ?></h2>
                                         <div class="flex items-center gap-2 mt-2 md:mt-0">
                                             <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
                                                 <?php
@@ -168,7 +167,6 @@ $previousBooking = $venueObj->getAllBookings($_SESSION['user']['id'], 4);
                             ?>
                                 <div class="p-6 border-b border-gray-200 last:border-b-0">
                                     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                                        <h2 class="text-xl font-semibold text-gray-800"><?php echo htmlspecialchars($booking['venue_tag_name']) ?></h2>
                                         <div class="flex items-center gap-2 mt-2 md:mt-0">
                                             <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
                                                 <?php

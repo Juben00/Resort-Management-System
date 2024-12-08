@@ -8,7 +8,19 @@ $venuePost = null;
 $getParams = $_GET['id'];
 $venueView = $venueObj->getSingleVenue($getParams);
 
+$ratings = $venueObj->getRatings($_GET['id']);
+$reviews = $venueObj->getReview($_GET['id']);
+
+$bookings = $venueObj->getBookingByVenue($_GET['id'], 2);
+
+$bookingCount = 0;
+$bookingRevenue = 0;
+$bookingThisMonth = 0;
 ?>
+
+<head>
+    <link rel="stylesheet" href="./output.css">
+</head>
 <!-- Venue Details View (Initially Hidden) -->
 <div id="venueDetailsView" class="container mx-auto pt-20">
     <div class="mb-4">
@@ -17,6 +29,7 @@ $venueView = $venueObj->getSingleVenue($getParams);
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
             Back to Listings
+
         </a>
     </div>
 
@@ -117,11 +130,11 @@ $venueView = $venueObj->getSingleVenue($getParams);
                             <div class="mb-6">
                                 <h3 class="text-lg font-semibold mb-2">Capacity</h3>
                                 <p id="detailVenueCapacity" class="text-gray-600 view-mode">
-                                    <?php echo trim(htmlspecialchars($venueView['capacity'])); ?> guests
+                                    <?php echo trim(htmlspecialchars($venueView['capacity'])); ?>
                                 </p>
                                 <input type="number" id="editVenueCapacity"
                                     class="form-input w-full rounded-md edit-mode hidden"
-                                    value=<?php echo trim(htmlspecialchars($venueView['capacity'])); ?>>
+                                    value="<?php echo htmlspecialchars($venueView['capacity']); ?>">
                             </div>
 
                             <!-- Amenities -->
@@ -180,23 +193,6 @@ $venueView = $venueObj->getSingleVenue($getParams);
                                 </div>
                             </div>
 
-                            <!-- Cancellation Policy -->
-                            <div class="mb-6">
-                                <h3 class="text-lg font-semibold mb-2">Cancellation Policy</h3>
-                                <div class="view-mode">
-                                    <div id="detailCancellationPolicy" class="text-gray-600"></div>
-                                </div>
-                                <div class="edit-mode hidden">
-                                    <select id="editCancellationPolicy" class="form-select rounded-md w-full mb-2">
-                                        <option value="flexible">Flexible - Full refund 24 hours prior</option>
-                                        <option value="moderate">Moderate - Full refund 5 days prior</option>
-                                        <option value="strict">Strict - 50% refund 7 days prior</option>
-                                        <option value="custom">Custom Policy</option>
-                                    </select>
-                                    <textarea id="editCustomPolicy" class="form-textarea w-full rounded-md mt-2 hidden"
-                                        rows="4" placeholder="Enter your custom cancellation policy..."></textarea>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -211,7 +207,9 @@ $venueView = $venueObj->getSingleVenue($getParams);
                     <div class="flex items-center gap-8">
                         <!-- Overall Rating -->
                         <div class="text-center">
-                            <div class="text-5xl font-bold mb-2" id="averageRating">4.8</div>
+                            <div class="text-5xl font-bold mb-1">
+                                <?php echo number_format($ratings['average'], 1) ?>
+                            </div>
                             <div class="flex items-center justify-center text-yellow-400 mb-1">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                     <path
@@ -219,67 +217,95 @@ $venueView = $venueObj->getSingleVenue($getParams);
                                 </svg>
                                 <!-- Repeat stars for 5 total -->
                             </div>
-                            <p class="text-sm text-gray-500"><span id="totalReviews">128</span> reviews</p>
+                            <div class="text-sm text-gray-600">
+                                <?php echo htmlspecialchars($ratings['total']) ?? 0 ?> reviews
+                            </div>
                         </div>
 
                         <!-- Rating Breakdown -->
                         <div class="flex-grow">
                             <div class="space-y-2">
-                                <?php for ($i = 5; $i >= 1; $i--): ?>
+                                <?php
+                                $totalReviews = isset($ratings['total']) ? (int) $ratings['total'] : 0;
+                                $rate = [
+                                    5 => isset($ratings['rating_5']) ? (int) $ratings['rating_5'] : 0,
+                                    4 => isset($ratings['rating_4']) ? (int) $ratings['rating_4'] : 0,
+                                    3 => isset($ratings['rating_3']) ? (int) $ratings['rating_3'] : 0,
+                                    2 => isset($ratings['rating_2']) ? (int) $ratings['rating_2'] : 0,
+                                    1 => isset($ratings['rating_1']) ? (int) $ratings['rating_1'] : 0,
+                                ];
+
+                                // Find the maximum review count to normalize widths
+                                $maxReviewCount = max($rate);
+
+                                for ($i = 5; $i >= 1; $i--):
+                                    $count = isset($rate[$i]) ? $rate[$i] : 0; // Count of reviews for the current star rating
+                                    // Normalize percentage based on $maxReviewCount
+                                    $normalizedPercentage = $maxReviewCount > 0 ? (($count) / $ratings['total']) * 100 : 0;
+                                    ?>
                                     <div class="flex items-center gap-2">
-                                        <span class="w-12 text-sm text-gray-600"><?php echo $i; ?> stars</span>
-                                        <div class="flex-grow bg-gray-200 rounded-full h-2">
-                                            <div class="bg-yellow-400 rounded-full h-2"
-                                                style="width: <?php echo rand(10, 100); ?>%"></div>
+                                        <span class="text-sm w-16"><?php echo $i; ?> stars</span>
+                                        <!-- Set explicit max width -->
+                                        <div class="flex-grow h-2 bg-gray-200 rounded max-w-[500px]">
+                                            <!-- Dynamically set the width based on normalized percentage -->
+                                            <div class="h-full bg-yellow-400 rounded"
+                                                style="width: <?php echo $normalizedPercentage; ?>%;"></div>
                                         </div>
-                                        <span
-                                            class="w-12 text-sm text-gray-600 text-right"><?php echo rand(0, 100); ?></span>
+                                        <span class="text-sm w-8"><?php echo $count; ?></span>
                                     </div>
                                 <?php endfor; ?>
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Reviews List -->
-                <div class="space-y-6" id="reviewsList">
-                    <!-- Sample Review -->
-                    <div class="border-b pb-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-full bg-gray-200 flex-shrink-0"></div>
-                            <div class="flex-grow">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div>
-                                        <h4 class="font-medium">Sarah Johnson</h4>
-                                        <div class="flex text-yellow-400">
-                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                            <!-- Repeat for 5 stars -->
-                                        </div>
+                <!-- Individual Reviews -->
+                <div class="mt-8 space-y-6">
+                    <?php foreach ($reviews as $index => $review): ?>
+                        <div class="border-b pb-6 review" data-index="<?php echo $index; ?>"
+                            style="<?php echo $index === 0 ? '' : 'display: none;'; ?>">
+                            <div class="flex items-center gap-4 mb-4">
+                                <?php if ($review['profile_pic'] == null): ?>
+                                    <div
+                                        class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-bold">
+                                        <?php echo htmlspecialchars($review['user_name'][0]); ?>
                                     </div>
-                                    <span class="text-sm text-gray-500">2 weeks ago</span>
+                                <?php else: ?>
+                                    <img class="w-12 h-12 bg-gray-200 rounded-full"
+                                        src="./<?php echo htmlspecialchars($review['profile_pic']); ?>" alt="Profile Picture">
+                                <?php endif; ?>
+                                <div>
+                                    <a href="user-page.php"
+                                        class="font-semibold hover:underline"><?php echo htmlspecialchars($review['user_name']); ?></a>
+                                    <p class="text-sm text-gray-500">
+                                        <?php
+                                        $originalDate = $review['date'];
+                                        $formattedDate = date('F j, Y \a\t g:i A', strtotime($originalDate));
+                                        echo htmlspecialchars($formattedDate);
+                                        ?>
+                                    </p>
                                 </div>
-                                <p class="text-gray-600">Amazing venue! Perfect for our wedding reception. The
-                                    staff was very accommodating and professional. The place was exactly as
-                                    described and the amenities were all in great condition.</p>
                             </div>
+                            <div class="flex text-yellow-400 mb-2">
+                                <?php for ($i = 0; $i < $review['rating']; $i++): ?>
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                <?php endfor; ?>
+                            </div>
+                            <p class="text-gray-700"><?php echo htmlspecialchars($review['review']); ?></p>
                         </div>
-                    </div>
-
-                    <!-- More reviews can be dynamically added here -->
+                    <?php endforeach; ?>
                 </div>
 
                 <!-- Pagination -->
-                <div class="mt-6 flex justify-center">
-                    <nav class="flex items-center gap-2">
-                        <button class="px-3 py-1 rounded-lg hover:bg-gray-100">Previous</button>
-                        <button class="px-3 py-1 rounded-lg bg-gray-900 text-white">1</button>
-                        <button class="px-3 py-1 rounded-lg hover:bg-gray-100">2</button>
-                        <button class="px-3 py-1 rounded-lg hover:bg-gray-100">3</button>
-                        <button class="px-3 py-1 rounded-lg hover:bg-gray-100">Next</button>
-                    </nav>
+                <div class="flex items-center justify-center gap-2 mt-6">
+                    <button id="prevReview"
+                        class="px-4 py-2 text-sm border w-24 bg-neutral-200 transition-all duration-150 text-gray-600 hover:bg-gray-100 rounded">Previous</button>
+                    <button id="nextReview"
+                        class="px-4 py-2 text-sm border w-24 bg-neutral-200 transition-all duration-150 text-gray-600 hover:bg-gray-100 rounded">Next</button>
                 </div>
             </div>
 
@@ -288,16 +314,16 @@ $venueView = $venueObj->getSingleVenue($getParams);
                 <h3 class="text-2xl font-bold mb-6">Calendar & Pricing</h3>
 
                 <!-- Calendar Header -->
-                <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-between items-center mb-4 calendar-header">
                     <div class="flex items-center space-x-4">
-                        <button class="p-2 hover:bg-gray-100 rounded-lg">
+                        <button class="p-2 hover:bg-gray-100 rounded-lg calendar-prev">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 19l-7-7 7-7" />
                             </svg>
                         </button>
                         <h4 class="text-lg font-semibold">October 2024</h4>
-                        <button class="p-2 hover:bg-gray-100 rounded-lg">
+                        <button class="p-2 hover:bg-gray-100 rounded-lg calendar-next">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
@@ -305,16 +331,6 @@ $venueView = $venueObj->getSingleVenue($getParams);
                         </button>
                     </div>
 
-                    <div class="flex items-center space-x-2">
-                        <button class="px-3 py-1 text-sm border rounded-lg hover:bg-gray-50">
-                            <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                            </svg>
-                        </button>
-                        <button class="px-3 py-1 text-sm border rounded-lg hover:bg-gray-50">View</button>
-                    </div>
                 </div>
 
                 <!-- Calendar Grid -->
@@ -331,7 +347,7 @@ $venueView = $venueObj->getSingleVenue($getParams);
                     </div>
 
                     <!-- Calendar Days -->
-                    <div class="grid grid-cols-7">
+                    <div class="grid grid-cols-7 calendar-days">
                         <?php
                         // Previous month days (greyed out)
                         for ($i = 0; $i < 0; $i++) {
@@ -353,48 +369,6 @@ $venueView = $venueObj->getSingleVenue($getParams);
                         ?>
                     </div>
                 </div>
-
-                <!-- Settings Panel -->
-                <div class="mt-6 border rounded-lg p-4">
-                    <h4 class="text-lg font-semibold mb-4">Settings</h4>
-                    <p class="text-sm text-gray-600 mb-4">These apply to all nights, unless you customize them
-                        by date.</p>
-
-                    <!-- Pricing Tab -->
-                    <div class="border-b pb-4 mb-4">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium">Base price</span>
-                            <span class="text-sm text-gray-500">PHP</span>
-                        </div>
-                        <div class="mt-2">
-                            <label class="block text-sm text-gray-600 mb-1">Per night</label>
-                            <p>₱ <?php echo htmlspecialchars($venueView['price']) ?></p>
-                        </div>
-                    </div>
-
-                    <!-- Custom Weekend Price -->
-                    <div class="border-b pb-4 mb-4">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium">Custom weekend price</span>
-                            <button class="text-sm text-blue-600 hover:text-blue-800">Add</button>
-                        </div>
-                    </div>
-
-                    <!-- Smart Pricing Toggle -->
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <span class="font-medium block">Smart Pricing</span>
-                            <span class="text-sm text-gray-600">Adjust your pricing to attract more
-                                guests.</span>
-                        </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" class="sr-only peer">
-                            <div
-                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
-                            </div>
-                        </label>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -414,35 +388,7 @@ $venueView = $venueObj->getSingleVenue($getParams);
                         </div>
                     </div>
 
-                    <!-- Down Payment Options -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Down Payment
-                            Required</label>
-                        <select class="form-select rounded-md w-full">
-                            <option value="30">30% of total amount</option>
-                            <option value="40">40% of total amount</option>
-                            <option value="100">Full payment required</option>
-                        </select>
-                    </div>
 
-                    <!-- Discounts -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Discounts</label>
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-2">
-                                <input type="number" placeholder="%" class="form-input rounded-md w-20">
-                                <input type="text" placeholder="Discount name" class="form-input rounded-md flex-grow">
-                                <button class="p-2 text-red-500 hover:bg-red-50 rounded-md">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <button class="text-sm text-blue-600 hover:text-blue-800">+ Add new
-                                discount</button>
-                        </div>
-                    </div>
 
                     <!-- Save Changes Button -->
                     <button onclick="saveChanges()"
@@ -451,25 +397,46 @@ $venueView = $venueObj->getSingleVenue($getParams);
                     </button>
                 </div>
 
+                <?php
+                $currentMonth = new DateTime(); // Defaults to the current date and time
+                foreach ($bookings as $booking) {
+                    $bookingCount += $booking['booking_count']; // Aggregate booking count
+                    $bookingRevenue += $booking['booking_grand_total']; // Aggregate revenue
+                
+                    $bookingEndDate = new DateTime($booking['booking_end_date']);
+
+                    if (
+                        $bookingEndDate->format('Y') === $currentMonth->format('Y') &&
+                        $bookingEndDate->format('m') === $currentMonth->format('m')
+                    ) {
+                        $bookingThisMonth += 1; // Increment count for bookings this month
+                    }
+                }
+                ?>
+
+                <?php
+                // var_dump($bookings);
+                ?>
+
                 <!-- Quick Stats -->
                 <div class="border-t pt-6">
-                    <h4 class="text-sm font-medium text-gray-700 mb-3">Quick Stats</h4>
+                    <h4 class="text-sm font-medium text-gray-700 mb-3">Booking Statistics</h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-gray-50 p-3 rounded-lg">
                             <p class="text-sm text-gray-600">Total Bookings</p>
-                            <p class="text-xl font-semibold">24</p>
+                            <p class="text-xl font-semibold"><?php echo htmlspecialchars($bookingCount) ?></p>
                         </div>
                         <div class="bg-gray-50 p-3 rounded-lg">
                             <p class="text-sm text-gray-600">This Month</p>
-                            <p class="text-xl font-semibold">3</p>
+                            <p class="text-xl font-semibold"><?php echo htmlspecialchars($bookingThisMonth) ?></p>
                         </div>
                         <div class="bg-gray-50 p-3 rounded-lg">
                             <p class="text-sm text-gray-600">Revenue</p>
-                            <p class="text-xl font-semibold">₱360k</p>
+                            <p class="text-xl font-semibold">₱<?php echo htmlspecialchars($bookingRevenue) ?></p>
                         </div>
                         <div class="bg-gray-50 p-3 rounded-lg">
                             <p class="text-sm text-gray-600">Rating</p>
-                            <p class="text-xl font-semibold">4.8/5</p>
+                            <p class="text-xl font-semibold"><?php echo number_format($ratings['average'], 1) ?>/5</p>
                         </div>
                     </div>
                 </div>
@@ -478,25 +445,46 @@ $venueView = $venueObj->getSingleVenue($getParams);
                 <div class="border-t pt-6 mt-6">
                     <h4 class="text-lg font-semibold mb-4">Recent Reservations</h4>
                     <div class="space-y-4">
-                        <!-- Sample Reservation Items -->
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <p class="font-medium">Wedding Reception</p>
-                                    <p class="text-sm text-gray-600">Maria Santos</p>
-                                </div>
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    Confirmed
-                                </span>
-                            </div>
-                            <div class="flex justify-between text-sm text-gray-600">
-                                <p>Dec 15, 2024</p>
-                                <p>₱15,000</p>
-                            </div>
-                        </div>
 
-                        <div class="bg-gray-50 p-4 rounded-lg">
+                        <?php
+                        if (empty($bookings)) {
+                            echo '<p class="text-gray-600 text-xs text-center">No bookings found.</p>';
+                        }
+                        foreach ($bookings as $booking):
+                            ?>
+                            <!-- Sample Reservation Items -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <p class="font-medium">Wedding Reception</p>
+                                        <p class="text-sm text-gray-600">
+                                            <?php echo htmlspecialchars($booking['firstname'] . " " . $booking['middlename'] . "." . " " . $booking['lastname']); ?>
+                                        </p>
+                                    </div>
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        Confirmed
+                                    </span>
+                                </div>
+                                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                                    <p class="text-gray-600 mt-1">
+                                        <?php
+                                        $startDate = new DateTime($booking['booking_start_date']);
+                                        $endDate = new DateTime($booking['booking_end_date']);
+                                        echo $startDate->format('F j, Y') . ' to ' . $endDate->format('F j, Y');
+                                        ?>
+                                    </p>
+                                </div>
+                                <p>₱<?php echo htmlspecialchars($booking['booking_grand_total']) ?></p>
+                            </div>
+                            <?php
+                        endforeach;
+                        ?>
+                    </div>
+
+
+
+                    <!-- <div class="bg-gray-50 p-4 rounded-lg">
                             <div class="flex justify-between items-start mb-2">
                                 <div>
                                     <p class="font-medium">Birthday Party</p>
@@ -528,8 +516,7 @@ $venueView = $venueObj->getSingleVenue($getParams);
                                 <p>Nov 30, 2024</p>
                                 <p>₱20,000</p>
                             </div>
-                        </div>
-                    </div>
+                        </div> -->
 
                     <!-- View All Reservations Link -->
                     <div class="mt-4 text-center">
@@ -614,24 +601,6 @@ $venueView = $venueObj->getSingleVenue($getParams);
             // Existing rules display code...
         }
 
-        // Populate cancellation policy with detailed breakdown
-        const policyDiv = document.getElementById('detailCancellationPolicy');
-        if (!venue.cancellation_policy) {
-            policyDiv.innerHTML = `
-            <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                    <p class="text-yellow-700 font-medium">Required: Please add cancellation policy</p>
-            </div>
-                <p class="text-yellow-600 text-sm mt-2">Define your booking cancellation terms and conditions</p>
-            </div>
-        `;
-        } else {
-            // Existing cancellation policy display code...
-        }
-
         // Populate owner information
         const ownerDiv = document.getElementById('detailVenueOwner');
         ownerDiv.innerHTML = `
@@ -675,7 +644,7 @@ $venueView = $venueObj->getSingleVenue($getParams);
         const mainImage = document.getElementById('mainImage');
         mainImage.src = venue.image_urls && venue.image_urls.length > 0
             ? venue.image_urls[0]
-            : '../images/icoco_black_ico.png';
+            : '../images/black_ico.png';
         mainImage.alt = venue.name || 'Venue image';
     }
 
@@ -691,40 +660,23 @@ $venueView = $venueObj->getSingleVenue($getParams);
             document.getElementById('editVenueName').value = document.getElementById('detailVenueName').textContent.trim();
             document.getElementById('editVenueLocation').value = document.getElementById('detailVenueLocation').textContent.trim();
             document.getElementById('editVenueDescription').value = document.getElementById('detailVenueDescription').textContent.trim();
-            document.getElementById('editVenueCapacity').value = document.getElementById('detailVenueCapacity').textContent.split(' ')[0].trim();
+            document.getElementById('editVenueCapacity').value = document.getElementById('detailVenueCapacity').textContent.trim();
             populateAmenitiesEdit();
-
-            // Populate rules edit fields
-            const currentRules = Array.from(document.getElementById('detailVenueRules').children)
-                .map(li => li.textContent.trim());
-            const rulesList = document.getElementById('rulesList');
-            rulesList.innerHTML = '';
-            currentRules.forEach(rule => {
-                addRuleField(rule);
-            });
-
-            // Handle cancellation policy edit mode
-            document.getElementById('editCancellationPolicy').addEventListener('change', function () {
-                const customPolicyField = document.getElementById('editCustomPolicy');
-                if (this.value === 'custom') {
-                    customPolicyField.classList.remove('hidden');
-                } else {
-                    customPolicyField.classList.add('hidden');
-                }
-            });
+            populateRulesEdit();
         }
     }
 
     function saveChanges() {
         // Collect values from input fields
-        const venueName = document.getElementById('detailVenueName').value;
+        const venueName = document.getElementById('editVenueName').value;
         const venueLocation = document.getElementById('editVenueLocation').value;
         const venueDescription = document.getElementById('editVenueDescription').value;
         const venueCapacity = document.getElementById('editVenueCapacity').value;
-        // Collect other values as needed
+        const venuePrice = document.getElementById('venuePrice').value;
+        const amenities = Array.from(document.querySelectorAll('#editVenueAmenities input')).map(input => input.value);
+        const rules = Array.from(document.querySelectorAll('#editVenueRules input')).map(input => input.value);
 
         // Send data to server to save changes
-        // Example using fetch API
         fetch('save-venue-details.php', {
             method: 'POST',
             headers: {
@@ -735,17 +687,22 @@ $venueView = $venueObj->getSingleVenue($getParams);
                 venue_location: venueLocation,
                 venue_description: venueDescription,
                 venue_capacity: venueCapacity,
-                // Include other fields as needed
+                venue_price: venuePrice,
+                amenities: amenities,
+                rules: rules
             })
         })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     // Update view mode with new values
+                    document.getElementById('detailVenueName').textContent = venueName;
                     document.getElementById('detailVenueLocation').textContent = venueLocation;
                     document.getElementById('detailVenueDescription').textContent = venueDescription;
                     document.getElementById('detailVenueCapacity').textContent = `${venueCapacity} guests`;
-                    // Update other fields as needed
+                    document.getElementById('detailVenuePrice').textContent = `₱${venuePrice}`;
+                    updateAmenitiesView(amenities);
+                    updateRulesView(rules);
 
                     // Switch back to view mode
                     toggleEditMode();
@@ -763,11 +720,45 @@ $venueView = $venueObj->getSingleVenue($getParams);
         const amenitiesList = document.getElementById('amenitiesList');
         amenitiesList.innerHTML = '';
 
-        const currentAmenities = Array.from(document.getElementById('detailVenueAmenities').children)
-            .map(li => li.textContent);
+        const currentAmenities = Array.from(document.querySelectorAll('#detailVenueAmenities li'))
+            .map(li => li.textContent.trim());
 
         currentAmenities.forEach(amenity => {
             addAmenityField(amenity);
+        });
+    }
+
+    function populateRulesEdit() {
+        const rulesList = document.getElementById('rulesList');
+        rulesList.innerHTML = '';
+
+        const currentRules = Array.from(document.querySelectorAll('#detailVenueRules li'))
+            .map(li => li.textContent.trim());
+
+        currentRules.forEach(rule => {
+            addRuleField(rule);
+        });
+    }
+
+    function updateAmenitiesView(amenities) {
+        const amenitiesList = document.getElementById('detailVenueAmenities');
+        amenitiesList.innerHTML = '';
+        amenities.forEach(amenity => {
+            const li = document.createElement('li');
+            li.className = 'text-sm text-gray-800 leading-tight';
+            li.textContent = amenity;
+            amenitiesList.appendChild(li);
+        });
+    }
+
+    function updateRulesView(rules) {
+        const rulesList = document.getElementById('detailVenueRules');
+        rulesList.innerHTML = '';
+        rules.forEach(rule => {
+            const li = document.createElement('li');
+            li.className = 'text-sm text-gray-800 leading-tight';
+            li.textContent = rule;
+            rulesList.appendChild(li);
         });
     }
 
@@ -803,34 +794,49 @@ $venueView = $venueObj->getSingleVenue($getParams);
 
     // Add this to your existing script section
     function initializeCalendar() {
-        // Get current date
         const date = new Date();
-        const currentMonth = date.getMonth();
-        const currentYear = date.getFullYear();
+        let currentMonth = date.getMonth();
+        let currentYear = date.getFullYear();
 
-        // Update calendar header
         updateCalendarHeader(currentMonth, currentYear);
-
-        // Generate calendar days
         generateCalendarDays(currentMonth, currentYear);
+
+        document.querySelector('.calendar-prev').addEventListener('click', function () {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            updateCalendarHeader(currentMonth, currentYear);
+            generateCalendarDays(currentMonth, currentYear);
+        });
+
+        document.querySelector('.calendar-next').addEventListener('click', function () {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            updateCalendarHeader(currentMonth, currentYear);
+            generateCalendarDays(currentMonth, currentYear);
+        });
     }
 
     function updateCalendarHeader(month, year) {
         const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
+            "July", "August", "September", "October", "November", "December"];
         document.querySelector('.calendar-header h4').textContent = `${monthNames[month]} ${year}`;
     }
 
     function generateCalendarDays(month, year) {
         const firstDay = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        let calendarHTML = '';
+        const calendarDays = document.querySelector('.calendar-days');
+        calendarDays.innerHTML = '';
 
         // Previous month days
         for (let i = 0; i < firstDay; i++) {
-            calendarHTML += `<div class="p-2 border-b border-r text-gray-400"></div>`;
+            calendarDays.innerHTML += `<div class="p-2 border-b border-r text-gray-400"></div>`;
         }
 
         // Current month days
@@ -839,32 +845,56 @@ $venueView = $venueObj->getSingleVenue($getParams);
                 month === new Date().getMonth() &&
                 year === new Date().getFullYear();
 
-            calendarHTML += `
-            <div class="relative p-2 border-b border-r hover:bg-gray-50 cursor-pointer" 
-                 onclick="editDayPrice(${year}, ${month}, ${day})">
-                <div class="text-sm ${isToday ? 'font-bold' : ''}">${day}</div>
-                <div class="text-xs text-gray-600">₱2,341</div>
-            </div>
-        `;
+            calendarDays.innerHTML += `
+                <div class="relative p-2 border-b border-r hover:bg-gray-50 cursor-pointer" 
+                     onclick="editDayPrice(${year}, ${month}, ${day})">
+                    <div class="text-sm ${isToday ? 'font-bold' : ''}">${day}</div>
+                    <div class="text-xs text-gray-600">₱2,341</div>
+                </div>
+            `;
         }
-
-        document.querySelector('.calendar-days').innerHTML = calendarHTML;
     }
 
     function editDayPrice(year, month, day) {
-        // Show a modal or form to edit the price for this specific day
         const date = new Date(year, month, day);
         const formattedDate = date.toLocaleDateString();
-
-        // You can implement your own modal here
         const newPrice = prompt(`Enter new price for ${formattedDate}:`);
         if (newPrice && !isNaN(newPrice)) {
-            // Update the price in your database
-            // Then refresh the calendar display
             console.log(`Updated price for ${formattedDate} to ₱${newPrice}`);
         }
     }
 
-    // Initialize calendar when page loads
     document.addEventListener('DOMContentLoaded', initializeCalendar);
+    document.addEventListener('DOMContentLoaded', function () {
+        const reviews = document.querySelectorAll('.review');
+        let currentIndex = 0;
+
+        function showReview(index) {
+            reviews.forEach((review, i) => {
+                review.style.display = i === index ? 'block' : 'none';
+            });
+        }
+
+        document.getElementById('prevReview').addEventListener('click', function () {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showReview(currentIndex);
+            } else {
+                currentIndex = reviews.length - 1;
+                showReview(currentIndex);
+            }
+        });
+
+        document.getElementById('nextReview').addEventListener('click', function () {
+            if (currentIndex < reviews.length - 1) {
+                currentIndex++;
+                showReview(currentIndex);
+            } else {
+                currentIndex = 0;
+                showReview(currentIndex);
+            }
+        });
+
+        showReview(currentIndex);
+    });
 </script>

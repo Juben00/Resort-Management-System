@@ -7,8 +7,8 @@ session_start();
 
 $venueObj = new Venue();
 
-$name = $description = $location = $price = $capacity = $amenities = $tag = $entrance = $cleaning = $rules = $addRules = $checkIn = $checkOut = $check_inout = "";
-$nameErr = $descriptionErr = $locationErr = $priceErr = $capacityErr = $amenitiesErr = $tagErr = $entranceErr = $cleaningErr = $imageErr = $rulesErr = $checkInErr = $checkOutErr = "";
+$name = $description = $location = $price = $capacity = $amenities = $entrance = $cleaning = $rules = $addRules = $checkIn = $checkOut = $check_inout = "";
+$nameErr = $descriptionErr = $locationErr = $priceErr = $capacityErr = $amenitiesErr = $entranceErr = $cleaningErr = $imageErr = $rulesErr = $checkInErr = $checkOutErr = "";
 
 $uploadDir = '/venue_image_uploads/';
 $allowedType = ['jpg', 'jpeg', 'png'];
@@ -21,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = clean_input($_POST['price']);
     $capacity = clean_input($_POST['venue-max-guest']);
     $amenities = $_POST['amenities'];
-    $tag = clean_input(isset($_POST['placeType']) ? $_POST['placeType'] : '');
     $entrance = clean_input($_POST['entrance-fee']);
     $cleaning = clean_input($_POST['cleaning-fee']);
     $rules = isset($_POST['fixedRules']) && is_array($_POST['fixedRules']) ? $_POST['fixedRules'] : [];
@@ -44,8 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $capacityErr = "Capacity is required";
     if (empty($amenities))
         $amenitiesErr = "Amenities are required";
-    if (empty($tag))
-        $tagErr = "Tag is required";
     if (empty($entrance))
         $entranceErr = "Entrance field is required";
     if (empty($cleaning))
@@ -67,16 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Convert the combined array into JSON
     $mergedRulesJson = json_encode($mergedRules);
-
-    if ($tag == 'Corporate Space') {
-        $tag = 1;
-    } else if ($tag == 'Reception Hall') {
-        $tag = 2;
-    } else if ($tag == 'Intimate Space') {
-        $tag = 3;
-    } else if ($tag == 'Outdoor Venue') {
-        $tag = 4;
-    }
 
     // Proceed if no errors
     if (
@@ -118,7 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $venueObj->capacity = $capacity;
         $venueObj->amenities = $amenitiesJson;
         $venueObj->rules = $mergedRulesJson;
-        $venueObj->tag = $tag;
         $venueObj->host_id = $_SESSION['user']['id'];
         $venueObj->entrance = $entrance;
         $venueObj->cleaning = $cleaning;

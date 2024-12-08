@@ -55,7 +55,7 @@ $totalCount = $pendingCount + $confirmedCount + $cancelledCount + $completedCoun
 
 
             <!-- Tab Content -->
-            <div id="pending-content" class="mt-8 tab-content">
+            <!-- <div id="pending-content" class="mt-8 tab-content">
                 <div class="bg-white rounded-lg shadow overflow-hidden">
                     <?php
                     if (empty($pendingBookings)) {
@@ -528,13 +528,493 @@ $totalCount = $pendingCount + $confirmedCount + $cancelledCount + $completedCoun
                     }
                     ?>
                 </div>
+            </div> -->
+            <div id="pending-content" class="mt-8 tab-content">
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <?php
+                    if (empty($pendingBookings)) {
+                        echo '<p class="p-6 text-center text-gray-600">You do not have any pending bookings.</p>';
+                    } else {
+                        foreach ($pendingBookings as $booking) {
+                            $timezone = new DateTimeZone('Asia/Manila');
+                            $currentDateTime = new DateTime('now', $timezone);
+                            $bookingStartDate = new DateTime($booking['booking_start_date'], $timezone);
+                            ?>
+                            <div class="p-6 border-b border-gray-200 booking-item hover:bg-gray-50 transition duration-150 ease-in-out"
+                                data-status="<?php echo $booking['booking_status_id']; ?>">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="text-xl font-semibold text-gray-800">
+                                        <?php echo htmlspecialchars($booking['name']) ?>
+                                    </h2>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                                            <?php
+                                            switch ($booking['booking_status_id']) {
+                                                case '1':
+                                                    echo 'Pending';
+                                                    break;
+                                                case '2':
+                                                    echo 'Approved';
+                                                    break;
+                                                case '3':
+                                                    echo 'Cancelled';
+                                                    break;
+                                                case '4':
+                                                    echo 'Completed';
+                                                    break;
+                                                default:
+                                                    echo 'Unknown';
+                                                    break;
+                                            }
+                                            ?>
+                                        </span>
+                                        <?php if ($bookingStartDate > $currentDateTime): ?>
+                                            <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                                Upcoming Booking
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+                                                Active Booking
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <?php
+                                    $imageUrls = !empty($booking['image_urls']) ? explode(',', $booking['image_urls']) : [];
+                                    ?>
+                                    <?php if (!empty($imageUrls)): ?>
+                                        <img src="./<?= htmlspecialchars($imageUrls[0]) ?>"
+                                            alt="<?= htmlspecialchars($booking['name']) ?>"
+                                            class="w-32 h-32 object-cover rounded-lg flex-shrink-0 shadow-md">
+                                    <?php endif; ?>
+                                    <div class="flex-1">
+                                        <p class="text-lg font-medium text-gray-900">
+                                            <?php echo htmlspecialchars($booking['name']) ?>
+                                        </p>
+                                        <p class="text-gray-600 mt-1"><?php echo htmlspecialchars($booking['location']) ?></p>
+                                        <p class="text-gray-600 mt-1">
+                                            ₱<?php echo number_format(htmlspecialchars($booking['booking_grand_total'] ? $booking['booking_grand_total'] : 0.0)) ?>
+                                            for
+                                            <?php echo number_format(htmlspecialchars($booking['booking_duration'] ? $booking['booking_duration'] : 0.0)) ?>
+                                            days
+                                        </p>
+                                        <p class="text-gray-600 mt-1">
+                                            <?php
+                                            $startDate = new DateTime($booking['booking_start_date']);
+                                            $endDate = new DateTime($booking['booking_end_date']);
+                                            echo $startDate->format('F j, Y') . ' to ' . $endDate->format('F j, Y');
+                                            ?>
+                                        </p>
+                                        <div class="mt-4 space-x-4">
+                                            <button
+                                                onclick="showDetails(<?php echo htmlspecialchars(json_encode($booking)); ?>)"
+                                                class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800">
+                                                View Details
+                                            </button>
+                                            <?php if ($booking['booking_status_id'] == '2' || $booking['booking_status_id'] == '4'): ?>
+                                                <button onclick="printReceipt(<?php echo htmlspecialchars(json_encode([
+                                                    'booking_id' => $booking['booking_id'],
+                                                    'venue_name' => $booking['name'],
+                                                    'booking_start_date' => $booking['booking_start_date'],
+                                                    'booking_end_date' => $booking['booking_end_date'],
+                                                    'booking_duration' => $booking['booking_duration'],
+                                                    'booking_grand_total' => $booking['booking_grand_total'],
+                                                    'booking_payment_method' => $booking['booking_payment_method'],
+                                                    'booking_payment_reference' => $booking['booking_payment_reference'],
+                                                    'booking_service_fee' => $booking['booking_service_fee'],
+                                                    'venue_location' => $booking['location']
+                                                ])); ?>)" type="button"
+                                                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                                    <i class="fas fa-print mr-2"></i>Print Receipt
+                                                </button>
+                                                <button onclick="downloadReceipt(<?php echo htmlspecialchars(json_encode([
+                                                    'booking_id' => $booking['booking_id'],
+                                                    'venue_name' => $booking['name'],
+                                                    'booking_start_date' => $booking['booking_start_date'],
+                                                    'booking_end_date' => $booking['booking_end_date'],
+                                                    'booking_duration' => $booking['booking_duration'],
+                                                    'booking_grand_total' => $booking['booking_grand_total'],
+                                                    'booking_payment_method' => $booking['booking_payment_method'],
+                                                    'booking_payment_reference' => $booking['booking_payment_reference'],
+                                                    'booking_service_fee' => $booking['booking_service_fee'],
+                                                    'venue_location' => $booking['location']
+                                                ])); ?>)" type="button"
+                                                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                                    <i class="fas fa-download mr-2"></i>Download Receipt
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+
+            <!-- Repeat the above structure for confirmed, cancelled, and completed tabs -->
+            <div id="confirmed-content" class="mt-8 hidden tab-content">
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <?php
+                    if (empty($confirmedBookings)) {
+                        echo '<p class="p-6 text-center text-gray-600">You do not have any previous bookings.</p>';
+                    } else {
+                        foreach ($confirmedBookings as $booking) {
+                            $timezone = new DateTimeZone('Asia/Manila');
+                            $currentDateTime = new DateTime('now', $timezone);
+                            $bookingStartDate = new DateTime($booking['booking_start_date'], $timezone);
+                            ?>
+                            <div class="p-6 border-b border-gray-200 booking-item"
+                                data-status="<?php echo $booking['booking_status_id']; ?>">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="text-xl font-semibold"><?php echo htmlspecialchars($booking['name']) ?></h2>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                            <?php
+                                            switch ($booking['booking_status_id']) {
+                                                case '1':
+                                                    echo 'Pending';
+                                                    break;
+                                                case '2':
+                                                    echo 'Approved';
+                                                    break;
+                                                case '3':
+                                                    echo 'Cancelled';
+                                                    break;
+                                                case '4':
+                                                    echo 'Completed';
+                                                    break;
+                                                default:
+                                                    echo 'Unknown';
+                                                    break;
+                                            }
+                                            ?>
+                                        </span>
+                                        <?php if ($bookingStartDate > $currentDateTime): ?>
+                                            <span
+                                                class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Upcoming
+                                                Booking</span>
+                                        <?php else: ?>
+                                            <span
+                                                class="px-2 py-1 bg-green-100 text-blue-800 rounded-full text-sm font-medium">Active
+                                                Booking</span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <?php
+                                    $imageUrls = !empty($booking['image_urls']) ? explode(',', $booking['image_urls']) : [];
+                                    ?>
+                                    <?php if (!empty($imageUrls)): ?>
+                                        <img src="./<?= htmlspecialchars($imageUrls[0]) ?>"
+                                            alt="<?= htmlspecialchars($booking['name']) ?>"
+                                            class="w-32 h-32 object-cover rounded-lg flex-shrink-0">
+                                    <?php endif; ?>
+                                    <div class="flex-1">
+                                        <p class="text-lg font-medium"><?php echo htmlspecialchars($booking['name']) ?></p>
+                                        <p class="text-gray-600 mt-1"><?php echo htmlspecialchars($booking['location']) ?></p>
+                                        <p class="text-gray-600 mt-1">
+                                            ₱<?php echo number_format(htmlspecialchars($booking['booking_grand_total'] ? $booking['booking_grand_total'] : 0.0)) ?>
+                                            for
+                                            <?php echo number_format(htmlspecialchars($booking['booking_duration'] ? $booking['booking_duration'] : 0.0)) ?>
+                                            days
+                                        </p>
+                                        <p class="text-gray-600 mt-1">
+                                            <?php
+                                            $startDate = new DateTime($booking['booking_start_date']);
+                                            $endDate = new DateTime($booking['booking_end_date']);
+                                            echo $startDate->format('F j, Y') . ' to ' . $endDate->format('F j, Y');
+                                            ?>
+                                        </p>
+                                        <div class="mt-4 space-x-4">
+                                            <button
+                                                onclick="showDetails(<?php echo htmlspecialchars(json_encode($booking)); ?>)"
+                                                class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800">View Details
+                                            </button>
+                                            <?php if ($booking['booking_status_id'] == '2' || $booking['booking_status_id'] == '4'): ?>
+                                                <button onclick="printReceipt(<?php echo htmlspecialchars(json_encode([
+                                                    'booking_id' => $booking['booking_id'],
+                                                    'venue_name' => $booking['name'],
+                                                    'booking_start_date' => $booking['booking_start_date'],
+                                                    'booking_end_date' => $booking['booking_end_date'],
+                                                    'booking_duration' => $booking['booking_duration'],
+                                                    'booking_grand_total' => $booking['booking_grand_total'],
+                                                    'booking_payment_method' => $booking['booking_payment_method'],
+                                                    'booking_payment_reference' => $booking['booking_payment_reference'],
+                                                    'booking_service_fee' => $booking['booking_service_fee'],
+                                                    'venue_location' => $booking['location']
+                                                ])); ?>)" type="button"
+                                                    class="px-4 py-2 border border-black text-black rounded-lg hover:bg-gray-100">
+                                                    <i class="fas fa-print mr-2"></i>Print Receipt
+                                                </button>
+                                                <button onclick="downloadReceipt(<?php echo htmlspecialchars(json_encode([
+                                                    'booking_id' => $booking['booking_id'],
+                                                    'venue_name' => $booking['name'],
+                                                    'booking_start_date' => $booking['booking_start_date'],
+                                                    'booking_end_date' => $booking['booking_end_date'],
+                                                    'booking_duration' => $booking['booking_duration'],
+                                                    'booking_grand_total' => $booking['booking_grand_total'],
+                                                    'booking_payment_method' => $booking['booking_payment_method'],
+                                                    'booking_payment_reference' => $booking['booking_payment_reference'],
+                                                    'booking_service_fee' => $booking['booking_service_fee'],
+                                                    'venue_location' => $booking['location']
+                                                ])); ?>)" type="button"
+                                                    class="px-4 py-2 border border-black text-black rounded-lg hover:bg-gray-100">
+                                                    <i class="fas fa-download mr-2"></i>Download Receipt
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+
+            <div id="cancelled-content" class="mt-8 hidden tab-content">
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <?php
+                    if (empty($cancelledBookings)) {
+                        echo '<p class="p-6 text-center text-gray-600">You do not have any previous bookings.</p>';
+                    } else {
+                        foreach ($cancelledBookings as $booking) {
+                            $timezone = new DateTimeZone('Asia/Manila');
+                            $currentDateTime = new DateTime('now', $timezone);
+                            $bookingStartDate = new DateTime($booking['booking_start_date'], $timezone);
+                            ?>
+                            <div class="p-6 border-b border-gray-200 booking-item"
+                                data-status="<?php echo $booking['booking_status_id']; ?>">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="text-xl font-semibold"><?php echo htmlspecialchars($booking['name']) ?></h2>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                            <?php
+                                            switch ($booking['booking_status_id']) {
+                                                case '1':
+                                                    echo 'Pending';
+                                                    break;
+                                                case '2':
+                                                    echo 'Approved';
+                                                    break;
+                                                case '3':
+                                                    echo 'Cancelled';
+                                                    break;
+                                                case '4':
+                                                    echo 'Completed';
+                                                    break;
+                                                default:
+                                                    echo 'Unknown';
+                                                    break;
+                                            }
+                                            ?>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <?php
+                                    $imageUrls = !empty($booking['image_urls']) ? explode(',', $booking['image_urls']) : [];
+                                    ?>
+                                    <?php if (!empty($imageUrls)): ?>
+                                        <img src="./<?= htmlspecialchars($imageUrls[0]) ?>"
+                                            alt="<?= htmlspecialchars($booking['name']) ?>"
+                                            class="w-32 h-32 object-cover rounded-lg flex-shrink-0">
+                                    <?php endif; ?>
+                                    <div class="flex-1">
+                                        <p class="text-lg font-medium"><?php echo htmlspecialchars($booking['name']) ?></p>
+                                        <p class="text-gray-600 mt-1"><?php echo htmlspecialchars($booking['location']) ?></p>
+                                        <p class="text-gray-600 mt-1">
+                                            ₱<?php echo number_format(htmlspecialchars($booking['booking_grand_total'] ? $booking['booking_grand_total'] : 0.0)) ?>
+                                            for
+                                            <?php echo number_format(htmlspecialchars($booking['booking_duration'] ? $booking['booking_duration'] : 0.0)) ?>
+                                            days
+                                        </p>
+                                        <p class="text-gray-600 mt-1">
+                                            <?php
+                                            $startDate = new DateTime($booking['booking_start_date']);
+                                            $endDate = new DateTime($booking['booking_end_date']);
+                                            echo $startDate->format('F j, Y') . ' to ' . $endDate->format('F j, Y');
+                                            ?>
+                                        </p>
+                                        <div class="mt-4 space-x-4">
+                                            <button
+                                                onclick="showDetails(<?php echo htmlspecialchars(json_encode($booking)); ?>)"
+                                                class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800">View Details
+                                            </button>
+                                            <?php if ($booking['booking_status_id'] == '2' || $booking['booking_status_id'] == '4'): ?>
+                                                <button onclick="printReceipt(<?php echo htmlspecialchars(json_encode([
+                                                    'booking_id' => $booking['booking_id'],
+                                                    'venue_name' => $booking['name'],
+                                                    'booking_start_date' => $booking['booking_start_date'],
+                                                    'booking_end_date' => $booking['booking_end_date'],
+                                                    'booking_duration' => $booking['booking_duration'],
+                                                    'booking_grand_total' => $booking['booking_grand_total'],
+                                                    'booking_payment_method' => $booking['booking_payment_method'],
+                                                    'booking_payment_reference' => $booking['booking_payment_reference'],
+                                                    'booking_service_fee' => $booking['booking_service_fee'],
+                                                    'venue_location' => $booking['location']
+                                                ])); ?>)" type="button"
+                                                    class="px-4 py-2 border border-black text-black rounded-lg hover:bg-gray-100">
+                                                    <i class="fas fa-print mr-2"></i>Print Receipt
+                                                </button>
+                                                <button onclick="downloadReceipt(<?php echo htmlspecialchars(json_encode([
+                                                    'booking_id' => $booking['booking_id'],
+                                                    'venue_name' => $booking['name'],
+                                                    'booking_start_date' => $booking['booking_start_date'],
+                                                    'booking_end_date' => $booking['booking_end_date'],
+                                                    'booking_duration' => $booking['booking_duration'],
+                                                    'booking_grand_total' => $booking['booking_grand_total'],
+                                                    'booking_payment_method' => $booking['booking_payment_method'],
+                                                    'booking_payment_reference' => $booking['booking_payment_reference'],
+                                                    'booking_service_fee' => $booking['booking_service_fee'],
+                                                    'venue_location' => $booking['location']
+                                                ])); ?>)" type="button"
+                                                    class="px-4 py-2 border border-black text-black rounded-lg hover:bg-gray-100">
+                                                    <i class="fas fa-download mr-2"></i>Download Receipt
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+
+            <div id="completed-content" class="mt-8 hidden tab-content">
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <?php
+                    if (empty($completedBookings)) {
+                        echo '<p class="p-6 text-center text-gray-600">You do not have any previous bookings.</p>';
+                    } else {
+                        foreach ($completedBookings as $booking) {
+                            $timezone = new DateTimeZone('Asia/Manila');
+                            $currentDateTime = new DateTime('now', $timezone);
+                            $bookingStartDate = new DateTime($booking['booking_start_date'], $timezone);
+                            ?>
+                            <div class="p-6 border-b border-gray-200 booking-item"
+                                data-status="<?php echo $booking['booking_status_id']; ?>">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="text-xl font-semibold"><?php echo htmlspecialchars($booking['name']) ?></h2>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                            <?php
+                                            switch ($booking['booking_status_id']) {
+                                                case '1':
+                                                    echo 'Pending';
+                                                    break;
+                                                case '2':
+                                                    echo 'Approved';
+                                                    break;
+                                                case '3':
+                                                    echo 'Cancelled';
+                                                    break;
+                                                case '4':
+                                                    echo 'Completed';
+                                                    break;
+                                                default:
+                                                    echo 'Unknown';
+                                                    break;
+                                            }
+                                            ?>
+                                        </span>
+                                        <?php if ($bookingStartDate > $currentDateTime): ?>
+                                            <span
+                                                class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Upcoming
+                                                Booking</span>
+                                        <?php else: ?>
+                                            <span
+                                                class="px-2 py-1 bg-green-100 text-blue-800 rounded-full text-sm font-medium">Active
+                                                Booking</span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <?php
+                                    $imageUrls = !empty($booking['image_urls']) ? explode(',', $booking['image_urls']) : [];
+                                    ?>
+                                    <?php if (!empty($imageUrls)): ?>
+                                        <img src="./<?= htmlspecialchars($imageUrls[0]) ?>"
+                                            alt="<?= htmlspecialchars($booking['name']) ?>"
+                                            class="w-32 h-32 object-cover rounded-lg flex-shrink-0">
+                                    <?php endif; ?>
+                                    <div class="flex-1">
+                                        <p class="text-lg font-medium"><?php echo htmlspecialchars($booking['name']) ?></p>
+                                        <p class="text-gray-600 mt-1"><?php echo htmlspecialchars($booking['location']) ?></p>
+                                        <p class="text-gray-600 mt-1">
+                                            ₱<?php echo number_format(htmlspecialchars($booking['booking_grand_total'] ? $booking['booking_grand_total'] : 0.0)) ?>
+                                            for
+                                            <?php echo number_format(htmlspecialchars($booking['booking_duration'] ? $booking['booking_duration'] : 0.0)) ?>
+                                            days
+                                        </p>
+                                        <p class="text-gray-600 mt-1">
+                                            <?php
+                                            $startDate = new DateTime($booking['booking_start_date']);
+                                            $endDate = new DateTime($booking['booking_end_date']);
+                                            echo $startDate->format('F j, Y') . ' to ' . $endDate->format('F j, Y');
+                                            ?>
+                                        </p>
+                                        <div class="mt-4 space-x-4">
+                                            <button
+                                                onclick="showDetails(<?php echo htmlspecialchars(json_encode($booking)); ?>)"
+                                                class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800">View Details
+                                            </button>
+                                            <?php if ($booking['booking_status_id'] == '2' || $booking['booking_status_id'] == '4'): ?>
+                                                <button onclick="printReceipt(<?php echo htmlspecialchars(json_encode([
+                                                    'booking_id' => $booking['booking_id'],
+                                                    'venue_name' => $booking['name'],
+                                                    'booking_start_date' => $booking['booking_start_date'],
+                                                    'booking_end_date' => $booking['booking_end_date'],
+                                                    'booking_duration' => $booking['booking_duration'],
+                                                    'booking_grand_total' => $booking['booking_grand_total'],
+                                                    'booking_payment_method' => $booking['booking_payment_method'],
+                                                    'booking_payment_reference' => $booking['booking_payment_reference'],
+                                                    'booking_service_fee' => $booking['booking_service_fee'],
+                                                    'venue_location' => $booking['location']
+                                                ])); ?>)" type="button"
+                                                    class="px-4 py-2 border border-black text-black rounded-lg hover:bg-gray-100">
+                                                    <i class="fas fa-print mr-2"></i>Print Receipt
+                                                </button>
+                                                <button onclick="downloadReceipt(<?php echo htmlspecialchars(json_encode([
+                                                    'booking_id' => $booking['booking_id'],
+                                                    'venue_name' => $booking['name'],
+                                                    'booking_start_date' => $booking['booking_start_date'],
+                                                    'booking_end_date' => $booking['booking_end_date'],
+                                                    'booking_duration' => $booking['booking_duration'],
+                                                    'booking_grand_total' => $booking['booking_grand_total'],
+                                                    'booking_payment_method' => $booking['booking_payment_method'],
+                                                    'booking_payment_reference' => $booking['booking_payment_reference'],
+                                                    'booking_service_fee' => $booking['booking_service_fee'],
+                                                    'venue_location' => $booking['location']
+                                                ])); ?>)" type="button"
+                                                    class="px-4 py-2 border border-black text-black rounded-lg hover:bg-gray-100">
+                                                    <i class="fas fa-download mr-2"></i>Download Receipt
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
             </div>
 
         </div>
     </div>
 </main>
 <div id="details-modal"
-    class="hidden fixed inset-0 bg-black/50 bg-opacity-50 overflow-y-auto h-full w-full z-50 transition-all duration-300 ease-out opacity-0">
+    class="hidden fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50 transition-all duration-300 ease-out opacity-0">
     <div
         class="relative top-20 mx-auto p-6 border w-full max-w-4xl shadow-lg rounded-xl bg-white transition-all duration-300 transform scale-95">
         <!-- Modal Header -->
@@ -551,9 +1031,9 @@ $totalCount = $pendingCount + $confirmedCount + $cancelledCount + $completedCoun
         <!-- Modal Content -->
         <div id="modal-content" class="mt-4">
             <!-- Main image and details container -->
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col md:flex-row md:space-x-6">
                 <!-- Images Section -->
-                <div class="w-full max-w-md mb-6">
+                <div class="w-full md:w-1/2 mb-6 md:mb-0">
                     <!-- Main Image -->
                     <div class="relative h-64 rounded-lg overflow-hidden mb-2">
                         <img id="modal-main-image" src="" alt="Venue Main Image"
@@ -567,37 +1047,37 @@ $totalCount = $pendingCount + $confirmedCount + $cancelledCount + $completedCoun
                 </div>
 
                 <!-- Details Section -->
-                <div class="w-full space-y-4">
-                    <!-- Move Booking Status to left -->
+                <div class="w-full md:w-1/2 space-y-4">
+                    <!-- Booking Status -->
                     <div class="flex items-center gap-2">
                         <span id="booking-status" class="px-2.5 py-0.5 rounded-full text-sm font-medium"></span>
                         <span id="booking-type" class="px-2.5 py-0.5 rounded-full text-sm font-medium"></span>
                     </div>
 
-                    <!-- Rest of the content -->
-                    <div class="bg-gray-50 p-3 rounded-lg">
-                        <h4 class="font-semibold text-base mb-2">Price Details</h4>
+                    <!-- Price Details -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-lg mb-2">Price Details</h4>
                         <div class="space-y-1">
-                            <p id="price-per-night" class="text-xl font-bold"></p>
-                            <p id="booking-duration" class="text-gray-600 text-sm"></p>
-                            <p id="cleaning-fee" class="text-gray-600 text-sm"></p>
+                            <p id="price-per-night" class="text-2xl font-bold"></p>
+                            <p id="booking-duration" class="text-gray-600"></p>
+                            <p id="cleaning-fee" class="text-gray-600"></p>
                         </div>
                     </div>
 
-                    <!-- Two Column Layout for Other Details -->
+                    <!-- Other Details -->
                     <div class="grid grid-cols-2 gap-6">
                         <div class="space-y-4">
                             <!-- Location Section -->
                             <div>
                                 <h4 class="font-semibold text-base mb-1">Location</h4>
-                                <div class="space-y-0.5 text-gray-600 text-sm" id="location-details">
-                                </div>
+                                <div class="space-y-0.5 text-gray-600" id="location-details"></div>
                             </div>
 
                             <!-- Capacity -->
                             <div>
-                                <h4 class="font-semibold text-base mb-1">Capacity</h4>
-                                <p id="venue-capacity" class="text-gray-600 text-sm"></p>
+                                <h4 class="font-semibold text-base mb-1">Capacity<h4
+                                        class="font-semibold text-base mb-1">Capacity</h4>
+                                    <p id="venue-capacity" class="text-gray-600"></p>
                             </div>
                         </div>
 
@@ -605,24 +1085,22 @@ $totalCount = $pendingCount + $confirmedCount + $cancelledCount + $completedCoun
                             <!-- Amenities -->
                             <div>
                                 <h4 class="font-semibold text-base mb-1">Amenities</h4>
-                                <ul id="amenities-list" class="text-gray-600 text-sm space-y-0.5">
-                                </ul>
+                                <ul id="amenities-list" class="text-gray-600 space-y-0.5"></ul>
                             </div>
 
                             <!-- Contact Information -->
                             <div>
                                 <h4 class="font-semibold text-base mb-1">Contact Information</h4>
-                                <div class="space-y-0.5 text-gray-600 text-sm" id="contact-details">
-                                </div>
+                                <div class="space-y-0.5 text-gray-600" id="contact-details"></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex justify-center gap-3 pt-2">
+                    <div class="flex justify-center gap-3 pt-4">
                         <div id="book-again-container" class="hidden">
                             <button
-                                class="px-4 py-1.5 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors duration-200 text-sm">
+                                class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors duration-200">
                                 Book Again
                             </button>
                         </div>
@@ -631,9 +1109,9 @@ $totalCount = $pendingCount + $confirmedCount + $cancelledCount + $completedCoun
             </div>
 
             <!-- Reviews Section -->
-            <div id="reviews-section" class="mt-6 pt-4 border-t">
-                <h4 class="font-semibold text-base mb-3">Reviews</h4>
-                <div id="reviews-container" class="space-y-3">
+            <div id="reviews-section" class="mt-8 pt-4 border-t">
+                <h4 class="font-semibold text-lg mb-3">Reviews</h4>
+                <div id="reviews-container" class="space-y-4">
                     <!-- Reviews will be dynamically loaded here -->
                 </div>
             </div>
@@ -759,3 +1237,140 @@ $totalCount = $pendingCount + $confirmedCount + $cancelledCount + $completedCoun
         document.querySelector('.tab-links').click();
     });
 </script>
+
+<!-- <script>
+    function showCont(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.add('hidden');
+        });
+
+        // Show the selected tab content
+        document.getElementById(tabName + '-content').classList.remove('hidden');
+
+        // Update tab styles
+        document.querySelectorAll('.tab-links').forEach(tab => {
+            tab.classList.remove('border-black', 'text-gray-900');
+            tab.classList.add('border-transparent', 'text-gray-500');
+        });
+
+        // Highlight the active tab
+        event.currentTarget.classList.remove('border-transparent', 'text-gray-500');
+        event.currentTarget.classList.add('border-black', 'text-gray-900');
+    }
+
+    function showDetails(booking) {
+        const modal = document.getElementById('details-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMainImage = document.getElementById('modal-main-image');
+        const imageGallery = document.getElementById('image-gallery');
+        const bookingStatus = document.getElementById('booking-status');
+        const bookingType = document.getElementById('booking-type');
+        const pricePerNight = document.getElementById('price-per-night');
+        const bookingDuration = document.getElementById('booking-duration');
+        const cleaningFee = document.getElementById('cleaning-fee');
+        const locationDetails = document.getElementById('location-details');
+        const venueCapacity = document.getElementById('venue-capacity');
+        const amenitiesList = document.getElementById('amenities-list');
+        const contactDetails = document.getElementById('contact-details');
+        const reviewsContainer = document.getElementById('reviews-container');
+
+        // Populate modal content
+        modalTitle.textContent = booking.name;
+        modalMainImage.src = booking.image_urls.split(',')[0];
+        bookingStatus.textContent = getBookingStatusText(booking.booking_status_id);
+        bookingType.textContent = isUpcomingBooking(booking.booking_start_date) ? 'Upcoming Booking' : 'Active Booking';
+        pricePerNight.textContent = `₱${Number(booking.booking_grand_total).toLocaleString()} total`;
+        bookingDuration.textContent = `${booking.booking_duration} days`;
+        cleaningFee.textContent = `Cleaning fee: ₱${Number(booking.cleaning_fee || 0).toLocaleString()}`;
+        locationDetails.textContent = booking.location;
+        venueCapacity.textContent = `${booking.capacity || 'N/A'} guests`;
+
+        // Populate image gallery
+        imageGallery.innerHTML = '';
+        booking.image_urls.split(',').forEach((url, index) => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = `${booking.name} image ${index + 1}`;
+            img.className = 'w-20 h-20 object-cover rounded-lg cursor-pointer';
+            img.onclick = () => {
+                modalMainImage.src = url;
+            };
+            imageGallery.appendChild(img);
+        });
+
+        // Populate amenities (assuming booking.amenities is an array of amenity names)
+        amenitiesList.innerHTML = '';
+        if (booking.amenities && booking.amenities.length > 0) {
+            booking.amenities.forEach(amenity => {
+                const li = document.createElement('li');
+                li.textContent = amenity;
+                amenitiesList.appendChild(li);
+            });
+        } else {
+            amenitiesList.innerHTML = '<li>No amenities listed</li>';
+        }
+
+        // Populate contact details
+        contactDetails.textContent = booking.contact_info || 'No contact information available';
+
+        // Populate reviews (assuming booking.reviews is an array of review objects)
+        reviewsContainer.innerHTML = '';
+        if (booking.reviews && booking.reviews.length > 0) {
+            booking.reviews.forEach(review => {
+                const reviewElement = document.createElement('div');
+                reviewElement.className = 'bg-gray-50 p-4 rounded-lg';
+                reviewElement.innerHTML = `
+                        <p class="font-medium">${review.author}</p>
+                        <p class="text-gray-600 mt-1">${review.content}</p>
+                    `;
+                reviewsContainer.appendChild(reviewElement);
+            });
+        } else {
+            reviewsContainer.innerHTML = '<p class="text-gray-600">No reviews available</p>';
+        }
+
+        // Show modal
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modal.querySelector('.relative').classList.remove('scale-95');
+        }, 10);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('details-modal');
+        modal.classList.add('opacity-0');
+        modal.querySelector('.relative').classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    function getBookingStatusText(statusId) {
+        switch (statusId) {
+            case '1': return 'Pending';
+            case '2': return 'Approved';
+            case '3': return 'Cancelled';
+            case '4': return 'Completed';
+            default: return 'Unknown';
+        }
+    }
+
+    function isUpcomingBooking(startDate) {
+        const now = new Date();
+        const bookingStart = new Date(startDate);
+        return bookingStart > now;
+    }
+
+    // Functions for printing and downloading receipts
+    function printReceipt(bookingData) {
+        // Implement print functionality
+        console.log('Printing receipt for:', bookingData);
+    }
+
+    function downloadReceipt(bookingData) {
+        // Implement download functionality
+        console.log('Downloading receipt for:', bookingData);
+    }
+</script> -->

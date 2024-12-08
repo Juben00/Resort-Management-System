@@ -12,7 +12,6 @@ class Venue
     public $amenities;
 
     public $rules;
-    public $tag;
     public $entrance;
     public $cleaning;
     public $host_id = 2;
@@ -39,8 +38,8 @@ class Venue
             $conn->beginTransaction();
 
             // Insert venue information
-            $sql = 'INSERT INTO venues (name, description, location, price, capacity, amenities, rules, entrance, cleaning, venue_tag, time_inout, host_id, status_id, availability_id) 
-                VALUES (:name, :description, :location, :price, :capacity, :amenities, :rules, :entrance, :cleaning, :venue_tag, :time_inout, :host_id, :status_id, :availability_id)';
+            $sql = 'INSERT INTO venues (name, description, location, price, capacity, amenities, rules, entrance, cleaning, time_inout, host_id, status_id, availability_id) 
+                VALUES (:name, :description, :location, :price, :capacity, :amenities, :rules, :entrance, :cleaning, :time_inout, :host_id, :status_id, :availability_id)';
             $stmt = $conn->prepare($sql);
 
             // Bind parameters
@@ -53,7 +52,6 @@ class Venue
             $stmt->bindParam(':rules', $this->rules);
             $stmt->bindParam(':entrance', $this->entrance);
             $stmt->bindParam(':cleaning', $this->cleaning);
-            $stmt->bindParam(':venue_tag', $this->tag);
             $stmt->bindParam(':time_inout', $this->check_inout);
             $stmt->bindParam(':host_id', $this->host_id);
             $stmt->bindParam(':status_id', $this->status);
@@ -106,7 +104,6 @@ class Venue
             // Start building the SQL query
             $sql = "SELECT 
             v.id AS venue_id,
-            vtg.tag_name AS venue_tag_name,
             v.*, 
             vss.name AS status, 
             vas.name AS availability, 
@@ -114,7 +111,6 @@ class Venue
             AVG(r.rating) AS rating, 
             COUNT(DISTINCT r.id) AS total_reviews
             FROM venues v 
-            JOIN venue_tag_sub vtg ON v.venue_tag = vtg.id
             JOIN venue_status_sub vss ON v.status_id = vss.id 
             JOIN venue_availability_sub vas ON v.availability_id = vas.id 
             JOIN venue_images vi ON v.id = vi.venue_id 
@@ -179,7 +175,6 @@ class Venue
                 v.description AS venue_description, 
                 v.location AS venue_location, 
                 v.*, 
-                vt.tag_name AS tag, 
                 vss.name AS status, 
                 vas.name AS availability, 
                 AVG(r.rating) AS rating, 
@@ -187,8 +182,6 @@ class Venue
                 GROUP_CONCAT(DISTINCT vi.image_url) AS image_urls
             FROM 
                 venues v
-            JOIN 
-                venue_tag_sub vt ON v.venue_tag = vt.id
             JOIN 
                 venue_status_sub vss ON v.status_id = vss.id
             JOIN 
@@ -200,7 +193,7 @@ class Venue
             WHERE 
                 v.id = :venue_id
             GROUP BY 
-                v.id, vt.tag_name, vss.name, vas.name;
+                v.id, vss.name, vas.name;
         ";
 
             $stmt = $conn->prepare($sql);
@@ -572,8 +565,6 @@ class Venue
 
     d.discount_value AS discount_value,
 
-    vt.tag_name AS venue_tag_name,
-
     GROUP_CONCAT(COALESCE(vi.image_url, '')) AS image_urls
 FROM 
     bookings b
@@ -583,8 +574,6 @@ LEFT JOIN
     users u ON b.booking_guest_id = u.id
 LEFT JOIN 
     venues v ON b.booking_venue_id = v.id
-LEFT JOIN
-    venue_tag_sub vt ON v.venue_tag = vt.id
 LEFT JOIN 
     venue_images vi ON v.id = vi.venue_id
 ";

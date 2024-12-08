@@ -5,8 +5,8 @@ require_once '../sanitize.php';
 
 $venueObj = new Venue();
 
-$name = $description = $location = $price = $capacity = $amenities = $tag = $entrance = $cleaning = "";
-$nameErr = $descriptionErr = $locationErr = $priceErr = $capacityErr = $amenitiesErr = $tagErr = $entranceErr = $cleaningErr = $imageErr = "";
+$name = $description = $location = $price = $capacity = $amenities = $entrance = $cleaning = "";
+$nameErr = $descriptionErr = $locationErr = $priceErr = $capacityErr = $amenitiesErr = $entranceErr = $cleaningErr = $imageErr = "";
 
 $uploadDir = '/venue_image_uploads/';
 $allowedType = ['jpg', 'jpeg', 'png'];
@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = clean_input($_POST['price']);
     $capacity = clean_input($_POST['capacity']);
     $amenities = clean_input($_POST['amenities']);
-    $tag = clean_input($_POST['tag']);
     $entrance = clean_input($_POST['entrance']);
     $cleaning = clean_input($_POST['cleaning']);
 
@@ -36,8 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $capacityErr = "Capacity is required";
     if (empty($amenities))
         $amenitiesErr = "Amenities are required";
-    if (empty($tag))
-        $tagErr = "Tag is required";
     if (empty($entrance))
         $entranceErr = "Entrance field is required";
     if (empty($cleaning))
@@ -74,15 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $amenitiesArray = explode(',', $amenities);
     $amenitiesJson = json_encode(array_map('trim', $amenitiesArray));
 
-    if ($tag == 'Corporate Events') {
-        $tag = 1;
-    } else if ($tag == 'Reception Hall') {
-        $tag = 2;
-    } else if ($tag == 'Intimate Gatherings') {
-        $tag = 3;
-    } else if ($tag == 'Outdoor') {
-        $tag = 4;
-    }
 
     // Proceed if no errors
     if (
@@ -96,7 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $venueObj->price = $price;
         $venueObj->capacity = $capacity;
         $venueObj->amenities = $amenitiesJson;
-        $venueObj->tag = $tag;
         $venueObj->entrance = $entrance;
         $venueObj->cleaning = $cleaning;
         $venueObj->image_url = json_encode($uploadedImages); // Save multiple image paths as JSON

@@ -176,67 +176,6 @@ session_start();
             </div>
 
             <div id="step2" class="step">
-                <h2 class="text-3xl font-semibold mb-4">Which of these best describes your place?</h2>
-                <div class="grid grid-cols-3 gap-4">
-                    <label
-                        class="p-4 border rounded-lg text-left hover:border-black focus:outline-none focus:ring-2 focus:ring-black cursor-pointer peer-checked:bg-gray-100 peer-checked:border-black transition">
-                        <input type="radio" name="placeType" value="Corporate Space" class="hidden peer">
-                        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                            </path>
-                        </svg>
-                        <h3 class="font-semibold">Corporate Space</h3>
-                        <p class="text-sm text-gray-500">Professional venue for meetings, conferences and business
-                            events
-                        </p>
-                    </label>
-
-                    <label
-                        class="p-4 border rounded-lg text-left hover:border-black focus:outline-none focus:ring-2 focus:ring-black cursor-pointer peer-checked:bg-gray-100 peer-checked:border-black transition">
-                        <input type="radio" name="placeType" value="Reception Hall" class="hidden peer">
-                        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M21 15.5458C21 19.5458 12 23.5458 12 23.5458C12 23.5458 3 19.5458 3 15.5458V8.54578C3 7.71778 3.543 6.97178 4.316 6.67278L11.316 4.17278C11.756 4.01978 12.244 4.01978 12.684 4.17278L19.684 6.67278C20.457 6.97178 21 7.71778 21 8.54578V15.5458Z">
-                            </path>
-                        </svg>
-                        <h3 class="font-semibold">Reception Hall</h3>
-                        <p class="text-sm text-gray-500">Large spaces perfect for weddings, parties and formal
-                            gatherings
-                        </p>
-                    </label>
-
-                    <label
-                        class="p-4 border rounded-lg text-left hover:border-black focus:outline-none focus:ring-2 focus:ring-black cursor-pointer peer-checked:bg-gray-100 peer-checked:border-black transition">
-                        <input type="radio" name="placeType" value="Intimate Space" class="hidden peer">
-                        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                            </path>
-                        </svg>
-                        <h3 class="font-semibold">Intimate Space</h3>
-                        <p class="text-sm text-gray-500">Cozy venues ideal for small gatherings and private events</p>
-                    </label>
-
-                    <label
-                        class="p-4 border rounded-lg text-left hover:border-black focus:outline-none focus:ring-2 focus:ring-black cursor-pointer peer-checked:bg-gray-100 peer-checked:border-black transition">
-                        <input type="radio" name="placeType" value="Outdoor Venue" class="hidden peer">
-                        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
-                            </path>
-                        </svg>
-                        <h3 class="font-semibold">Outdoor Venue</h3>
-                        <p class="text-sm text-gray-500">Beautiful outdoor spaces for events under the sky</p>
-                    </label>
-                </div>
-            </div>
-
-            <div id="step3" class="step">
                 <h1 class="text-3xl font-bold mb-4">Tell guests what your place has to offer</h1>
                 <p class="text-gray-600 mb-6">You can add more amenities after you publish your listing.</p>
 
@@ -509,7 +448,7 @@ session_start();
                 </div>
             </div>
 
-            <div id="step4" class="step">
+            <div id="step3" class="step">
                 <div class="mt-80">
                     <div class="absolute bottom-60">
                         <h1 class="text-3xl font-bold ">Where's your place located?</h1>
@@ -524,7 +463,7 @@ session_start();
 
             </div>
 
-            <div id="step5" class="step">
+            <div id="step4" class="step">
                 <h1 class="text-4xl font-bold mb-4">Add photos of your venue</h1>
                 <p class="text-xl text-gray-600 mb-8">Photos help guests imagine staying in your place. You can start
                     with
@@ -551,7 +490,7 @@ session_start();
 
             </div>
 
-            <div id="step6" class="step">
+            <div id="step5" class="step">
                 <h1 class="text-4xl font-bold mb-4">Create your description</h1>
                 <p class="text-gray-600 mb-8">Share what makes your place special.</p>
 
@@ -566,7 +505,7 @@ session_start();
                 </div>
             </div>
 
-            <div id="step7" class="step">
+            <div id="step6" class="step">
                 <h1 class="text-4xl font-bold mb-4">Create your title</h1>
                 <p class="text-gray-600 mb-8">Catch guests' attention with a listing title that highlights what makes
                     your
@@ -592,7 +531,7 @@ session_start();
                 </div>
             </div>
 
-            <div id="step8" class="step">
+            <div id="step7" class="step">
                 <h2 class="text-2xl font-semibold mb-2">Step 3</h2>
                 <h1 class="text-4xl font-bold mb-4">Finish up and publish</h1>
                 <p class="text-xl text-gray-600 mb-8">Finally, you'll choose booking settings, set up pricing, and
@@ -600,7 +539,7 @@ session_start();
                     your listing.</p>
             </div>
 
-            <div id="step9" class="step">
+            <div id="step8" class="step">
                 <h1 class="text-4xl font-bold mb-4">Set your house rules</h1>
                 <p class="text-gray-600 mb-8">Let guests know what they can expect when booking your venue.</p>
 
@@ -633,7 +572,7 @@ session_start();
                 </div>
             </div>
 
-            <div id="step10" class="step ">
+            <div id="step9" class="step ">
                 <h1 class="text-3xl font-bold mb-2">Now, set your price</h1>
                 <p class="text-gray-600 mb-6">You can change it anytime.</p>
 
@@ -663,7 +602,7 @@ session_start();
 
             </div>
 
-            <div id="step11" class="step">
+            <div id="step10" class="step">
                 <h1 class="text-3xl font-bold mb-4">Additional fees</h1>
                 <p class="text-gray-600 mb-8">Set optional fees for your venue.</p>
 
@@ -725,7 +664,7 @@ session_start();
                 </div>
             </div>
 
-            <div id="step12" class="step">
+            <div id="step11" class="step">
                 <h1 class="text-3xl font-bold mb-4">Review your listing</h1>
                 <p class="text-gray-600 mb-6">Here's what we'll show to guests. Make sure everything looks good.</p>
 
@@ -805,7 +744,7 @@ session_start();
 
     <script>
         let currentStep = 1;
-        const totalSteps = 12;
+        const totalSteps = 11;
 
         // Replace the existing defaultDescription with this new version
         const defaultDescription = `A versatile and elegantly designed space featuring modern amenities and customizable layouts to suit various needs. With its convenient location, ample parking, and dedicated staff, it ensures a seamless and memorable experience for all occasions.`;
