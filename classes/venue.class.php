@@ -676,7 +676,7 @@ LEFT JOIN
         }
     }
 
-    public function getDashboardStats($userId) {
+    public function getDashboardStats() {
         try {
             $conn = $this->db->connect();
             
@@ -688,22 +688,18 @@ LEFT JOIN
                 SUM(CASE WHEN booking_status_id = 3 THEN 1 ELSE 0 END) as canceled_reservations,
                 SUM(booking_grand_total) as total_earnings,
                 SUM(CASE WHEN MONTH(booking_created_at) = MONTH(CURRENT_DATE) THEN booking_grand_total ELSE 0 END) as monthly_earnings
-            FROM bookings 
-            WHERE booking_guest_id = :userId";
+            FROM bookings";
             
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':userId', $userId);
             $stmt->execute();
             $stats = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // Get new bookings in last 24 hours
             $sql = "SELECT COUNT(*) as new_bookings 
                     FROM bookings 
-                    WHERE booking_guest_id = :userId 
-                    AND booking_created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
+                    WHERE booking_created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
             
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':userId', $userId);
             $stmt->execute();
             $newBookings = $stmt->fetch(PDO::FETCH_ASSOC);
             
@@ -713,14 +709,12 @@ LEFT JOIN
                     FROM bookings b
                     JOIN venues v ON b.booking_venue_id = v.id
                     JOIN users u ON b.booking_guest_id = u.id
-                    WHERE b.booking_guest_id = :userId 
-                    AND (b.booking_status_id = 1 OR b.booking_status_id = 2)
+                    WHERE(b.booking_status_id = 1 OR b.booking_status_id = 2)
                     AND b.booking_start_date >= CURRENT_DATE
                     ORDER BY b.booking_start_date ASC
                     LIMIT 5";
             
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':userId', $userId);
             $stmt->execute();
             $upcomingReservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

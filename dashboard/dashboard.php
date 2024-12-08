@@ -56,9 +56,9 @@ session_start();
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+// document.addEventListener('DOMContentLoaded', function() {
     loadDashboardData();
-});
+// });
 
 function loadDashboardData() {
     fetch('../api/GetDashboardStats.api.php')
@@ -66,6 +66,9 @@ function loadDashboardData() {
         .then(data => {
             if (data.status === 'success') {
                 updateDashboard(data.data);
+                console.log(data.data);
+                console.log("adas");
+                
             } else {
                 console.error('Error loading dashboard data:', data.message);
             }

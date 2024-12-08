@@ -5,11 +5,10 @@ session_start();
 $venueObj = new Venue();
 
 // Get user ID from session
-$userId = $_SESSION['user']['id'];
 
 try {
     // Get all bookings for the user
-    $stats = $venueObj->getDashboardStats($userId);
+    $stats = $venueObj->getDashboardStats();
     
     echo json_encode([
         'status' => 'success',
