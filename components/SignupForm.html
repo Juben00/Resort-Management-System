@@ -64,6 +64,7 @@
             name="email"
             class="w-full p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-200"
             placeholder="Icoco.user@email.com"
+            required
           />
         </div>
         <div>
@@ -83,6 +84,7 @@
             name="password"
             class="w-full p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-200"
             placeholder="***********"
+            required
           />
         </div>
         <button
@@ -108,6 +110,7 @@
               name="firstname"
               class="w-full p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-200"
               placeholder="John"
+              required
             />
           </div>
           <div>
@@ -122,6 +125,7 @@
               name="lastname"
               class="w-full p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-200"
               placeholder="Doe"
+              required
             />
           </div>
         </div>
@@ -146,6 +150,7 @@
               id="sex"
               name="sex"
               class="w-full p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-200"
+              required
             >
               <option value="" disabled selected>Select sex</option>
               <option value="Male">Male</option>
@@ -165,6 +170,7 @@
               id="birthdate"
               name="birthdate"
               class="w-full p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-200"
+              required
             />
           </div>
 
@@ -192,6 +198,7 @@
               maxlength="11"
               pattern="[0-9]*"
               inputmode="numeric"
+              required
             />
           </div>
         </div>
@@ -201,7 +208,7 @@
             <div class="flex items-center space-x-2">
                 <input id="signupaddress" name="signupaddress" placeholder="Click the button to set a location" required type="text" 
                 class="flex-grow p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-200"
-                readonly />
+                readonly required />
               <button id="maps-button" class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition duration-200">
                   <svg height="24px" width="24px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#4B5563" stroke="#4B5563"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <polygon points="154.64,420.096 154.64,59.496 0,134 0,512 "></polygon> <polygon style="fill:#d3d5de;" points="309.288,146.464 309.288,504.472 154.64,420.096 154.64,59.496 "></polygon> <polygon points="463.928,50.152 309.288,146.464 309.288,504.472 463.928,415.68 "></polygon> <path style="fill:#e73023;" d="M414.512,281.656l-11.92-15.744c-8.8-11.472-85.6-113.984-85.6-165.048 C317.032,39.592,355.272,0,414.512,0S512,39.592,512,100.864c0,50.992-76.8,153.504-85.488,165.048L414.512,281.656z"></path> <circle style="fill:#FFFFFF;" cx="414.512" cy="101.536" r="31.568"></circle> </g></svg>
               </button>
@@ -217,6 +224,7 @@
             name="email"
             class="w-full p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-200"
             placeholder="john.doe@email.com"
+            required
           />
         </div>
         <div>
@@ -229,6 +237,7 @@
             name="password"
             class="w-full p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-200"
             placeholder="**********"
+            required
           />
         </div>
         <div class="flex items-center">
@@ -237,6 +246,7 @@
             id="agreeTerms"
             name="agreeTerms"
             class="h-5 w-5 rounded text-blue-600 border-gray-300 focus:ring-blue-500"
+            required
           />
           <label for="agreeTerms" class="ml-2 block text-sm text-gray-700">
             I agree with all the
