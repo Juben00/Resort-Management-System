@@ -259,17 +259,29 @@ $(document).ready(function () {
             processData: false,  
             contentType: false, 
             success: function (response) {
-                if (response.status === "success") {
-                    showModal(response.message, function () {
-                        formElement[0].reset();
-                        $('#authModal').addClass("hidden");
-                        $('#loginTab').click();
-                    }, "icoco_black_ico.png");
-                } else {
-                    showModal(response.message, undefined, "icoco_black_ico.png");
+                // Ensure response is parsed as JSON
+                try {
+                    const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
+    
+                    if (jsonResponse.status === "success") {
+                        showModal(jsonResponse.message, function () {
+                            formElement[0].reset();
+                            $('#authModal').addClass("hidden");
+                            $('#loginTab').click();
+                        }, "icoco_black_ico.png");
+                    } else {
+                        showModal(jsonResponse.message, undefined, "icoco_black_ico.png");
+                    }
+                } catch (error) {
+                    console.error('Error parsing response:', error);
+                    showModal('An unexpected error occurred.', undefined, "icoco_black_ico.png");
                 }
             },
-            });
+            error: function (xhr, status, error) {
+                console.error('AJAX error:', status, error);
+                showModal('An error occurred while processing your request.', undefined, "icoco_black_ico.png");
+            }
+        });
     }
 
     

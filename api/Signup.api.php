@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $firstname = clean_input($_POST['firstname']);
     $lastname = clean_input($_POST['lastname']);
     $middlename = clean_input($_POST['middlename']) ?? '';
-    $sex = clean_input($_POST['sex']);
+    $sex = isset($_POST['sex']) ? clean_input($_POST['sex']) : '';
     $birthdate = clean_input($_POST['birthdate']);
     $contact_number = clean_input($_POST['contact']);
     $address = clean_input($_POST['signupaddress']);

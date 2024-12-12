@@ -71,7 +71,7 @@
   function showModal(message, callback = () => {}, logo) {
     const basePath = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/');
     const logoPath = `${basePath}/images/${logo}`;
-
+    
     feedbackModalMessage.innerHTML = message; // Set the custom message
     feedbackModal.classList.remove("hidden"); // Show the modal
     feedbackModal.classList.add("flex"); // Show the modal
