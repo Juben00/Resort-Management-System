@@ -730,6 +730,26 @@ LEFT JOIN
         }
     }
 
+    public function getCompletedReservations() {
+        $conn = $this->db->connect();
+        $sql = "SELECT 
+                    b.id,
+                    CONCAT(u.firstname, ' ', u.lastname) as customer_name,
+                    v.name,
+                    b.booking_start_date AS booking_start_date,
+                    b.booking_end_date AS booking_end_date,
+                    b.booking_status_id
+                FROM bookings b
+                JOIN users u ON b.booking_guest_id = u.id
+                JOIN venues v ON b.booking_venue_id = v.id
+                WHERE b.booking_status_id = '4'
+                ORDER BY b.booking_created_at DESC";
+                
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 
 $venueObj = new Venue();

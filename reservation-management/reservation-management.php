@@ -18,6 +18,9 @@ $accountObj = new Account();
             id="approved-reservations-rm">Approved</button>
         <button
             class="tab-button flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            id="completed-reservations-rm">Completed</button>
+        <button
+            class="tab-button flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
             id="cancelled-reservations-rm">Cancelled</button>
         <button
             class="tab-button flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
@@ -44,6 +47,12 @@ $accountObj = new Account();
         $("#approved-reservations-rm").on("click", function (e) {
             e.preventDefault();
             viewRmApproved();
+            activateTab($(this));
+        });
+
+        $("#completed-reservations-rm").on("click", function (e) {
+            e.preventDefault();
+            viewRmCompleted();
             activateTab($(this));
         });
 
@@ -87,6 +96,17 @@ $accountObj = new Account();
         $.ajax({
             type: "GET",
             url: "../reservation-management/approved-reservations.php",
+            dataType: "html",
+            success: function (response) {
+                $("#reservation-management-view").html(response);
+            },
+        });
+    }
+
+    function viewRmCompleted() {
+        $.ajax({
+            type: "GET",
+            url: "../reservation-management/completed-reservations.php",
             dataType: "html",
             success: function (response) {
                 $("#reservation-management-view").html(response);
