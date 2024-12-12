@@ -10,7 +10,7 @@ $firstnameErr = $lastnameErr = $middlenameErr = $sexErr = $birthdateErr = $conta
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $firstname = clean_input($_POST['firstname']);
     $lastname = clean_input($_POST['lastname']);
-    $middlename = clean_input($_POST['middlename']);
+    $middlename = clean_input($_POST['middlename']) ?? '';
     $sex = clean_input($_POST['sex']);
     $birthdate = clean_input($_POST['birthdate']);
     $contact_number = clean_input($_POST['contact']);
@@ -31,9 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $lastnameErr = 'Last name must contain letters and spaces only';
     }
 
-    if (empty($middlename)) {
-        $middlenameErr = 'Middle name is required';
-    }
+    // if (empty($middlename)) {
+    //     $middlenameErr = 'Middle name is required';
+    // }
 
     if (empty($sex)) {
         $sexErr = "sex is required";
@@ -41,12 +41,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($birthdate)) {
         $birthdateErr = 'Birthdate is required';
+    } else {
+        $birthDateTime = new DateTime($birthdate);
+        $today = new DateTime();
+        $age = $today->diff($birthDateTime)->y;
+    
+        if ($age < 18) {
+            $birthdateErr = 'You must be at least 18 years old';
+        }
     }
 
     if (empty($contact_number)) {
         $contact_numberErr = 'Contact number is required';
     } else if (!preg_match('/^[0-9]+$/', $contact_number)) {
         $contact_numberErr = 'Contact number must contain numbers only';
+    } else if (strlen($contact_number) < 11) {
+        $contact_numberErr = 'Contact number must be at least 11 digits';
     }
 
     if (empty($address)) {
