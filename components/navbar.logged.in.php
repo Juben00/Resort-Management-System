@@ -6,7 +6,7 @@ $account = new Account();
 $profilePic = $account->getProfilePic($_SESSION['user']['id']);
 ?>
 
-<nav id="main-nav" class="bg-transparent backdrop-blur-xl z-40 fixed w-full px-2 lg:px-8">
+<nav id="main-nav" class="bg-transparent backdrop-blur-xl z-50 fixed w-full px-2 lg:px-8">
   <!-- logged in -->
   <div class="flex items-center justify-between md:px-4">
     <!-- Left Section -->

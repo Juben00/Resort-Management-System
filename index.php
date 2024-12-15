@@ -259,7 +259,7 @@ $bookmarkIds = array_column($bookmarks, 'venue_id');
                                             <?php endif; ?>
                                             <?php if (isset($venue['capacity'])): ?>
                                                 <span
-                                                    class="absolute top-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full z-50 flex items-center gap-1">
+                                                    class="absolute top-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full z-30 flex items-center gap-1">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24"
                                                         fill="currentColor">
                                                         <path
