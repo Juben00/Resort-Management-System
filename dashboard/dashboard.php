@@ -16,9 +16,11 @@ session_start();
                     <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Reservations</h3>
                     <p class="text-3xl font-bold text-primary" id="totalReservations">-</p>
                     <ul class="mt-2 text-sm text-gray-600">
+                        <li>Pending: <span id="pendingReservations"></span></li>
                         <li>Completed: <span id="completedReservations">-</span></li>
                         <li>Upcoming: <span id="upcomingReservations">-</span></li>
                         <li>Canceled: <span id="canceledReservations">-</span></li>
+                        <li>Rejected: <span id="rejectedReservations">-</span></li>
                     </ul>
                 </div>
                 <div class="bg-white rounded-lg shadow-md p-6">
@@ -56,40 +58,42 @@ session_start();
 </div>
 
 <script>
-// document.addEventListener('DOMContentLoaded', function() {
+    // document.addEventListener('DOMContentLoaded', function() {
     loadDashboardData();
-// });
+    // });
 
-function loadDashboardData() {
-    fetch('../api/GetDashboardStats.api.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                updateDashboard(data.data);
-                console.log(data.data);
-                console.log("adas");
-                
-            } else {
-                console.error('Error loading dashboard data:', data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-}
+    function loadDashboardData() {
+        fetch('../api/GetDashboardStats.api.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateDashboard(data.data);
+                    console.log(data.data);
+                    console.log("adas");
 
-function updateDashboard(data) {
-    // Update statistics
-    const stats = data.reservations;
-    document.getElementById('totalReservations').textContent = stats.total_reservations;
-    document.getElementById('completedReservations').textContent = stats.completed_reservations;
-    document.getElementById('upcomingReservations').textContent = stats.upcoming_reservations;
-    document.getElementById('canceledReservations').textContent = stats.canceled_reservations;
-    document.getElementById('totalEarnings').textContent = '₱' + formatNumber(stats.total_earnings);
-    document.getElementById('monthlyEarnings').textContent = '₱' + formatNumber(stats.monthly_earnings);
-    document.getElementById('newBookings').textContent = data.new_bookings;
+                } else {
+                    console.error('Error loading dashboard data:', data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
 
-    // Update upcoming reservations table
-    const tableBody = document.getElementById('upcomingReservationsTable');
-    tableBody.innerHTML = data.upcoming_reservations.map(booking => `
+    function updateDashboard(data) {
+        // Update statistics
+        const stats = data.reservations;
+        document.getElementById('totalReservations').textContent = stats.total_reservations;
+        document.getElementById('pendingReservations').textContent = stats.pending_reservations;
+        document.getElementById('rejectedReservations').textContent = stats.rejected_reservations;
+        document.getElementById('completedReservations').textContent = stats.completed_reservations;
+        document.getElementById('upcomingReservations').textContent = stats.upcoming_reservations;
+        document.getElementById('canceledReservations').textContent = stats.canceled_reservations;
+        document.getElementById('totalEarnings').textContent = '₱' + formatNumber(stats.total_earnings);
+        document.getElementById('monthlyEarnings').textContent = '₱' + formatNumber(stats.monthly_earnings);
+        document.getElementById('newBookings').textContent = data.new_bookings;
+
+        // Update upcoming reservations table
+        const tableBody = document.getElementById('upcomingReservationsTable');
+        tableBody.innerHTML = data.upcoming_reservations.map(booking => `
         <tr class="border-b hover:bg-gray-50">
             <td class="py-2 px-4">${formatDate(booking.booking_start_date)}</td>
             <td class="py-2 px-4">${booking.venue_name}</td>
@@ -101,37 +105,37 @@ function updateDashboard(data) {
             </td>
         </tr>
     `).join('');
-}
+    }
 
-function formatNumber(number) {
-    return new Intl.NumberFormat('en-PH').format(number || 0);
-}
+    function formatNumber(number) {
+        return new Intl.NumberFormat('en-PH').format(number || 0);
+    }
 
-function formatDate(dateString) {
-    return new Date(dateString).toLocaleDateString('en-PH', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-}
+    function formatDate(dateString) {
+        return new Date(dateString).toLocaleDateString('en-PH', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
 
-function getStatusText(statusId) {
-    const statuses = {
-        '1': 'Pending',
-        '2': 'Approved',
-        '3': 'Cancelled',
-        '4': 'Completed'
-    };
-    return statuses[statusId] || 'Unknown';
-}
+    function getStatusText(statusId) {
+        const statuses = {
+            '1': 'Pending',
+            '2': 'Approved',
+            '3': 'Cancelled',
+            '4': 'Completed'
+        };
+        return statuses[statusId] || 'Unknown';
+    }
 
-function getStatusClass(statusId) {
-    const classes = {
-        '1': 'bg-yellow-100 text-yellow-800',
-        '2': 'bg-green-100 text-green-800',
-        '3': 'bg-red-100 text-red-800',
-        '4': 'bg-blue-100 text-blue-800'
-    };
-    return classes[statusId] || 'bg-gray-100 text-gray-800';
-}
+    function getStatusClass(statusId) {
+        const classes = {
+            '1': 'bg-yellow-100 text-yellow-800',
+            '2': 'bg-green-100 text-green-800',
+            '3': 'bg-red-100 text-red-800',
+            '4': 'bg-blue-100 text-blue-800'
+        };
+        return classes[statusId] || 'bg-gray-100 text-gray-800';
+    }
 </script>

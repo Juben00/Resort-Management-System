@@ -204,10 +204,8 @@ $isHost = $accountObj->HostApplicationStats($_SESSION['user']['id'], 2);
                             <h2 class="text-2xl font-semibold mb-4 text-gray-700">Personal Details</h2>
                             <p class="text-gray-600 mb-6">Let's start with your personal information.</p>
                             <div class="space-y-4">
-                            <?php 
-                            var_dump($_SESSION['user']['id']);
-        var_dump($isHost); 
-        foreach ($user as $index): ?>
+                                <?php
+                                foreach ($user as $index): ?>
                                     <div>
                                         <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                                         <input type="text" id="fullName" name="fullName" placeholder="Last Name, First Name M.I."

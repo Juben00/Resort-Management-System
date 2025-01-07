@@ -465,7 +465,7 @@ class Venue
     {
         try {
             $conn = $this->db->connect();
-            $sql = "UPDATE bookings SET booking_status_id = 4 WHERE id = :booking_id";
+            $sql = "UPDATE bookings SET booking_status_id = 5 WHERE id = :booking_id";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':booking_id', $booking_id);
 
@@ -676,20 +676,24 @@ LEFT JOIN
         }
     }
 
-    public function getDashboardStats() {
+    public function getDashboardStats()
+    {
         try {
             $conn = $this->db->connect();
-            
+
             // Get total reservations and their status counts
             $sql = "SELECT 
-                COUNT(*) as total_reservations,
-                SUM(CASE WHEN booking_status_id = 4 THEN 1 ELSE 0 END) as completed_reservations,
-                SUM(CASE WHEN booking_status_id = 1 OR booking_status_id = 2 THEN 1 ELSE 0 END) as upcoming_reservations,
-                SUM(CASE WHEN booking_status_id = 3 THEN 1 ELSE 0 END) as canceled_reservations,
-                SUM(booking_grand_total) as total_earnings,
-                SUM(CASE WHEN MONTH(booking_created_at) = MONTH(CURRENT_DATE) THEN booking_grand_total ELSE 0 END) as monthly_earnings
-            FROM bookings";
-            
+                COUNT(*) AS total_reservations,
+                SUM(CASE WHEN booking_status_id = 5 THEN 1 ELSE 0 END) AS rejected_reservations,
+                SUM(CASE WHEN booking_status_id = 4 THEN 1 ELSE 0 END) AS completed_reservations,
+                SUM(CASE WHEN booking_status_id = 1 THEN 1 ELSE 0 END) AS pending_reservations,
+                SUM(CASE WHEN booking_status_id = 2 THEN 1 ELSE 0 END) AS upcoming_reservations,
+                SUM(CASE WHEN booking_status_id = 3 THEN 1 ELSE 0 END) AS canceled_reservations,
+                SUM(CASE WHEN booking_status_id IN (2, 4) THEN booking_grand_total ELSE 0 END) AS total_earnings,
+                SUM(CASE WHEN booking_status_id IN (2, 4) AND MONTH(booking_created_at) = MONTH(CURRENT_DATE) THEN booking_grand_total ELSE 0 END) AS monthly_earnings
+            FROM bookings;
+            ";
+
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $stats = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -698,11 +702,11 @@ LEFT JOIN
             $sql = "SELECT COUNT(*) as new_bookings 
                     FROM bookings 
                     WHERE booking_created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
-            
+
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $newBookings = $stmt->fetch(PDO::FETCH_ASSOC);
-            
+
             // Get upcoming reservations
             $sql = "SELECT b.*, v.name as venue_name, v.location as venue_location,
                         u.firstname, u.lastname, u.contact_number
@@ -713,7 +717,7 @@ LEFT JOIN
                     AND b.booking_start_date >= CURRENT_DATE
                     ORDER BY b.booking_start_date ASC
                     LIMIT 5";
-            
+
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $upcomingReservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -723,14 +727,15 @@ LEFT JOIN
                 'new_bookings' => $newBookings['new_bookings'],
                 'upcoming_reservations' => $upcomingReservations
             ];
-            
+
         } catch (PDOException $e) {
             error_log("Database error: " . $e->getMessage());
             throw new Exception("Error fetching dashboard statistics");
         }
     }
 
-    public function getCompletedReservations() {
+    public function getCompletedReservations()
+    {
         $conn = $this->db->connect();
         $sql = "SELECT 
                     b.id,
@@ -744,7 +749,7 @@ LEFT JOIN
                 JOIN venues v ON b.booking_venue_id = v.id
                 WHERE b.booking_status_id = '4'
                 ORDER BY b.booking_created_at DESC";
-                
+
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
