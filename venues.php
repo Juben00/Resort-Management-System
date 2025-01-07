@@ -650,13 +650,13 @@ $reviews = $venueObj->getReview($_GET['id']);
                                             <label
                                                 class="block text-xs font-semibold text-gray-700 mb-1">CHECK-IN</label>
                                             <input type="date" name="checkin"
-                                                class="w-full bg-transparent focus:outline-none text-gray-800">
+                                                class="w-full bg-transparent focus:outline-none text-gray-800" placeholder="Select date">
                                         </div>
                                         <div class="w-1/2 p-3">
                                             <label
-                                                class="block text-xs font-semibold text-gray-700 mb-1">CHECKOUT</label>
+                                                class="block text-xs font-semibold text-gray-700 mb-1">CHECK-OUT</label>
                                             <input type="date" name="checkout"
-                                                class="w-full bg-transparent focus:outline-none text-gray-800">
+                                                class="w-full bg-transparent focus:outline-none text-gray-800" placeholder="Select date">
                                         </div>
                                     </div>
                                     <div class="p-3">
@@ -823,6 +823,13 @@ $reviews = $venueObj->getReview($_GET['id']);
             function validateDateRange() {
                 const checkinDate = new Date(checkinInput.value);
                 const checkoutDate = new Date(checkoutInput.value);
+
+                if (checkinDate >= checkoutDate) {
+                    showModal('Checkout date must be after checkin date.', undefined, 'icoco_black_ico.png');
+                    checkoutInput.value = '';
+                    return;
+                }
+
                 const dateRange = new Date(checkinDate);
 
                 while (dateRange <= checkoutDate) {
