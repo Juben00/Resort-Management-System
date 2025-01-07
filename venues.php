@@ -323,7 +323,7 @@ $reviews = $venueObj->getReview($_GET['id']);
     ?>
 
     <main class="max-w-7xl pt-32 mx-auto px-4 py-6 sm:px-6 lg:px-8 main-container bg-gray-50">
-        <div class="main-content rounded-lg overflow-hidden">
+        <div class="main-content rounded-lg">
             <div id="venueDetails" class="p-6 md:p-10">
                 <div class="mb-8">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
